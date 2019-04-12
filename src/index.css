@@ -1,0 +1,16 @@
+#game-container{
+  height: 100vh;
+  width: 100vw;
+  background-color: blue;
+  z-index: 0;
+  position: absolute;
+}
+
+.player{
+  position: absolute;
+  background-color: red;
+  z-index: 5;
+  display: block;
+  /* min-height: 50px;
+  min-width: 30px; */
+}

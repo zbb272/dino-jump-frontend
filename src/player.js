@@ -6,8 +6,13 @@ class Player {
     this.dy = 0;
     this.height = 50;
     this.width = 30;
+    this.left = this.x;
+    this.right = this.x + this.width;
+    this.top = this.y;
+    this.bottom = this.y + this.height;
     this.movingLeft = false;
     this.movingRight = false;
+    this.jumping = false;
     this.gameContainer = gameContainer;
     this.container = document.createElement("div");
     this.container.classList.add("player");
@@ -18,15 +23,21 @@ class Player {
   setXY(x, y) {
     this.x = x;
     this.y = y;
+    this.left = this.x;
+    this.right = this.x + this.width;
+    this.top = this.y;
+    this.bottom = this.y + this.height;
   }
+
+  //triggered by an early keyup, allows for shorter jumps
   haltJump() {
+    this.jumping = false;
     if (this.isAirborne()) {
       if (this.dy < 0) {
         this.dy = this.dy / 2;
       }
     }
   }
-
   jump() {
     if (!this.isAirborne()) {
       this.dy = -20;
@@ -53,12 +64,12 @@ class Player {
   //produces a sliding/skidding if you are moving too fast
   slowDown() {
     if (this.dx < 2 && this.dx > -2) {
-      this.slowDown();
+      this.dx = 0;
     } else {
       if (this.dx > 0) {
-        this.dx -= this.dx / 2;
+        this.dx -= this.dx / 3;
       } else {
-        this.dx -= this.dx / 2;
+        this.dx -= this.dx / 3;
       }
     }
   }
@@ -68,16 +79,20 @@ class Player {
     this.movingRight = true;
     if (this.isAirborne() && this.dx < 0) {
       this.slowDown();
+    } else if (this.dx < 2) {
+      this.dx = 4;
     } else if (this.dx < 10) {
-      this.dx += 2;
+      this.dx += 1;
     }
   }
   moveLeft() {
     this.movingLeft = true;
     if (this.isAirborne() && this.dx > 0) {
-      this.dx = 0;
+      this.slowDown();
+    } else if (this.dx > -2) {
+      this.dx = -4;
     } else if (this.dx > -10) {
-      this.dx += -2;
+      this.dx += -1;
     }
   }
 
@@ -89,7 +104,7 @@ class Player {
       return true;
     } else {
       objects.forEach(obj => {
-        if (this.y + this.dy <= obj.y + obj.height) {
+        if (this.verticallyIntercepts(obj, this.dx) && this.top >= obj.bottom && this.top + this.dy <= obj.bottom) {
           ret = true;
         }
       });
@@ -97,14 +112,13 @@ class Player {
     }
   }
   //additional paramater here so as to check airborne
-  collidesBottom(objects, value = this.dy) {
+  collidesBottom(objects, value = this.dy, otherValue = this.dx) {
     let ret = false;
     if (this.y + value + this.height >= this.gameContainer.clientHeight) {
       return true;
     } else {
       objects.forEach(obj => {
-        if (this.y + this.height + value >= obj.y) {
-          //  debugger;
+        if (this.verticallyIntercepts(obj, otherValue) && this.bottom <= obj.top && this.bottom + value >= obj.top) {
           ret = true;
         }
       });
@@ -117,8 +131,7 @@ class Player {
       return true;
     } else {
       objects.forEach(obj => {
-        if (this.x + this.dx <= obj.x + obj.width) {
-          debugger;
+        if (this.horizontallyIntercepts(obj) && this.left + this.dx <= obj.right && this.left >= obj.right) {
           ret = true;
         }
       });
@@ -131,8 +144,7 @@ class Player {
       return true;
     } else {
       objects.forEach(obj => {
-        if (this.x + this.width + this.dx > obj.x) {
-          debugger;
+        if (this.horizontallyIntercepts(obj) && this.right <= obj.left && this.right + this.dx >= obj.left) {
           ret = true;
         }
       });
@@ -140,54 +152,51 @@ class Player {
     return ret;
   }
   isAirborne() {
-    return !this.collidesBottom(this.getPlatformsBelow(), 1);
+    return !this.collidesBottom(Platform.all(), 1, 0);
   }
-
-  getPlatformsBelow() {
-    return Platform.all().filter(plat => {
-      return plat.y > this.y + this.height && this.x < plat.x + plat.width && this.x + this.width >= plat.x;
-    });
+  horizontallyIntercepts(obj) {
+    return obj.top < this.bottom + this.dy && obj.bottom > this.top + this.dy;
   }
-  getPlatformsAbove() {
-    return Platform.all().filter(plat => {
-      return plat.y + plat.height < this.y && this.x < plat.x + plat.width && this.x + this.width >= plat.x;
-    });
-  }
-  getPlatformsAhead() {
-    return Platform.all().filter(plat => {
-      return plat.x > this.x + this.width && this.y + this.height > plat.y && this.y < plat.y + plat.height;
-    });
-  }
-  getPlatformsBehind() {
-    return Platform.all().filter(plat => {
-      return plat.x + plat.width < this.x && this.y + this.height > plat.y && this.y < plat.y + plat.height;
-    });
+  verticallyIntercepts(obj, otherValue) {
+    return obj.left < this.right + otherValue && obj.right > this.left + otherValue;
   }
 
   //currently only checks against windows
   //instead of setting dy/dx to zero, sets them to exactly what they should be in order to reach the collided object's boundary
   collisions() {
-    while (this.dx > 0 && this.collidesRight(this.getPlatformsAhead())) {
-      this.dx -= 1;
-    }
-    while (this.dx < 0 && this.collidesLeft(this.getPlatformsBehind())) {
-      this.dx += 1;
-    }
-    while (this.dy > 0 && this.collidesBottom(this.getPlatformsBelow())) {
-      this.dy -= 1;
-    }
-    while (this.dy < 0 && this.collidesTop(this.getPlatformsAbove())) {
-      this.dy += 1;
+    let allGood = false;
+    while (!allGood) {
+      allGood = true;
+      if (this.collidesRight(Platform.all())) {
+        this.dx -= 1;
+        allGood = false;
+      }
+      if (this.collidesLeft(Platform.all())) {
+        this.dx += 1;
+        allGood = false;
+      }
+      if (this.collidesBottom(Platform.all())) {
+        this.dy -= 1;
+        allGood = false;
+      }
+      if (this.collidesTop(Platform.all())) {
+        this.dy += 1;
+        allGood = false;
+      }
     }
   }
 
   //applies slows, then collisions, then sets values
-  draw(left, right) {
+  draw(left, right, jump) {
     if (left) {
       this.moveLeft();
     }
     if (right) {
       this.moveRight();
+    }
+    if (jump && !this.isAirborne() && !this.jumping) {
+      this.jumping = true;
+      this.jump();
     }
     this.applyGravity();
     if (!this.isAirborne() && !this.movingRight && !this.movingLeft) {

@@ -154,6 +154,8 @@ class Player {
   isAirborne() {
     return !this.collidesBottom(Platform.all(), 1, 0);
   }
+
+  //determines if a block is above/beneath/ahead/behind
   horizontallyIntercepts(obj) {
     return obj.top < this.bottom + this.dy && obj.bottom > this.top + this.dy;
   }
@@ -161,7 +163,6 @@ class Player {
     return obj.left < this.right + otherValue && obj.right > this.left + otherValue;
   }
 
-  //currently only checks against windows
   //instead of setting dy/dx to zero, sets them to exactly what they should be in order to reach the collided object's boundary
   collisions() {
     let allGood = false;
@@ -186,7 +187,7 @@ class Player {
     }
   }
 
-  //applies slows, then collisions, then sets values
+  //Acts, applies slows, then collisions, then sets values
   draw(left, right, jump) {
     if (left) {
       this.moveLeft();

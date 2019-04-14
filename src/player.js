@@ -6,13 +6,19 @@ class Player {
     this.dy = 0;
     this.height = 50;
     this.width = 30;
+
+    //values for easing collision calculations
     this.left = this.x;
     this.right = this.x + this.width;
     this.top = this.y;
     this.bottom = this.y + this.height;
+
+    //storing key inputs
     this.movingLeft = false;
     this.movingRight = false;
     this.jumping = false;
+
+    //html stuff
     this.gameContainer = gameContainer;
     this.container = document.createElement("div");
     this.container.classList.add("player");
@@ -20,6 +26,7 @@ class Player {
     this.render();
   }
 
+  //only spot this.x and this.y should be modified
   setXY(x, y) {
     this.x = x;
     this.y = y;
@@ -35,17 +42,17 @@ class Player {
     if (this.isAirborne()) {
       if (this.dy < 0) {
         this.dy = this.dy / 2;
+        this.dy = Math.floor(this.dy);
       }
     }
   }
+
+  //max jump height set here
   jump() {
-    if (!this.isAirborne()) {
-      this.dy = -20;
-      console.log("jump", this.dy);
-    }
+    this.dy = -20;
   }
 
-  //triggered by keyUp --- applies slow() when grounded
+  //triggered by keyUp --- applies slow()
   haltLeft() {
     this.movingLeft = false;
   }
@@ -60,7 +67,6 @@ class Player {
     }
   }
 
-  //will only occur when grounded and not holding a key
   //produces a sliding/skidding if you are moving too fast
   slowDown() {
     if (this.dx < 2 && this.dx > -2) {
@@ -68,13 +74,15 @@ class Player {
     } else {
       if (this.dx > 0) {
         this.dx -= this.dx / 3;
+        this.dx = Math.floor(this.dx);
       } else {
         this.dx -= this.dx / 3;
+        this.dx = Math.ceil(this.dx);
       }
     }
   }
 
-  //can't change direction in the air, but can slow down/speed up
+  //can't instantly change direction in the air, but can slow down/speed up
   moveRight() {
     this.movingRight = true;
     if (this.isAirborne() && this.dx < 0) {
@@ -96,29 +104,27 @@ class Player {
     }
   }
 
-  //collisions are given an optional object target
-  //if no target is given, checks against the window
+  //collisions are against each object target
+  // first checks if the object is above/below/ahead/behind the given object
+  // then determines if the object's relevant side would pass through the object's relevant side if current dx/dy were applied.
   collidesTop(objects) {
     let ret = false;
-    if (this.y + this.dy <= 0) {
-      return true;
-    } else {
-      objects.forEach(obj => {
-        if (this.verticallyIntercepts(obj, this.dx) && this.top >= obj.bottom && this.top + this.dy <= obj.bottom) {
-          ret = true;
-        }
-      });
-      return ret;
-    }
+    objects.forEach(obj => {
+      if (this.verticallyIntercepts(obj, this.dx) && this.top >= obj.bottom && this.top + this.dy <= obj.bottom) {
+        ret = true;
+      }
+    });
+    return ret;
   }
-  //additional paramater here so as to check airborne
-  collidesBottom(objects, value = this.dy, otherValue = this.dx) {
+  //additional paramater here so as to check airborne(doesn't consider dx or)
+  //if collision with bottom, reset to original position
+  collidesBottom(objects, yValue = this.dy, xValue = this.dx) {
     let ret = false;
-    if (this.y + value + this.height >= this.gameContainer.clientHeight) {
-      return true;
+    if (this.y + yValue + this.height >= this.gameContainer.clientHeight) {
+      this.setXY(30, this.gameContainer.clientHeight - 400);
     } else {
       objects.forEach(obj => {
-        if (this.verticallyIntercepts(obj, otherValue) && this.bottom <= obj.top && this.bottom + value >= obj.top) {
+        if (this.verticallyIntercepts(obj, xValue) && this.bottom <= obj.top && this.bottom + yValue >= obj.top) {
           ret = true;
         }
       });
@@ -151,11 +157,13 @@ class Player {
     }
     return ret;
   }
+
+  //is the object's current position 1px above another object's top?
   isAirborne() {
     return !this.collidesBottom(Platform.all(), 1, 0);
   }
 
-  //determines if a block is above/beneath/ahead/behind
+  //determines if a block is above/beneath/ahead/behind the player
   horizontallyIntercepts(obj) {
     return obj.top < this.bottom + this.dy && obj.bottom > this.top + this.dy;
   }
@@ -163,7 +171,9 @@ class Player {
     return obj.left < this.right + otherValue && obj.right > this.left + otherValue;
   }
 
-  //instead of setting dy/dx to zero, sets them to exactly what they should be in order to reach the collided object's boundary
+  //boolean flag is only true if there are no collisions
+  //each time a collision is flagged, the relavant dx/dy is brought down/up slightly
+  //final dx/dy will move the player to a position exactly against the object
   collisions() {
     let allGood = false;
     while (!allGood) {
@@ -189,15 +199,15 @@ class Player {
 
   //Acts, applies slows, then collisions, then sets values
   draw(left, right, jump) {
+    if (jump && !this.isAirborne() && !this.jumping) {
+      this.jumping = true;
+      this.jump();
+    }
     if (left) {
       this.moveLeft();
     }
     if (right) {
       this.moveRight();
-    }
-    if (jump && !this.isAirborne() && !this.jumping) {
-      this.jumping = true;
-      this.jump();
     }
     this.applyGravity();
     if (!this.isAirborne() && !this.movingRight && !this.movingLeft) {

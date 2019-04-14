@@ -17,14 +17,14 @@
 
 .platform-green {
   position: absolute;
-  background: green;
+  background: greenyellow;
   z-index: 3;
   display: block;
 }
 
 .platform-brown {
   position: absolute;
-  background: brown;
+  background: peru;
   z-index: 3;
   display: block;
 }

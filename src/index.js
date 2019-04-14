@@ -11,18 +11,20 @@ function run() {
   // document.addEventListener("keypress", keyPressEventHandler);
   document.addEventListener("keyup", keyUpEventHandler);
 
-  let startY = gameContainer.clientHeight - 50;
+  let startY = gameContainer.clientHeight - 150;
   let startX = 30;
   let player = new Player(startX, startY, gameContainer);
-  let platform2 = new Platform(200, gameContainer.clientHeight - 100, 50, 100, gameContainer, "platform-brown");
-  let platform3 = new Platform(300, gameContainer.clientHeight - 200, 50, 200, gameContainer, "platform-brown");
-  let platform4 = new Platform(400, gameContainer.clientHeight - 200, 50, 200, gameContainer, "platform-brown");
-  let platform5 = new Platform(400, gameContainer.clientHeight - 400, 75, 20, gameContainer, "platform-brown");
-  let platform6 = new Platform(600, gameContainer.clientHeight - 450, 100, 20, gameContainer, "platform-brown");
-  let platform7 = new Platform(700, gameContainer.clientHeight - 200, 100, 20, gameContainer, "platform-brown");
-  let platform8 = new Platform(800, gameContainer.clientHeight - 100, 100, 20, gameContainer, "platform-brown");
-  let platform9 = new Platform(500, gameContainer.clientHeight - 600, 100, 10, gameContainer, "platform-brown");
-  let platform10 = new Platform(200, gameContainer.clientHeight - 650, 25, 10, gameContainer, "platform-green");
+  let platform2 = new Platform(0, 100, 300, 100, gameContainer, "platform-brown");
+  let platform3 = new Platform(300, 250, 50, 250, gameContainer, "platform-brown");
+  //let platform4 = new Platform(400, 200, 50, 200, gameContainer, "platform-brown");
+  let platform5 = new Platform(550, 220, 75, 220, gameContainer, "platform-brown");
+  let platform6 = new Platform(1000, 300, gameContainer.clientWidth - 1000, 300, gameContainer, "platform-brown");
+
+  let platform11 = new Platform(800, 200, 10, 15, gameContainer, "platform-brown");
+  let platform7 = new Platform(875, 500, 100, 15, gameContainer, "platform-brown");
+  let platform8 = new Platform(700, 500, 75, 15, gameContainer, "platform-brown");
+  let platform9 = new Platform(500, 600, 50, 15, gameContainer, "platform-brown");
+  let platform10 = new Platform(200, 650, 24, 5, gameContainer, "platform-green");
 
   setInterval(draw, 20);
 

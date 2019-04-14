@@ -2,7 +2,7 @@ const all = [];
 class Platform {
   constructor(x, y, width, height, gameContainer, type) {
     this.x = x;
-    this.y = y;
+    this.y = gameContainer.clientHeight - y;
     this.width = width;
     this.height = height;
     this.left = this.x;

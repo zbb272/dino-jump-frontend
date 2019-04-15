@@ -6,6 +6,11 @@
   position: absolute;
 }
 
+.block{
+  z-index: 5;
+  position: absolute;
+}
+
 .player{
   position: absolute;
   background-color: red;

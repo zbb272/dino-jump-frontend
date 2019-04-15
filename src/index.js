@@ -1,5 +1,6 @@
 let gameContainer;
 let levelBuilderOpen = false;
+let currentLevel;
 document.addEventListener("DOMContentLoaded", run());
 
 function run() {
@@ -15,7 +16,7 @@ function run() {
   let startY = gameContainer.clientHeight - 50;
   let startX = 30;
   let player = new Player(0, 0, gameContainer);
-  let currentLevel;
+  // let currentLevel;
 
   let level = "";
   let levelUrl = `http://localhost:3000/api/v1/levels/`;
@@ -40,7 +41,7 @@ function run() {
     getLevels().then(() => {
       currentLevel = Level.all[0];
       currentLevel.render();
-      debugger;
+      // debugger;
       player.setLevel(currentLevel);
       player.disabled = false;
     });
@@ -104,7 +105,7 @@ function run() {
     if (event.keyCode === 76 || event.key === "l") {
       if (!levelBuilderOpen) {
         levelBuilderOpen = true;
-        levelBuilder(level);
+        levelBuilder();
       }
     } else if (event.key === "?") {
       debugger;

@@ -1,6 +1,6 @@
 class Block {
   static all = [];
-  constructor(obj, gameContainer) {
+  constructor(obj) {
     this.x = obj.x;
     this.y = obj.y;
     this.width = obj.width;

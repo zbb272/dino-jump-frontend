@@ -18,12 +18,11 @@ let platformBlockButton;
 let enemyBlockButton;
 let coinBlockButton;
 
-let currentLevel;
 let grid;
 let builderControlContainer;
 let newBlocks;
 
-function levelBuilder(level){
+function levelBuilder(){
   platformBlockMode = false;
   enemyBlockMode = false;
   coinBlockMode = false;
@@ -36,7 +35,7 @@ function levelBuilder(level){
 
   newBlocks = [];
 
-  currentLevel = level;
+  // currentLevel = level;
   builderControlContainer = document.getElementById("builder-controls");
 
   doneButton = document.createElement("button");
@@ -169,8 +168,10 @@ function doneButtonEventHandler(event){
   }
   console.log(newBlocks)
   newBlocks.forEach(square => {
-    obj = {x: parseInt((square.style.left).replace(/\D/gm, "/")), y: parseInt((square.style.top).replace(/\D/gm, "/")), width: 25, height: 25, gameContainer: gameContainer, color: square.style.backgroundColor, status: square.dataset.status}
+    obj = {x: parseInt((square.style.left).replace(/\D/gm, "/")), y: parseInt((square.style.top).replace(/\D/gm, "/")), width: 25, height: 25, style: square.style.backgroundColor, status: square.dataset.status}
     let b = new Block(obj);
+    console.log(Level.all)
+    currentLevel.blocks.push(b);
     console.log(b);
   })
 

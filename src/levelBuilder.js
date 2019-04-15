@@ -100,21 +100,24 @@ function doneButtonEventHandler(event){
     let block;
     if(endDragX > startDragX){
       if(endDragY > startDragY){
-        block = new Block(startDragX, startDragY, parseInt(dottedRectangle.style.minWidth),  parseInt(dottedRectangle.style.minHeight), gameContainer);
+        obj = {x: startDragX, y: startDragY, width: parseInt(dottedRectangle.style.minWidth), height: parseInt(dottedRectangle.style.minHeight), gameContainer: gameContainer, color: "black", status: "platform"}
+        block = new Block(obj);
       }
       else{
-        block = new Block(startDragX, endDragY, parseInt(dottedRectangle.style.minWidth),  parseInt(dottedRectangle.style.minHeight), gameContainer);
+        obj = {x: startDragX, y: endDragY, width: parseInt(dottedRectangle.style.minWidth), height: parseInt(dottedRectangle.style.minHeight), gameContainer: gameContainer, color: "black", status: "platform"}
+        block = new Block(obj);
       }
     }
     else{
       if(endDragY > startDragY){
-        block = new Block(endDragX, startDragY, parseInt(dottedRectangle.style.minWidth),  parseInt(dottedRectangle.style.minHeight), gameContainer);
+        obj = {x: endDragX, y: startDragY, width: parseInt(dottedRectangle.style.minWidth), height: parseInt(dottedRectangle.style.minHeight), gameContainer: gameContainer, color: "black", status: "platform"}
+        block = new Block(obj);
       }
       else{
-        block = new Block(endDragX, endDragY, parseInt(dottedRectangle.style.minWidth),  parseInt(dottedRectangle.style.minHeight), gameContainer);
+        obj = {x: endDragX, y: endDragY, width: parseInt(dottedRectangle.style.minWidth), height: parseInt(dottedRectangle.style.minHeight), gameContainer: gameContainer, color: "black", status: "platform"}
+        block = new Block(obj);
       }
     }
-    console.log(block)
     if(block instanceof Block){
       doneButton.remove();
       saveButton.remove();

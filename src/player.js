@@ -39,10 +39,11 @@ class Player {
 
   //triggered by an early keyup, allows for shorter jumps
   haltJump() {
+    console.log("Halt jump");
     this.jumping = false;
     if (this.isAirborne()) {
       if (this.dy < 0) {
-        this.dy;
+        this.dy = this.dy / 2;
         this.dy = Math.floor(this.dy);
       }
     }
@@ -74,10 +75,10 @@ class Player {
       this.dx = 0;
     } else {
       if (this.dx > 0) {
-        this.dx -= this.dx / 3;
+        this.dx -= this.dx / 5;
         this.dx = Math.floor(this.dx);
       } else {
-        this.dx -= this.dx / 3;
+        this.dx -= this.dx / 5;
         this.dx = Math.ceil(this.dx);
       }
     }
@@ -161,7 +162,7 @@ class Player {
 
   //is the object's current position 1px above another object's top?
   isAirborne() {
-    return !this.collidesBottom(Platform.all(), 1, 0);
+    return !this.collidesBottom(Block.all, 1, 0);
   }
 
   //determines if a block is above/beneath/ahead/behind the player
@@ -179,19 +180,19 @@ class Player {
     let allGood = false;
     while (!allGood) {
       allGood = true;
-      if (this.collidesRight(Platform.all())) {
+      if (this.collidesRight(Block.all)) {
         this.dx -= 1;
         allGood = false;
       }
-      if (this.collidesLeft(Platform.all())) {
+      if (this.collidesLeft(Block.all)) {
         this.dx += 1;
         allGood = false;
       }
-      if (this.collidesBottom(Platform.all())) {
+      if (this.collidesBottom(Block.all)) {
         this.dy -= 1;
         allGood = false;
       }
-      if (this.collidesTop(Platform.all())) {
+      if (this.collidesTop(Block.all)) {
         this.dy += 1;
         allGood = false;
       }
@@ -211,7 +212,7 @@ class Player {
       } else if (!this.jumping && this.doubleJump) {
         console.log("djump");
         this.doubleJump = false;
-        this.jump(12);
+        this.jump(10);
       }
     }
     if (left) {

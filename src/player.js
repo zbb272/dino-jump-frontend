@@ -222,15 +222,32 @@ class Player {
     }
     return ret;
   }
+
+  collidesAll(objects) {
+    return this.collidesLeft(objects, -1, 0) || this.collidesRight(objects, 1, 0) || this.collidesBottom(objects, 1, 0) || this.collidesTop(-1, 0);
+  }
   specialCollisions() {
     this.goalCollisions;
     this.coinCollisions;
     this.badCollisions();
   }
 
-  goalCollisions() {}
-  coinCollisions() {}
-  badCollisions() {}
+  goalCollisions() {
+    if (this.collidesAll(this.level.goal)) {
+      console.log("Goal");
+    }
+  }
+  coinCollisions() {
+    if (this.collidesAll(this.level.coins)) {
+      console.log("Cha-ching");
+    }
+  }
+
+  badCollisions() {
+    if (this.collidesAll(this.level.hazards)) {
+      console.log("Oof");
+    }
+  }
 
   //is the object's current position 1px above another object's top?
   isAirborne() {

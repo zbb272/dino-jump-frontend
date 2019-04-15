@@ -169,16 +169,17 @@ class Player {
   //collisions are against each object target
   // first checks if the object is above/below/ahead/behind the given object
   // then determines if the object's relevant side would pass through the object's relevant side if current dx/dy were applied.
-  collidesTop(objects) {
+  collidesTop(objects, value = this.dy, interceptValue = this.dx) {
     let ret = false;
     if (this.y + this.dy <= 0) {
       return true;
+    } else if (objects.length > 0) {
+      objects.forEach(obj => {
+        if (obj.visible && this.verticallyIntercepts(obj, interceptValue) && this.top >= obj.bottom && this.top + value <= obj.bottom) {
+          ret = obj;
+        }
+      });
     }
-    objects.forEach(obj => {
-      if (this.verticallyIntercepts(obj, this.dx) && this.top >= obj.bottom && this.top + this.dy <= obj.bottom) {
-        ret = true;
-      }
-    });
     return ret;
   }
   //additional paramater here so as to check airborne(doesn't consider dx or)
@@ -187,10 +188,10 @@ class Player {
     let ret = false;
     if (this.y + yValue + this.height >= this.gameContainer.clientHeight) {
       this.setXY(this.level.startPositionX, this.level.startPositionY);
-    } else {
+    } else if (objects.length > 0) {
       objects.forEach(obj => {
-        if (this.verticallyIntercepts(obj, xValue) && this.bottom <= obj.top && this.bottom + yValue >= obj.top) {
-          ret = true;
+        if (obj.visible && this.verticallyIntercepts(obj, xValue) && this.bottom <= obj.top && this.bottom + yValue >= obj.top) {
+          ret = obj;
         }
       });
       return ret;
@@ -200,10 +201,10 @@ class Player {
     let ret = false;
     if (this.x + this.dx <= 0) {
       return true;
-    } else {
+    } else if (objects.length > 0) {
       objects.forEach(obj => {
-        if (this.horizontallyIntercepts(obj, yValue) && this.left + xValue <= obj.right && this.left >= obj.right) {
-          ret = true;
+        if (obj.visible && this.horizontallyIntercepts(obj, yValue) && this.left + xValue <= obj.right && this.left >= obj.right) {
+          ret = obj;
         }
       });
       return ret;
@@ -213,10 +214,10 @@ class Player {
     let ret = false;
     if (this.x + this.dx + this.width >= this.gameContainer.clientWidth) {
       return true;
-    } else {
+    } else if (objects.length > 0) {
       objects.forEach(obj => {
-        if (this.horizontallyIntercepts(obj, yValue) && this.right <= obj.left && this.right + xValue >= obj.left) {
-          ret = true;
+        if (obj.visible && this.horizontallyIntercepts(obj, yValue) && this.right <= obj.left && this.right + xValue >= obj.left) {
+          ret = obj;
         }
       });
     }
@@ -227,25 +228,28 @@ class Player {
     return this.collidesLeft(objects, -1, 0) || this.collidesRight(objects, 1, 0) || this.collidesBottom(objects, 1, 0) || this.collidesTop(-1, 0);
   }
   specialCollisions() {
-    this.goalCollisions;
-    this.coinCollisions;
+    this.goalCollisions();
+    this.coinCollisions();
     this.badCollisions();
   }
 
   goalCollisions() {
-    if (this.collidesAll(this.level.goal)) {
+    if (typeof this.collidesAll(this.level.goal) === "object") {
       console.log("Goal");
     }
   }
   coinCollisions() {
-    if (this.collidesAll(this.level.coins)) {
+    const coin = this.collidesAll(this.level.coins);
+    if (typeof coin === "object") {
+      coin.container.remove();
+      coin.remove();
       console.log("Cha-ching");
     }
   }
 
   badCollisions() {
-    if (this.collidesAll(this.level.hazards)) {
-      console.log("Oof");
+    if (typeof this.collidesAll(this.level.hazards) === "object") {
+      this.setXY(this.level.startPositionX, this.level.startPositionY);
     }
   }
 

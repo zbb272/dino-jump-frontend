@@ -1,4 +1,4 @@
-
+debugger;
 let mouseFlag = 0;
 
 let gridMode = false;
@@ -22,7 +22,7 @@ let grid;
 let builderControlContainer;
 let newBlocks;
 
-function levelBuilder(){
+function levelBuilder() {
   platformBlockMode = false;
   enemyBlockMode = false;
   coinBlockMode = false;
@@ -70,18 +70,17 @@ function levelBuilder(){
   builderControlContainer.appendChild(gridModeButton);
 }
 
-function mouseDownEvent(event){
+function mouseDownEvent(event) {
   console.log("mouseDown");
-  if(!gridMode && dragMode){
+  if (!gridMode && dragMode) {
     mouseFlag = 0;
-    if(event.target !== doneButton && event.target !== saveButton){
+    if (event.target !== doneButton && event.target !== saveButton) {
       startDragX = event.clientX - event.target.offsetLeft;
       startDragY = event.clientY - event.target.offsetTop;
 
-      if(dragGoing){
+      if (dragGoing) {
         dragGoing = false;
-      }
-      else{
+      } else {
         dragGoing = true;
         dottedRectangle.style.minHeight = `1px`;
         dottedRectangle.style.minWidth = `1px`;
@@ -92,48 +91,44 @@ function mouseDownEvent(event){
         dottedRectangle.style.backgroundColor = "";
       }
 
-      console.log("X: "+startDragX+" Y: "+startDragY);
+      console.log("X: " + startDragX + " Y: " + startDragY);
     }
   }
 }
 
-function mouseMoveEvent(event){
-  if(dragGoing && dragMode){
-    console.log("mouse move")
-    if(event.pageX > startDragX){
+function mouseMoveEvent(event) {
+  if (dragGoing && dragMode) {
+    console.log("mouse move");
+    if (event.pageX > startDragX) {
       dottedRectangle.style.minWidth = `${event.pageX - startDragX}px`;
-    }
-    else{
+    } else {
       dottedRectangle.style.left = `${event.pageX}px`;
       dottedRectangle.style.minWidth = `${startDragX - event.pageX}px`;
     }
-    if(event.pageY > startDragY){
+    if (event.pageY > startDragY) {
       dottedRectangle.style.minHeight = `${event.pageY - startDragY}px`;
-    }
-    else{
+    } else {
       dottedRectangle.style.top = `${event.pageY}px`;
       dottedRectangle.style.minHeight = `${startDragY - event.pageY}px`;
     }
     mouseFlag = 1;
-  }
-  else{
+  } else {
     mouseFlag = 0;
   }
 }
 
-function mouseUpEvent(event){
+function mouseUpEvent(event) {
   console.log("mouseUp");
-  if(dragMode){
-    if(mouseFlag === 0){
+  if (dragMode) {
+    if (mouseFlag === 0) {
       console.log("click");
-    }
-    else if(mouseFlag === 1){
+    } else if (mouseFlag === 1) {
       endDragX = event.pageX;
       endDragY = event.pageY;
       dottedRectangle.style.backgroundColor = "black";
       dottedRectangle.style.outlineStyle = "none";
 
-      console.log("X: "+endDragX+" Y: "+endDragY);
+      console.log("X: " + endDragX + " Y: " + endDragY);
       console.log("drag");
       mouseFlag = 0;
       dragGoing = false;
@@ -141,39 +136,73 @@ function mouseUpEvent(event){
   }
 }
 
-
-function doneButtonEventHandler(event){
-
+function doneButtonEventHandler(event) {
   // constructor(x, y, width, height, color = "black", visible = true, gameContainer){
   let block;
-  if(endDragX > startDragX){
-    if(endDragY > startDragY){
-      obj = {x: startDragX, y: startDragY, width: parseInt(dottedRectangle.style.minWidth), height: parseInt(dottedRectangle.style.minHeight), gameContainer: gameContainer, color: "black", status: "platform"}
+  if (endDragX > startDragX) {
+    if (endDragY > startDragY) {
+      obj = {
+        x: startDragX,
+        y: startDragY,
+        width: parseInt(dottedRectangle.style.minWidth),
+        height: parseInt(dottedRectangle.style.minHeight),
+        gameContainer: gameContainer,
+        color: "black",
+        status: "platform"
+      };
+      block = new Block(obj);
+    } else {
+      obj = {
+        x: startDragX,
+        y: endDragY,
+        width: parseInt(dottedRectangle.style.minWidth),
+        height: parseInt(dottedRectangle.style.minHeight),
+        gameContainer: gameContainer,
+        color: "black",
+        status: "platform"
+      };
       block = new Block(obj);
     }
-    else{
-      obj = {x: startDragX, y: endDragY, width: parseInt(dottedRectangle.style.minWidth), height: parseInt(dottedRectangle.style.minHeight), gameContainer: gameContainer, color: "black", status: "platform"}
+  } else {
+    if (endDragY > startDragY) {
+      obj = {
+        x: endDragX,
+        y: startDragY,
+        width: parseInt(dottedRectangle.style.minWidth),
+        height: parseInt(dottedRectangle.style.minHeight),
+        gameContainer: gameContainer,
+        color: "black",
+        status: "platform"
+      };
+      block = new Block(obj);
+    } else {
+      obj = {
+        x: endDragX,
+        y: endDragY,
+        width: parseInt(dottedRectangle.style.minWidth),
+        height: parseInt(dottedRectangle.style.minHeight),
+        gameContainer: gameContainer,
+        color: "black",
+        status: "platform"
+      };
       block = new Block(obj);
     }
   }
-  else{
-    if(endDragY > startDragY){
-      obj = {x: endDragX, y: startDragY, width: parseInt(dottedRectangle.style.minWidth), height: parseInt(dottedRectangle.style.minHeight), gameContainer: gameContainer, color: "black", status: "platform"}
-      block = new Block(obj);
-    }
-    else{
-      obj = {x: endDragX, y: endDragY, width: parseInt(dottedRectangle.style.minWidth), height: parseInt(dottedRectangle.style.minHeight), gameContainer: gameContainer, color: "black", status: "platform"}
-      block = new Block(obj);
-    }
-  }
-  console.log(newBlocks)
+  console.log(newBlocks);
   newBlocks.forEach(square => {
-    obj = {x: parseInt((square.style.left).replace(/\D/gm, "/")), y: parseInt((square.style.top).replace(/\D/gm, "/")), width: 25, height: 25, style: square.style.backgroundColor, status: square.dataset.status}
+    obj = {
+      x: parseInt(square.style.left.replace(/\D/gm, "/")),
+      y: parseInt(square.style.top.replace(/\D/gm, "/")),
+      width: 25,
+      height: 25,
+      style: square.style.backgroundColor,
+      status: square.dataset.status
+    };
     let b = new Block(obj);
-    console.log(Level.all)
-    currentLevel.blocks.push(b);
+    console.log(Level.all);
+    currentLevel.add(b);
     console.log(b);
-  })
+  });
 
   levelBuilderOpen = false;
 
@@ -181,8 +210,8 @@ function doneButtonEventHandler(event){
   saveButton.remove();
   dragModeButton.remove();
   dottedRectangle.remove();
-  for(let y = 0; y < 28; y++){
-    for(let x = 0; x < 48; x++){
+  for (let y = 0; y < 28; y++) {
+    for (let x = 0; x < 48; x++) {
       grid[y][x].remove();
     }
   }
@@ -191,31 +220,29 @@ function doneButtonEventHandler(event){
   enemyBlockButton.remove();
   coinBlockButton.remove();
 
-
   gameContainer.removeEventListener("mousedown", mouseDownEvent);
   gameContainer.removeEventListener("mousemove", mouseMoveEvent);
   gameContainer.removeEventListener("mouseup", mouseUpEvent);
 }
 
-function dragModeButtonEventHandler(event){
+function dragModeButtonEventHandler(event) {
   dragMode = !dragMode;
 }
 
-function gridModeButtonEventHandler(event){
+function gridModeButtonEventHandler(event) {
   gridMode = !gridMode;
   grid = [];
-  if(gridMode){
-    console.log("grid mode enabled")
+  if (gridMode) {
+    console.log("grid mode enabled");
     //create grid 28 rows x 48 columns
-    for(let y = 0; y < 28; y++){
+    for (let y = 0; y < 28; y++) {
       grid[y] = [];
-      for(let x = 0; x < 48; x++){
-
+      for (let x = 0; x < 48; x++) {
         let square = document.createElement("div");
         square.style.minHeight = "25px";
         square.style.minWidth = "25px";
-        square.style.top = `${(y) * 25}px`;
-        square.style.left = `${(x) * 25}px`;
+        square.style.top = `${y * 25}px`;
+        square.style.left = `${x * 25}px`;
         square.classList.add("grid-square");
         square.style.borderStyle = "solid";
         square.style.borderWidth = "1px";
@@ -241,71 +268,64 @@ function gridModeButtonEventHandler(event){
   }
 }
 
-function platformBlockEventHandler(event){
+function platformBlockEventHandler(event) {
   platformBlockMode = true;
   enemyBlockMode = false;
   coinBlockMode = false;
 }
 
-function enemyBlockEventHandler(event){
+function enemyBlockEventHandler(event) {
   platformBlockMode = false;
   enemyBlockMode = true;
   coinBlockMode = false;
 }
 
-function coinBlockEventHandler(event){
+function coinBlockEventHandler(event) {
   platformBlockMode = false;
   enemyBlockMode = false;
   coinBlockMode = true;
 }
 
-function squareClickEventHandler(event){
-  console.log("square clicked")
-  let status = "platform"
+function squareClickEventHandler(event) {
+  console.log("square clicked");
+  let status = "platform";
   let square = event.target;
 
-  newBlocks
-  if(platformBlockMode){
-    if(square.dataset.status === "none"){
+  newBlocks;
+  if (platformBlockMode) {
+    if (square.dataset.status === "none") {
       square.dataset.status = "platform";
       square.style.backgroundColor = "black";
       newBlocks.push(square);
-    }
-    else if(square.dataset.status === "platform"){
+    } else if (square.dataset.status === "platform") {
       square.dataset.status = "none";
       square.style.backgroundColor = "none";
       newBlocks.splice(newBlocks.indexOf(square), 1);
     }
-  }
-  else if(enemyBlockMode){
-    if(square.dataset.status === "none"){
+  } else if (enemyBlockMode) {
+    if (square.dataset.status === "none") {
       square.dataset.status = "enemy";
-      square.style.backgroundColor = "red"
+      square.style.backgroundColor = "red";
       newBlocks.push(square);
-    }
-    else if(square.dataset.status === "enemy"){
+    } else if (square.dataset.status === "enemy") {
       square.dataset.status = "none";
       square.style.backgroundColor = "none";
       newBlocks.splice(newBlocks.indexOf(square), 1);
     }
-  }
-  else if(coinBlockMode){
-    if(square.dataset.status === "none"){
+  } else if (coinBlockMode) {
+    if (square.dataset.status === "none") {
       square.dataset.status = "coin";
       square.style.backgroundColor = "green";
       newBlocks.push(square);
-    }
-    else if(square.dataset.status === "coin"){
+    } else if (square.dataset.status === "coin") {
       square.dataset.status = "none";
       square.style.backgroundColor = "none";
       newBlocks.splice(newBlocks.indexOf(square), 1);
     }
   }
-
-
 }
 
-function saveButtonEventHandler(event){
+function saveButtonEventHandler(event) {
   console.log("save button hit");
   let blockArray = [];
   Block.all.forEach(block => {
@@ -319,6 +339,6 @@ function saveButtonEventHandler(event){
     headers: {
       "Content-Type": "application/json"
     },
-    body: JSON.stringify({blockArray})
+    body: JSON.stringify({ blockArray })
   }).then(res => response.json());
 }

@@ -19,15 +19,19 @@ class Level {
   render() {
     this.blockSchemas.forEach(b => {
       const block = new Block(b, this.gameContainer);
-      if (b.status === "goal") {
-        this.goal = [block];
-      } else if (b.status === "enemy") {
-        this.hazards.push(block);
-      } else if (b.status === "coins") {
-        this.coins.push(block);
-      }
-      this.block.push(block);
+      this.add(block);
     });
+  }
+
+  add(block) {
+    if (block.status === "goal") {
+      this.goal.push(block);
+    } else if (block.status === "enemy") {
+      this.hazards.push(block);
+    } else if (block.status === "coin") {
+      this.coins.push(block);
+    }
+    this.blocks.push(block);
   }
 
   drop() {

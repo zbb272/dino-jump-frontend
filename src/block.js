@@ -15,6 +15,8 @@ class Block {
     this.container = document.createElement("div");
     this.container.classList.add("block");
     this.gameContainer.appendChild(this.container);
+    this.level = Level.all.find(l => l.id === obj.level_id);
+    this.visible = true;
     this.render();
     Block.all.push(this);
   }
@@ -28,6 +30,10 @@ class Block {
       color: this.color
     };
     return obj;
+  }
+  remove() {
+    this.container.remove();
+    this.visible = false;
   }
 
   draw() {

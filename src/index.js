@@ -1,4 +1,5 @@
 let gameContainer;
+let levelBuilderOpen = false;
 document.addEventListener("DOMContentLoaded", run());
 
 function run() {
@@ -100,7 +101,10 @@ function run() {
       dashPressed = true;
     }
     if (event.keyCode === 76 || event.key === "l") {
-      levelBuilder(level);
+      if(!levelBuilderOpen){
+        levelBuilderOpen = true;
+        levelBuilder(level);
+      }
     } else if (event.key === "?") {
       debugger;
     }

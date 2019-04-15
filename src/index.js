@@ -13,48 +13,76 @@ function run() {
 
   let startY = gameContainer.clientHeight - 50;
   let startX = 30;
-  let player = new Player(startX, startY, gameContainer);
-  createTestLevel();
+  let player = new Player(0, 0, gameContainer);
+  let currentLevel;
 
   let level = "";
-  let levelUrl = `localhost:3000/levels/`;
-  fetch(levelUrl)
-  .then(res => res.json())
-  .then(data => {
-    console.log(data);
-    //create level objects here
-  });
-  // debugger
+  let levelUrl = `http://localhost:3000/api/v1/levels/`;
 
+  init();
   setInterval(draw, 20);
+
+  function getLevels() {
+    return fetch(levelUrl)
+      .then(res => res.json())
+      .then(levels => {
+        levels.forEach(levelData => {
+          const level = new Level(levelData, gameContainer);
+        });
+      })
+      .then(() => {
+        levelForm();
+      });
+  }
+
+  function init() {
+    getLevels().then(() => {
+      currentLevel = Level.all[0];
+      currentLevel.render();
+      player.setLevel(currentLevel);
+      player.disabled = false;
+    });
+  }
+
+  function levelForm() {
+    const form = document.getElementById("level-select-form");
+    const select = document.getElementById("level-select");
+    console.log("Levels", Level.all);
+    Level.all.forEach(level => {
+      console.log("Level", level);
+      const option = document.createElement("option");
+      option.name = level.name;
+      option.dataset.id = level.id;
+      option.innerHTML = level.name;
+      select.appendChild(option);
+    });
+    form.addEventListener("submit", e => {
+      e.preventDefault();
+      console.log(select.options[select.selectedIndex]);
+      selectLevel(select.options[select.selectedIndex].dataset.id);
+    });
+  }
+  function selectLevel(id) {
+    fetch(levelUrl + id)
+      .then(res => res.json())
+      .then(data => {
+        const level = new Level(data, gameContainer);
+        level.render();
+        currentLevel.drop();
+        player.level = level;
+        player.setLevel(level);
+        currentLevel = level;
+      });
+  }
 
   function draw() {
     // checkCollision();
-    player.draw({ left: leftPressed, right: rightPressed, jump: jumpPressed, dash: dashPressed });
-    if (dashPressed) {
-      dashPressed = false;
+    if (!player.disabled) {
+      player.draw({ left: leftPressed, right: rightPressed, jump: jumpPressed, dash: dashPressed });
+      if (dashPressed) {
+        dashPressed = false;
+      }
     }
-  }
-
-  function createTestLevel() {
-    let obj = { x: 0, y: gameContainer.clientHeight - 100, width: 150, height: 100, gameContainer: gameContainer, color: "black", status: "platform" };
-    let platform2 = new Block(obj);
-    obj = { x: 300, y: gameContainer.clientHeight - 300, width: 50, height: 300, gameContainer: gameContainer, color: "black", status: "platform" };
-    let platform3 = new Block(obj);
-    obj = { x: 500, y: gameContainer.clientHeight - 300, width: 75, height: 300, gameContainer: gameContainer, color: "black", status: "platform" };
-    let platform5 = new Block(obj);
-    obj = { x: 1000, y: gameContainer.clientHeight - 300, width: gameContainer.clientWidth - 1000, height: 300, gameContainer: gameContainer, color: "black", status: "platform" };
-    let platform6 = new Block(obj);
-    obj = { x: 800, y: gameContainer.clientHeight - 200, width: 10, height: 15, gameContainer: gameContainer, color: "black", status: "platform" };
-    let platform11 = new Block(obj);
-    obj = { x: 875, y: gameContainer.clientHeight - 500, width: 100, height: 15, gameContainer: gameContainer, color: "black", status: "platform" };
-    let platform7 = new Block(obj);
-    obj = { x: 700, y: gameContainer.clientHeight - 500, width: 75, height: 15, gameContainer: gameContainer, color: "black", status: "platform" };
-    let platform8 = new Block(obj);
-    obj = { x: 500, y: gameContainer.clientHeight - 600, width: 50, height: 15, gameContainer: gameContainer, color: "black", status: "platform" };
-    let platform9 = new Block(obj);
-    obj = { x: 250, y: gameContainer.clientHeight - 650, width: 24, height: 5, gameContainer: gameContainer, color: "black", status: "platform" };
-    let platform10 = new Block(obj);
   }
 
   //event handlers

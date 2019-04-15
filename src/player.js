@@ -2,6 +2,8 @@ class Player {
   constructor(startX, startY, gameContainer) {
     this.x = startX;
     this.y = startY;
+    this.lastX = startX;
+    this.lastY = startY;
     this.dx = 0;
     this.dy = 0;
     this.height = 50;
@@ -23,18 +25,29 @@ class Player {
     this.movingRight = false;
     this.jumping = false;
     this.doubleJump = true;
-    this.dashing = false;
+    this.dashing = 0;
 
     //html stuff
     this.gameContainer = gameContainer;
     this.container = document.createElement("div");
     this.container.classList.add("player");
     this.gameContainer.appendChild(this.container);
-    this.render();
+    this.disabled = true;
+  }
+
+  setLevel(level) {
+    this.setXY(level.startPositionX, level.startPositionY);
+    this.level = level;
   }
 
   //only spot this.x and this.y should be modified
   setXY(x, y) {
+    if (this.x !== x) {
+      this.lastX = this.x;
+    }
+    if (this.y !== y) {
+      this.lastY = this.y;
+    }
     this.x = x;
     this.y = y;
     this.left = this.x;
@@ -81,9 +94,24 @@ class Player {
   }
 
   initiateDash() {
-    this.dashing = true;
+    this.dashing = 6;
     this.dy = 0;
-    this.jumping = true;
+    if (this.isAirborne()) {
+      this.jumping = true;
+    }
+    if (this.movingRight) {
+      this.dx = 30;
+    } else if (this.movingLeft) {
+      this.dx = -30;
+    }
+  }
+  completeDash() {
+    this.jumping = false;
+
+    this.dx = 0;
+    setTimeout(() => {
+      this.dashing = 0;
+    }, 500);
   }
 
   //triggered by keyUp --- applies slow()
@@ -96,7 +124,7 @@ class Player {
 
   //gradually fall when airborne
   applyGravity() {
-    if (this.isAirborne() && !this.dashing) {
+    if (this.isAirborne() && this.dashing <= 1) {
       this.dy += 1;
     }
   }
@@ -143,6 +171,9 @@ class Player {
   // then determines if the object's relevant side would pass through the object's relevant side if current dx/dy were applied.
   collidesTop(objects) {
     let ret = false;
+    if (this.y + this.dy <= 0) {
+      return true;
+    }
     objects.forEach(obj => {
       if (this.verticallyIntercepts(obj, this.dx) && this.top >= obj.bottom && this.top + this.dy <= obj.bottom) {
         ret = true;
@@ -155,7 +186,7 @@ class Player {
   collidesBottom(objects, yValue = this.dy, xValue = this.dx) {
     let ret = false;
     if (this.y + yValue + this.height >= this.gameContainer.clientHeight) {
-      this.setXY(30, this.gameContainer.clientHeight - 400);
+      this.setXY(this.level.startPositionX, this.level.startPositionY);
     } else {
       objects.forEach(obj => {
         if (this.verticallyIntercepts(obj, xValue) && this.bottom <= obj.top && this.bottom + yValue >= obj.top) {
@@ -191,16 +222,25 @@ class Player {
     }
     return ret;
   }
+  specialCollisions() {
+    this.goalCollisions;
+    this.coinCollisions;
+    this.badCollisions();
+  }
+
+  goalCollisions() {}
+  coinCollisions() {}
+  badCollisions() {}
 
   //is the object's current position 1px above another object's top?
   isAirborne() {
-    return !this.collidesBottom(Block.all, 1, 0);
+    return !this.collidesBottom(this.level.blocks, 1, 0);
   }
 
   isAgainstWall() {
-    if (this.collidesLeft(Block.all, -1, 0)) {
+    if (this.collidesLeft(this.level.blocks, -1, 0)) {
       return 1;
-    } else if (this.collidesRight(Block.all, 1, 0)) {
+    } else if (this.collidesRight(this.level.blocks, 1, 0)) {
       return -1;
     } else {
       return 0;
@@ -222,19 +262,19 @@ class Player {
     let allGood = false;
     while (!allGood) {
       allGood = true;
-      if (this.collidesRight(Block.all)) {
+      if (this.collidesRight(this.level.blocks)) {
         this.dx -= 1;
         allGood = false;
       }
-      if (this.collidesLeft(Block.all)) {
+      if (this.collidesLeft(this.level.blocks)) {
         this.dx += 1;
         allGood = false;
       }
-      if (this.collidesBottom(Block.all)) {
+      if (this.collidesBottom(this.level.blocks)) {
         this.dy -= 1;
         allGood = false;
       }
-      if (this.collidesTop(Block.all)) {
+      if (this.collidesTop(this.level.blocks)) {
         this.dy += 1;
         allGood = false;
       }
@@ -243,13 +283,20 @@ class Player {
 
   //Acts, applies slows, then collisions, then sets values
   draw(inputs) {
+    this.specialCollisions();
     if (!this.isAirborne()) {
       this.doubleJump = true;
+    }
+    if (this.dashing > 1) {
+      this.dashing -= 1;
+      if (this.dashing === 1) {
+        this.completeDash();
+      }
     }
     if (inputs.jump && !this.jumping) {
       this.processJumpInput();
     }
-    if (inputs.dash && !this.dashing) {
+    if (this.dashUnlocked && inputs.dash && this.dashing === 0) {
       this.initiateDash();
     }
     if (inputs.left) {

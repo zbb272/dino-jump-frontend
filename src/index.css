@@ -1,17 +1,17 @@
-#game-container{
-  height: 100vh;
-  width: 100vw;
+#game-container {
+  height: 700px;
+  width: 1200px;
   background-color: blue;
   z-index: 0;
   position: absolute;
 }
 
-.block{
+.block {
   z-index: 5;
   position: absolute;
 }
 
-.player{
+.player {
   position: absolute;
   background-color: red;
   z-index: 5;

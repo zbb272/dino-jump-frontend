@@ -1,4 +1,3 @@
-
 class Player {
   constructor(startX, startY, gameContainer) {
     this.x = startX;
@@ -7,16 +6,19 @@ class Player {
     this.dy = 0;
     this.height = 50;
     this.width = 30;
+
     //values for easing collision calculations
     this.left = this.x;
     this.right = this.x + this.width;
     this.top = this.y;
     this.bottom = this.y + this.height;
+
     //storing key inputs
     this.movingLeft = false;
     this.movingRight = false;
     this.jumping = false;
     this.doubleJump = true;
+
     //html stuff
     this.gameContainer = gameContainer;
     this.container = document.createElement("div");
@@ -24,6 +26,7 @@ class Player {
     this.gameContainer.appendChild(this.container);
     this.render();
   }
+
   //only spot this.x and this.y should be modified
   setXY(x, y) {
     this.x = x;
@@ -33,20 +36,23 @@ class Player {
     this.top = this.y;
     this.bottom = this.y + this.height;
   }
+
   //triggered by an early keyup, allows for shorter jumps
   haltJump() {
     this.jumping = false;
     if (this.isAirborne()) {
       if (this.dy < 0) {
-        this.dy = this.dy / 2;
+        this.dy;
         this.dy = Math.floor(this.dy);
       }
     }
   }
+
   //max jump height set here
   jump(n) {
     this.dy = -1 * n;
   }
+
   //triggered by keyUp --- applies slow()
   haltLeft() {
     this.movingLeft = false;
@@ -54,12 +60,14 @@ class Player {
   haltRight() {
     this.movingRight = false;
   }
+
   //gradually fall when airborne
   applyGravity() {
     if (this.isAirborne()) {
       this.dy += 1;
     }
   }
+
   //produces a sliding/skidding if you are moving too fast
   slowDown() {
     if (this.dx < 2 && this.dx > -2) {
@@ -74,6 +82,7 @@ class Player {
       }
     }
   }
+
   //can't instantly change direction in the air, but can slow down/speed up
   moveRight() {
     this.movingRight = true;
@@ -95,6 +104,7 @@ class Player {
       this.dx += -1;
     }
   }
+
   //collisions are against each object target
   // first checks if the object is above/below/ahead/behind the given object
   // then determines if the object's relevant side would pass through the object's relevant side if current dx/dy were applied.
@@ -148,10 +158,12 @@ class Player {
     }
     return ret;
   }
+
   //is the object's current position 1px above another object's top?
   isAirborne() {
-    return !this.collidesBottom(Block.all, 1, 0);
+    return !this.collidesBottom(Platform.all(), 1, 0);
   }
+
   //determines if a block is above/beneath/ahead/behind the player
   horizontallyIntercepts(obj) {
     return obj.top < this.bottom + this.dy && obj.bottom > this.top + this.dy;
@@ -159,6 +171,7 @@ class Player {
   verticallyIntercepts(obj, otherValue) {
     return obj.left < this.right + otherValue && obj.right > this.left + otherValue;
   }
+
   //boolean flag is only true if there are no collisions
   //each time a collision is flagged, the relavant dx/dy is brought down/up slightly
   //final dx/dy will move the player to a position exactly against the object
@@ -166,24 +179,25 @@ class Player {
     let allGood = false;
     while (!allGood) {
       allGood = true;
-      if (this.collidesRight(Block.all)) {
+      if (this.collidesRight(Platform.all())) {
         this.dx -= 1;
         allGood = false;
       }
-      if (this.collidesLeft(Block.all)) {
+      if (this.collidesLeft(Platform.all())) {
         this.dx += 1;
         allGood = false;
       }
-      if (this.collidesBottom(Block.all)) {
+      if (this.collidesBottom(Platform.all())) {
         this.dy -= 1;
         allGood = false;
       }
-      if (this.collidesTop(Block.all)) {
+      if (this.collidesTop(Platform.all())) {
         this.dy += 1;
         allGood = false;
       }
     }
   }
+
   //Acts, applies slows, then collisions, then sets values
   draw(left, right, jump) {
     if (!this.isAirborne()) {
@@ -214,6 +228,7 @@ class Player {
     this.setXY(this.x + this.dx, this.y + this.dy);
     this.render();
   }
+
   render() {
     this.container.style.minHeight = `${this.height}px`;
     this.container.style.minWidth = `${this.width}px`;

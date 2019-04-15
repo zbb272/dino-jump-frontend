@@ -1,4 +1,3 @@
-
 class Player {
   constructor(startX, startY, gameContainer) {
     this.x = startX;
@@ -7,16 +6,19 @@ class Player {
     this.dy = 0;
     this.height = 50;
     this.width = 30;
+
     //values for easing collision calculations
     this.left = this.x;
     this.right = this.x + this.width;
     this.top = this.y;
     this.bottom = this.y + this.height;
+
     //storing key inputs
     this.movingLeft = false;
     this.movingRight = false;
     this.jumping = false;
     this.doubleJump = true;
+
     //html stuff
     this.gameContainer = gameContainer;
     this.container = document.createElement("div");
@@ -24,6 +26,7 @@ class Player {
     this.gameContainer.appendChild(this.container);
     this.render();
   }
+
   //only spot this.x and this.y should be modified
   setXY(x, y) {
     this.x = x;
@@ -33,8 +36,10 @@ class Player {
     this.top = this.y;
     this.bottom = this.y + this.height;
   }
+
   //triggered by an early keyup, allows for shorter jumps
   haltJump() {
+    console.log("Halt jump");
     this.jumping = false;
     if (this.isAirborne()) {
       if (this.dy < 0) {
@@ -43,10 +48,12 @@ class Player {
       }
     }
   }
+
   //max jump height set here
   jump(n) {
     this.dy = -1 * n;
   }
+
   //triggered by keyUp --- applies slow()
   haltLeft() {
     this.movingLeft = false;
@@ -54,26 +61,29 @@ class Player {
   haltRight() {
     this.movingRight = false;
   }
+
   //gradually fall when airborne
   applyGravity() {
     if (this.isAirborne()) {
       this.dy += 1;
     }
   }
+
   //produces a sliding/skidding if you are moving too fast
   slowDown() {
     if (this.dx < 2 && this.dx > -2) {
       this.dx = 0;
     } else {
       if (this.dx > 0) {
-        this.dx -= this.dx / 3;
+        this.dx -= this.dx / 5;
         this.dx = Math.floor(this.dx);
       } else {
-        this.dx -= this.dx / 3;
+        this.dx -= this.dx / 5;
         this.dx = Math.ceil(this.dx);
       }
     }
   }
+
   //can't instantly change direction in the air, but can slow down/speed up
   moveRight() {
     this.movingRight = true;
@@ -95,6 +105,7 @@ class Player {
       this.dx += -1;
     }
   }
+
   //collisions are against each object target
   // first checks if the object is above/below/ahead/behind the given object
   // then determines if the object's relevant side would pass through the object's relevant side if current dx/dy were applied.
@@ -148,10 +159,12 @@ class Player {
     }
     return ret;
   }
+
   //is the object's current position 1px above another object's top?
   isAirborne() {
     return !this.collidesBottom(Block.all, 1, 0);
   }
+
   //determines if a block is above/beneath/ahead/behind the player
   horizontallyIntercepts(obj) {
     return obj.top < this.bottom + this.dy && obj.bottom > this.top + this.dy;
@@ -159,6 +172,7 @@ class Player {
   verticallyIntercepts(obj, otherValue) {
     return obj.left < this.right + otherValue && obj.right > this.left + otherValue;
   }
+
   //boolean flag is only true if there are no collisions
   //each time a collision is flagged, the relavant dx/dy is brought down/up slightly
   //final dx/dy will move the player to a position exactly against the object
@@ -184,6 +198,7 @@ class Player {
       }
     }
   }
+
   //Acts, applies slows, then collisions, then sets values
   draw(left, right, jump) {
     if (!this.isAirborne()) {
@@ -197,7 +212,7 @@ class Player {
       } else if (!this.jumping && this.doubleJump) {
         console.log("djump");
         this.doubleJump = false;
-        this.jump(12);
+        this.jump(10);
       }
     }
     if (left) {
@@ -214,6 +229,7 @@ class Player {
     this.setXY(this.x + this.dx, this.y + this.dy);
     this.render();
   }
+
   render() {
     this.container.style.minHeight = `${this.height}px`;
     this.container.style.minWidth = `${this.width}px`;

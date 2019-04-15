@@ -40,6 +40,7 @@ function run() {
     getLevels().then(() => {
       currentLevel = Level.all[0];
       currentLevel.render();
+      debugger;
       player.setLevel(currentLevel);
       player.disabled = false;
     });
@@ -101,7 +102,7 @@ function run() {
       dashPressed = true;
     }
     if (event.keyCode === 76 || event.key === "l") {
-      if(!levelBuilderOpen){
+      if (!levelBuilderOpen) {
         levelBuilderOpen = true;
         levelBuilder(level);
       }

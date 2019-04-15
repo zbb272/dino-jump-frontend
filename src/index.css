@@ -4,8 +4,8 @@
   background-color: blue;
   z-index: 0;
   position: absolute;
-  display: block;
-  padding: 0px;
+  /* display: block;
+//  padding: 0px; */
 }
 
 #builder-controls {

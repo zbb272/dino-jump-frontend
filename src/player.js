@@ -13,11 +13,17 @@ class Player {
     this.top = this.y;
     this.bottom = this.y + this.height;
 
+    //movement upgrades
+    this.doubleJumpUnlocked = false;
+    this.wallJumpUnlocked = false;
+    this.dashUnlocked = false;
+
     //storing key inputs
     this.movingLeft = false;
     this.movingRight = false;
     this.jumping = false;
     this.doubleJump = true;
+    this.dashing = false;
 
     //html stuff
     this.gameContainer = gameContainer;
@@ -49,12 +55,35 @@ class Player {
   }
 
   //max jump height set here
+  processJumpInput() {
+    if (!this.isAirborne()) {
+      console.log("jump");
+      this.jumping = true;
+      this.jump(20);
+    } else if (this.wallJumpUnlocked && this.isAgainstWall() !== 0) {
+      this.jumping = true;
+      console.log("walljump");
+      this.wallJump(15, this.isAgainstWall() * 10);
+    } else if (this.doubleJumpUnlocked && this.doubleJump) {
+      this.jumping = true;
+      console.log("djump");
+      this.doubleJump = false;
+      this.jump(10);
+    }
+  }
+
   jump(n) {
     this.dy = -1 * n;
   }
   wallJump(y, x) {
     this.jump(y);
     this.dx = x;
+  }
+
+  initiateDash() {
+    this.dashing = true;
+    this.dy = 0;
+    this.jumping = true;
   }
 
   //triggered by keyUp --- applies slow()
@@ -67,7 +96,7 @@ class Player {
 
   //gradually fall when airborne
   applyGravity() {
-    if (this.isAirborne()) {
+    if (this.isAirborne() && !this.dashing) {
       this.dy += 1;
     }
   }
@@ -213,30 +242,20 @@ class Player {
   }
 
   //Acts, applies slows, then collisions, then sets values
-  draw(left, right, jump) {
+  draw(inputs) {
     if (!this.isAirborne()) {
       this.doubleJump = true;
     }
-    if (jump) {
-      if (!this.isAirborne() && !this.jumping) {
-        console.log("jump");
-        this.jumping = true;
-        this.jump(20);
-      } else if (!this.jumping && this.isAgainstWall() !== 0) {
-        this.jumping = true;
-        console.log("walljump");
-        this.wallJump(15, this.isAgainstWall() * 10);
-      } else if (!this.jumping && this.doubleJump) {
-        this.jumping = true;
-        console.log("djump");
-        this.doubleJump = false;
-        this.jump(10);
-      }
+    if (inputs.jump && !this.jumping) {
+      this.processJumpInput();
     }
-    if (left) {
+    if (inputs.dash && !this.dashing) {
+      this.initiateDash();
+    }
+    if (inputs.left) {
       this.moveLeft();
     }
-    if (right) {
+    if (inputs.right) {
       this.moveRight();
     }
     this.applyGravity();

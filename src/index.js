@@ -7,6 +7,7 @@ function run() {
   let rightPressed = false;
   let leftPressed = false;
   let jumpPressed = false;
+  let dashPressed = false;
   document.addEventListener("keydown", keyDownEventHandler);
   document.addEventListener("keyup", keyUpEventHandler);
 
@@ -20,15 +21,18 @@ function run() {
 
   function draw() {
     // checkCollision();
-    player.draw(leftPressed, rightPressed, jumpPressed);
+    player.draw({ left: leftPressed, right: rightPressed, jump: jumpPressed, dash: dashPressed });
+    if (dashPressed) {
+      dashPressed = false;
+    }
   }
 
   function createTestLevel() {
-    let obj = { x: 0, y: gameContainer.clientHeight - 100, width: 300, height: 100, gameContainer: gameContainer, color: "black", status: "platform" };
+    let obj = { x: 0, y: gameContainer.clientHeight - 100, width: 150, height: 100, gameContainer: gameContainer, color: "black", status: "platform" };
     let platform2 = new Block(obj);
-    obj = { x: 300, y: gameContainer.clientHeight - 500, width: 50, height: 500, gameContainer: gameContainer, color: "black", status: "platform" };
+    obj = { x: 300, y: gameContainer.clientHeight - 300, width: 50, height: 300, gameContainer: gameContainer, color: "black", status: "platform" };
     let platform3 = new Block(obj);
-    obj = { x: 500, y: gameContainer.clientHeight - 500, width: 75, height: 500, gameContainer: gameContainer, color: "black", status: "platform" };
+    obj = { x: 500, y: gameContainer.clientHeight - 300, width: 75, height: 300, gameContainer: gameContainer, color: "black", status: "platform" };
     let platform5 = new Block(obj);
     obj = { x: 1000, y: gameContainer.clientHeight - 300, width: gameContainer.clientWidth - 1000, height: 300, gameContainer: gameContainer, color: "black", status: "platform" };
     let platform6 = new Block(obj);
@@ -55,10 +59,24 @@ function run() {
     if (event.keyCode === 32 || event.key === "Space") {
       jumpPressed = true;
     }
+    if (event.keyCode === 16) {
+      dashPressed = true;
+    }
     if (event.keyCode === 76 || event.key === "l") {
       levelBuilder();
     } else if (event.key === "?") {
       debugger;
+    }
+
+    //temporary power toggles
+    if (event.key === "w") {
+      player.wallJumpUnlocked = !player.wallJumpUnlocked;
+    }
+    if (event.key === "j") {
+      player.doubleJumpUnlocked = !player.doubleJumpUnlocked;
+    }
+    if (event.key === "d") {
+      player.dashUnlocked = !player.dashUnlocked;
     }
   }
 

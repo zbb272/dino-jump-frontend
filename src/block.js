@@ -1,17 +1,17 @@
 class Block{
   static all = [];
-  constructor(x, y, width, height, gameContainer, color = "black", visible = true){
-    this.x = x;
-    this.y = y;
-    this.width = width;
-    this.height = height;
+  constructor(obj){
+    this.x = obj.x;
+    this.y = obj.y;
+    this.width = obj.width;
+    this.height = obj.height;
     this.left = this.x;
     this.right = this.x + this.width;
     this.top = this.y;
     this.bottom = this.y + this.height;
-    this.color = color;
-    this.visible = visible;
-    this.gameContainer = gameContainer;
+    this.color = obj.color;
+    this.status = obj.status;
+    this.gameContainer = obj.gameContainer;
     this.container = document.createElement("div");
     this.container.classList.add("block");
     this.gameContainer.appendChild(this.container);

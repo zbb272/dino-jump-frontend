@@ -5,8 +5,10 @@ let startDragX, startDragY, endDragX, endDragY;
 let dottedRectangle;
 let doneButton;
 let saveButton;
+let currentLevel;
 
-function levelBuilder(){
+function levelBuilder(level){
+  currentLevel = level;
   doneButton = document.createElement("button");
   doneButton.innerText = "Done";
   doneButton.style.top = `${gameContainer.clientHeight / 2}px`;
@@ -136,4 +138,13 @@ function saveButtonEventHandler(event){
     blockArray.push(block.getObj());
     console.log(block.getObj());
   });
+  //fetch request
+  let levelUrl = `localhost:3000/levels/${currentLevel.id}`;
+  fetch(levelUrl, {
+    method: "PATCH",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({blockArray})
+  }).then(res => response.json());
 }

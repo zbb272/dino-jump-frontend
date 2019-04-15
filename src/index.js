@@ -15,6 +15,15 @@ function run() {
   let startX = 30;
   let player = new Player(startX, startY, gameContainer);
   createTestLevel();
+
+  let level = "";
+  let levelUrl = `localhost:3000/levels/`;
+  fetch(levelUrl)
+  .then(res => res.json())
+  .then(data => {
+    console.log(data);
+    //create level objects here
+  });
   // debugger
 
   setInterval(draw, 20);
@@ -63,7 +72,7 @@ function run() {
       dashPressed = true;
     }
     if (event.keyCode === 76 || event.key === "l") {
-      levelBuilder();
+      levelBuilder(level);
     } else if (event.key === "?") {
       debugger;
     }

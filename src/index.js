@@ -105,6 +105,7 @@ function run() {
     if (event.keyCode === 76 || event.key === "l") {
       if (!levelBuilderOpen) {
         levelBuilderOpen = true;
+        // debugger
         levelBuilder();
       }
     } else if (event.key === "?") {

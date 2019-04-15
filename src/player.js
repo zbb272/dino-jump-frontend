@@ -36,7 +36,6 @@ class Player {
     this.top = this.y;
     this.bottom = this.y + this.height;
   }
-
   //triggered by an early keyup, allows for shorter jumps
   haltJump() {
     console.log("Halt jump");
@@ -52,6 +51,10 @@ class Player {
   //max jump height set here
   jump(n) {
     this.dy = -1 * n;
+  }
+  wallJump(y, x) {
+    this.jump(y);
+    this.dx = x;
   }
 
   //triggered by keyUp --- applies slow()
@@ -133,26 +136,26 @@ class Player {
       return ret;
     }
   }
-  collidesLeft(objects) {
+  collidesLeft(objects, xValue = this.dx, yValue = this.dy) {
     let ret = false;
     if (this.x + this.dx <= 0) {
       return true;
     } else {
       objects.forEach(obj => {
-        if (this.horizontallyIntercepts(obj) && this.left + this.dx <= obj.right && this.left >= obj.right) {
+        if (this.horizontallyIntercepts(obj, yValue) && this.left + xValue <= obj.right && this.left >= obj.right) {
           ret = true;
         }
       });
       return ret;
     }
   }
-  collidesRight(objects) {
+  collidesRight(objects, xValue = this.dx, yValue = this.dy) {
     let ret = false;
     if (this.x + this.dx + this.width >= this.gameContainer.clientWidth) {
       return true;
     } else {
       objects.forEach(obj => {
-        if (this.horizontallyIntercepts(obj) && this.right <= obj.left && this.right + this.dx >= obj.left) {
+        if (this.horizontallyIntercepts(obj, yValue) && this.right <= obj.left && this.right + xValue >= obj.left) {
           ret = true;
         }
       });
@@ -165,9 +168,19 @@ class Player {
     return !this.collidesBottom(Block.all, 1, 0);
   }
 
+  isAgainstWall() {
+    if (this.collidesLeft(Block.all, -1, 0)) {
+      return 1;
+    } else if (this.collidesRight(Block.all, 1, 0)) {
+      return -1;
+    } else {
+      return 0;
+    }
+  }
+
   //determines if a block is above/beneath/ahead/behind the player
-  horizontallyIntercepts(obj) {
-    return obj.top < this.bottom + this.dy && obj.bottom > this.top + this.dy;
+  horizontallyIntercepts(obj, otherValue) {
+    return obj.top < this.bottom + otherValue && obj.bottom > this.top + otherValue;
   }
   verticallyIntercepts(obj, otherValue) {
     return obj.left < this.right + otherValue && obj.right > this.left + otherValue;
@@ -209,7 +222,12 @@ class Player {
         console.log("jump");
         this.jumping = true;
         this.jump(20);
+      } else if (!this.jumping && this.isAgainstWall() !== 0) {
+        this.jumping = true;
+        console.log("walljump");
+        this.wallJump(15, this.isAgainstWall() * 10);
       } else if (!this.jumping && this.doubleJump) {
+        this.jumping = true;
         console.log("djump");
         this.doubleJump = false;
         this.jump(10);

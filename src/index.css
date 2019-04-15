@@ -1,8 +1,13 @@
 #game-container {
-  height: 700px;
-  width: 1200px;
+  min-height: 700px;
+  min-width: 1200px;
   background-color: blue;
   z-index: 0;
+  position: absolute;
+}
+
+#builder-controls {
+  top: 700px;
   position: absolute;
 }
 
@@ -18,4 +23,10 @@
   display: block;
   /* min-height: 50px;
   min-width: 30px; */
+}
+
+.grid-square {
+  position: absolute;
+  z-index: 10;
+
 }

@@ -127,6 +127,9 @@ class Player {
     if (this.isAirborne() && this.dashing <= 1) {
       this.dy += 1;
     }
+    if (this.isAgainstWall() && this.wallJumpUnlocked && this.dy > 5) {
+      this.dy = 5;
+    }
   }
 
   //produces a sliding/skidding if you are moving too fast
@@ -176,6 +179,7 @@ class Player {
     } else if (objects.length > 0) {
       objects.forEach(obj => {
         if (obj.visible && this.verticallyIntercepts(obj, interceptValue) && this.top >= obj.bottom && this.top + value <= obj.bottom) {
+          console.log("touch");
           ret = obj;
         }
       });
@@ -225,7 +229,7 @@ class Player {
   }
 
   collidesAll(objects) {
-    return this.collidesLeft(objects, -1, 0) || this.collidesRight(objects, 1, 0) || this.collidesBottom(objects, 1, 0) || this.collidesTop(-1, 0);
+    return this.collidesLeft(objects, -1, 0) || this.collidesRight(objects, 1, 0) || this.collidesBottom(objects, 1, 0) || this.collidesTop(objects, -1, 0);
   }
   specialCollisions() {
     this.goalCollisions();

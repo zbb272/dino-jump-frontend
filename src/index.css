@@ -20,7 +20,7 @@
 
 .player {
   position: absolute;
-  background-color: red;
+  background-color: mediumaquamarine;
   z-index: 5;
   display: block;
   /* min-height: 50px;

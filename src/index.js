@@ -90,6 +90,7 @@ function run() {
 
   //event handlers
   function keyDownEventHandler(event) {
+    event.preventDefault();
     if (event.key === "Right" || event.key === "ArrowRight") {
       rightPressed = true;
       console.log("right");
@@ -125,6 +126,7 @@ function run() {
   }
 
   function keyUpEventHandler(event) {
+    event.preventDefault();
     if (event.key === "Right" || event.key === "ArrowRight") {
       rightPressed = false;
       player.haltRight();

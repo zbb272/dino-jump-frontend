@@ -203,7 +203,7 @@ function levelBuilder() {
       };
       let b = new Block(obj);
       console.log(Level.all);
-      currentLevel.blocks.push(b);
+      currentLevel.add(b);
       console.log(b);
     });
 

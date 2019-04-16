@@ -6,8 +6,9 @@ class Player {
     this.lastY = startY;
     this.dx = 0;
     this.dy = 0;
-    this.height = 50;
-    this.width = 30;
+    this.height = 45;
+    this.width = 25;
+    this.lives = 5;
 
     //values for easing collision calculations
     this.left = this.x;
@@ -28,11 +29,27 @@ class Player {
     this.dashing = 0;
 
     //html stuff
+    this.renderLives();
     this.gameContainer = gameContainer;
     this.container = document.createElement("div");
     this.container.classList.add("player");
     this.gameContainer.appendChild(this.container);
     this.disabled = true;
+  }
+
+  die() {
+    this.lives--;
+    this.renderLives();
+    if (this.lives === 0) {
+      this.level.submitScore();
+      this.lives = 5;
+      this.level.drop();
+      this.level.render();
+      this.renderLives();
+    }
+    this.dx = 0;
+    this.dy = 0;
+    this.setXY(this.level.startPositionX, this.level.startPositionY);
   }
 
   setLevel(level) {
@@ -196,8 +213,7 @@ class Player {
   collidesBottom(objects, yValue = this.dy, xValue = this.dx) {
     let ret = false;
     if (this.y + yValue + this.height >= this.gameContainer.clientHeight) {
-      this.level.submitScore();
-      this.setXY(this.level.startPositionX, this.level.startPositionY);
+      this.die();
     } else if (objects.length > 0) {
       objects.forEach(obj => {
         if (obj.visible && this.verticallyIntercepts(obj, xValue) && this.bottom <= obj.top && this.bottom + yValue >= obj.top) {
@@ -260,8 +276,7 @@ class Player {
 
   badCollisions() {
     if (typeof this.collidesAll(this.level.hazards) === "object") {
-      this.level.submitScore();
-      this.setXY(this.level.startPositionX, this.level.startPositionY);
+      this.die();
     }
   }
 
@@ -347,6 +362,13 @@ class Player {
     this.render();
   }
 
+  renderLives() {
+    const livesBar = document.getElementById("lives-bar");
+    livesBar.innerText = "";
+    for (let i = 0; i < this.lives; i++) {
+      livesBar.innerText += " <3";
+    }
+  }
   render() {
     this.container.style.minHeight = `${this.height}px`;
     this.container.style.minWidth = `${this.width}px`;

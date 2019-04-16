@@ -133,6 +133,8 @@ function levelBuilder() {
       currentLevel.add(b);
     });
 
+    currentLevel.blocks.forEach(block => block.renderWithImage());
+
     levelBuilderOpen = false;
 
     doneButton.remove();

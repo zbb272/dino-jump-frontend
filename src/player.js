@@ -263,6 +263,7 @@ class Player {
   specialCollisions() {
     this.goalCollisions();
     this.coinCollisions();
+
     this.badCollisions();
   }
 
@@ -274,8 +275,7 @@ class Player {
   coinCollisions() {
     const coin = this.collidesAll(this.level.coins);
     if (typeof coin === "object") {
-      coin.container.remove();
-      coin.remove();
+      this.level.removeCoin(coin);
       this.level.updateScore(10);
       console.log("Cha-ching");
     }

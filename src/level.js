@@ -53,6 +53,11 @@ class Level {
     }
     this.blocks.push(block);
   }
+  removeCoin(block) {
+    this.coins.splice(this.coins.indexOf(block), 1);
+    block.remove();
+    console.log(this.coins);
+  }
 
   drop() {
     this.blocks.forEach(block => block.container.remove());

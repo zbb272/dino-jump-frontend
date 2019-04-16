@@ -111,7 +111,7 @@ class Player {
   }
 
   initiateDash() {
-    this.dashing = 6;
+    this.dashing = 7;
     this.dy = 0;
     let direction = 0;
     if (this.isAirborne()) {
@@ -130,7 +130,10 @@ class Player {
     this.jumping = false;
 
     this.dx = 0;
+    this.dashing = 1;
+    console.log("dash ending");
     setTimeout(() => {
+      console.log("dash ended");
       this.dashing = 0;
     }, 500);
   }
@@ -149,7 +152,7 @@ class Player {
       this.dy += 1;
     }
     if (this.isAgainstWall() && this.wallJumpUnlocked && this.dy > 5) {
-      this.dy = 5;
+      this.dy = 3;
     }
   }
 
@@ -171,23 +174,26 @@ class Player {
   //can't instantly change direction in the air, but can slow down/speed up
   moveRight() {
     this.movingRight = true;
-
-    if (this.isAirborne() && this.dx < 0) {
-      this.slowDown();
-    } else if (this.dx < 2) {
-      this.dx = 4;
-    } else if (this.dx < 10) {
-      this.dx += 1;
+    if (this.isAgainstWall() !== -1) {
+      if (this.isAirborne() && this.dx < 0) {
+        this.slowDown();
+      } else if (this.dx < 2) {
+        this.dx = 4;
+      } else if (this.dx < 10) {
+        this.dx += 1;
+      }
     }
   }
   moveLeft() {
     this.movingLeft = true;
-    if (this.isAirborne() && this.dx > 0) {
-      this.slowDown();
-    } else if (this.dx > -2) {
-      this.dx = -4;
-    } else if (this.dx > -10) {
-      this.dx += -1;
+    if (this.isAgainstWall() !== 1) {
+      if (this.isAirborne() && this.dx > 0) {
+        this.slowDown();
+      } else if (this.dx > -2) {
+        this.dx = -4;
+      } else if (this.dx > -10) {
+        this.dx += -1;
+      }
     }
   }
 
@@ -335,9 +341,9 @@ class Player {
     if (!this.isAirborne() || (this.isAirborne() && this.isAgainstWall())) {
       this.doubleJump = true;
     }
-    if (this.dashing > 1) {
+    if (this.dashing > 2) {
       this.dashing -= 1;
-      if (this.dashing === 1 || this.isAgainstWall()) {
+      if (this.dashing <= 2) {
         this.completeDash();
       }
     }

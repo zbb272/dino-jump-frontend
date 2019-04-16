@@ -4,6 +4,7 @@
   background-color: blue;
   z-index: 0;
   position: absolute;
+  text-align: right;
   /* display: block;
 //  padding: 0px; */
 }
@@ -30,9 +31,18 @@
 .grid-square {
   position: absolute;
   z-index: 10;
+  display: inline;
 }
 
 .score {
   color: white;
   font: Arial;
+  display: inline;
+}
+
+.lives {
+  color: magenta;
+  font: Arial;
+  display: inline;
+  float: left;
 }

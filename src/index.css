@@ -9,6 +9,22 @@
 //  padding: 0px; */
 }
 
+#main-menu {
+  min-height: 700px;
+  min-width: 1200px;
+  background-color: black;
+  position: absolute;
+  text-align: center;
+  color: white;
+  z-index: 10;
+}
+
+ul{
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+
 #builder-controls {
   top: 800px;
   position: absolute;

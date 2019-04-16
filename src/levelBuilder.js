@@ -51,6 +51,67 @@ function levelBuilder() {
   saveAsNewForm.addEventListener("submit", saveAsNewEventHandler);
   builderControlContainer.appendChild(saveAsNewForm);
 
+  //create custom block form
+  customBlockForm = document.createElement("form");
+  customBlockForm.innerText = "Create Block: ";
+
+  blockXLabel = document.createElement("label");
+  blockXLabel.innerText = "X: ";
+  blockXInput = document.createElement("input");
+  blockXInput.type = "text";
+  customBlockForm.appendChild(blockXLabel);
+  customBlockForm.appendChild(blockXInput);
+
+  blockYLabel = document.createElement("label");
+  blockYLabel.innerText = "Y: ";
+  blockYInput = document.createElement("input");
+  blockYInput.type = "text";
+  customBlockForm.appendChild(blockYLabel);
+  customBlockForm.appendChild(blockYInput);
+
+  blockWidthLabel = document.createElement("label");
+  blockWidthLabel.innerText = "Width: ";
+  blockWidthInput = document.createElement("input");
+  blockWidthInput.type = "text";
+  customBlockForm.appendChild(blockWidthLabel);
+  customBlockForm.appendChild(blockWidthInput);
+
+  blockHeightLabel = document.createElement("label");
+  blockHeightLabel.innerText = "Height: ";
+  blockHeightInput = document.createElement("input");
+  blockHeightInput.type = "text";
+  customBlockForm.appendChild(blockHeightLabel);
+  customBlockForm.appendChild(blockHeightInput);
+
+  blockStatusLabel = document.createElement("label");
+  blockStatusLabel.innerText = "Status: ";
+  blockSelect = document.createElement("select");
+  platformOption = document.createElement("option");
+  platformOption.value = "platform";
+  platformOption.innerText = "Platform"
+  blockSelect.appendChild(platformOption);
+  enemyOption = document.createElement("option");
+  enemyOption.value = "enemy";
+  enemyOption.innerText = "Enemy"
+  blockSelect.appendChild(enemyOption);
+  coinOption = document.createElement("option");
+  coinOption.value = "coin";
+  coinOption.innerText = "Coin"
+  blockSelect.appendChild(coinOption);
+  goalOption = document.createElement("option");
+  goalOption.value = "goal";
+  goalOption.innerText = "Goal"
+  blockSelect.appendChild(goalOption);
+
+  customBlockForm.appendChild(blockStatusLabel);
+  customBlockForm.appendChild(blockSelect);
+
+  submitInput = document.createElement("input");
+  submitInput.type = "submit";
+  customBlockForm.appendChild(submitInput);
+  customBlockForm.addEventListener("submit", customBlockFormEventHandler)
+  builderControlContainer.appendChild(customBlockForm);
+
   let gridModeButton = document.createElement("button");
   gridModeButton.innerText = "Grid Mode";
   gridModeButton.addEventListener("click", gridModeButtonEventHandler);
@@ -59,8 +120,6 @@ function levelBuilder() {
   function doneButtonEventHandler(event) {
     // constructor(x, y, width, height, color = "black", visible = true, gameContainer){
     let block;
-
-    console.log(newBlocks);
     newBlocks.forEach(square => {
       obj = {
         x: parseInt(square.style.left.replace(/\D/gm, "/")),
@@ -71,9 +130,7 @@ function levelBuilder() {
         status: square.dataset.status
       };
       let b = new Block(obj);
-      console.log(Level.all);
       currentLevel.add(b);
-      console.log(b);
     });
 
     levelBuilderOpen = false;
@@ -82,6 +139,7 @@ function levelBuilder() {
     saveButton.remove();
 
     saveAsNewForm.remove();
+    customBlockForm.remove();
     console.log(grid.length)
     if(grid.length !== 0){
       for (let y = 0; y < 28; y++) {
@@ -147,6 +205,7 @@ function levelBuilder() {
       eraserBlockButton.innerText = "Eraser";
       eraserBlockButton.addEventListener("click", eraserBlockEventHandler);
       builderControlContainer.appendChild(eraserBlockButton);
+
     }
     else {
       platformBlockButton.remove();
@@ -294,6 +353,34 @@ function levelBuilder() {
       body: JSON.stringify(obj)
     }).then(res => res.json())
     .then(data => console.log(data));
+  }
+
+  function customBlockFormEventHandler(event){
+    event.preventDefault();
+    let xValue = event.target.childNodes[2].value;
+    let yValue = event.target.childNodes[4].value;
+    let wValue = event.target.childNodes[6].value;
+    let hValue = event.target.childNodes[8].value;
+    let sValue = event.target.childNodes[10].value;
+    let colorValue;
+    sValue === "platform" ? colorValue = "black" : "";
+    sValue === "enemy" ? colorValue = "red" : "";
+    sValue === "coin" ? colorValue = "green" : "";
+    sValue === "goal" ? colorValue = "gold" : "";
+    console.log(colorValue)
+    if(xValue !== "" && yValue !== "" && wValue !== "" && hValue !== "")
+    {
+      obj = {
+        x: parseInt(xValue),
+        y: parseInt(yValue),
+        width: parseInt(wValue),
+        height: parseInt(hValue),
+        style: colorValue,
+        status: sValue
+      };
+      let b = new Block(obj);
+      currentLevel.add(b);
+    }
   }
 }
 

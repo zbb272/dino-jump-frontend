@@ -28,6 +28,18 @@ class Level {
     this.render();
   }
 
+  complete() {
+    let i = Level.all.indexOf(this);
+    i++;
+    if (i === Level.all.length) {
+      i = 0;
+    }
+    this.drop();
+    currentLevel = Level.all[i];
+    currentLevel.render();
+    currentLevel.init();
+  }
+
   render() {
     this.renderScore();
     this.blockSchemas.forEach(b => {

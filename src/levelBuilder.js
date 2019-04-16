@@ -88,19 +88,19 @@ function levelBuilder() {
   blockSelect = document.createElement("select");
   platformOption = document.createElement("option");
   platformOption.value = "platform";
-  platformOption.innerText = "Platform"
+  platformOption.innerText = "Platform";
   blockSelect.appendChild(platformOption);
   enemyOption = document.createElement("option");
   enemyOption.value = "enemy";
-  enemyOption.innerText = "Enemy"
+  enemyOption.innerText = "Enemy";
   blockSelect.appendChild(enemyOption);
   coinOption = document.createElement("option");
   coinOption.value = "coin";
-  coinOption.innerText = "Coin"
+  coinOption.innerText = "Coin";
   blockSelect.appendChild(coinOption);
   goalOption = document.createElement("option");
   goalOption.value = "goal";
-  goalOption.innerText = "Goal"
+  goalOption.innerText = "Goal";
   blockSelect.appendChild(goalOption);
 
   customBlockForm.appendChild(blockStatusLabel);
@@ -109,7 +109,7 @@ function levelBuilder() {
   submitInput = document.createElement("input");
   submitInput.type = "submit";
   customBlockForm.appendChild(submitInput);
-  customBlockForm.addEventListener("submit", customBlockFormEventHandler)
+  customBlockForm.addEventListener("submit", customBlockFormEventHandler);
   builderControlContainer.appendChild(customBlockForm);
 
   let gridModeButton = document.createElement("button");
@@ -140,8 +140,8 @@ function levelBuilder() {
 
     saveAsNewForm.remove();
     customBlockForm.remove();
-    console.log(grid.length)
-    if(grid.length !== 0){
+    console.log(grid.length);
+    if (grid.length !== 0) {
       for (let y = 0; y < 28; y++) {
         for (let x = 0; x < 48; x++) {
           grid[y][x].remove();
@@ -149,7 +149,7 @@ function levelBuilder() {
       }
     }
 
-    if(gridMode){
+    if (gridMode) {
       platformBlockButton.remove();
       enemyBlockButton.remove();
       coinBlockButton.remove();
@@ -157,7 +157,6 @@ function levelBuilder() {
       eraserBlockButton.remove();
     }
     gridModeButton.remove();
-
   }
 
   function gridModeButtonEventHandler(event) {
@@ -177,6 +176,12 @@ function levelBuilder() {
           square.style.borderStyle = "solid";
           square.style.borderWidth = "1px";
           square.dataset.status = "none";
+
+          if (y === 0 && x % 4 === 0) {
+            square.innerText = `${x / 4}`;
+          } else if (x === 0 && y % 4 === 0) {
+            square.innerText = `${y / 4}`;
+          }
           // square.addEventListener("click", squareClickEventHandler);
           square.addEventListener("mousedown", squareMouseDownEventHandler);
           square.addEventListener("mousemove", squareMouseMoveEventHandler);
@@ -205,9 +210,7 @@ function levelBuilder() {
       eraserBlockButton.innerText = "Eraser";
       eraserBlockButton.addEventListener("click", eraserBlockEventHandler);
       builderControlContainer.appendChild(eraserBlockButton);
-
-    }
-    else {
+    } else {
       platformBlockButton.remove();
       enemyBlockButton.remove();
       coinBlockButton.remove();
@@ -261,12 +264,12 @@ function levelBuilder() {
     eraserBlockMode = true;
   }
 
-  function squareMouseDownEventHandler(event){
+  function squareMouseDownEventHandler(event) {
     drawingGoing = true;
   }
 
-  function squareMouseMoveEventHandler(event){
-    if(drawingGoing){
+  function squareMouseMoveEventHandler(event) {
+    if (drawingGoing) {
       let square = event.target;
 
       newBlocks;
@@ -288,15 +291,13 @@ function levelBuilder() {
           square.style.backgroundColor = "green";
           newBlocks.push(square);
         }
-      }
-      else if (goalBlockMode) {
+      } else if (goalBlockMode) {
         if (square.dataset.status === "none") {
           square.dataset.status = "goal";
           square.style.backgroundColor = "gold";
           newBlocks.push(square);
         }
-      }
-      else if (eraserBlockMode) {
+      } else if (eraserBlockMode) {
         if (square.dataset.status !== "none") {
           square.dataset.status = "none";
           square.style.backgroundColor = "transparent";
@@ -306,7 +307,7 @@ function levelBuilder() {
     }
   }
 
-  function squareMouseUpEventHandler(event){
+  function squareMouseUpEventHandler(event) {
     drawingGoing = false;
   }
 
@@ -317,10 +318,17 @@ function levelBuilder() {
       newBlocks.push(block);
     });
     blocksToSend = [];
-    newBlocks.forEach(block =>{
-      blocksToSend.push({x: block.x, y: block.y, width: block.width, height: block.height, style: block.color, status: block.status})
-    })
-    obj = {level: { name: newInputField.value, startPositionX: parseInt(player.style.left.replace(/\D/gm, "/")), startPositionY: parseInt(player.style.top.replace(/\D/gm, "/")), blocks_attributes: blocksToSend }};
+    newBlocks.forEach(block => {
+      blocksToSend.push({ x: block.x, y: block.y, width: block.width, height: block.height, style: block.color, status: block.status });
+    });
+    obj = {
+      level: {
+        name: newInputField.value,
+        startPositionX: parseInt(player.style.left.replace(/\D/gm, "/")),
+        startPositionY: parseInt(player.style.top.replace(/\D/gm, "/")),
+        blocks_attributes: blocksToSend
+      }
+    };
     let levelUrl = `http://localhost:3000/api/v1/levels/`;
     console.log(JSON.stringify(obj));
     fetch(levelUrl, {
@@ -329,8 +337,9 @@ function levelBuilder() {
         "Content-Type": "application/json"
       },
       body: JSON.stringify(obj)
-    }).then(res => res.json())
-    .then(data => console.log(data));
+    })
+      .then(res => res.json())
+      .then(data => console.log(data));
   }
 
   function saveButtonEventHandler(event) {
@@ -339,10 +348,10 @@ function levelBuilder() {
       newBlocks.push(block);
     });
     blocksToSend = [];
-    newBlocks.forEach(block =>{
-      blocksToSend.push({x: block.x, y: block.y, width: block.width, height: block.height, style: block.color, status: block.status})
-    })
-    obj = {level: {startPositionX: parseInt(player.style.left.replace(/\D/gm, "/")), startPositionY: parseInt(player.style.top.replace(/\D/gm, "/")), blocks_attributes: blocksToSend }};
+    newBlocks.forEach(block => {
+      blocksToSend.push({ x: block.x, y: block.y, width: block.width, height: block.height, style: block.color, status: block.status });
+    });
+    obj = { level: { startPositionX: parseInt(player.style.left.replace(/\D/gm, "/")), startPositionY: parseInt(player.style.top.replace(/\D/gm, "/")), blocks_attributes: blocksToSend } };
     //fetch request
     let levelUrl = `http://localhost:3000/api/v1/levels/${currentLevel.id}`;
     fetch(levelUrl, {
@@ -351,11 +360,12 @@ function levelBuilder() {
         "Content-Type": "application/json"
       },
       body: JSON.stringify(obj)
-    }).then(res => res.json())
-    .then(data => console.log(data));
+    })
+      .then(res => res.json())
+      .then(data => console.log(data));
   }
 
-  function customBlockFormEventHandler(event){
+  function customBlockFormEventHandler(event) {
     event.preventDefault();
     let xValue = event.target.childNodes[2].value;
     let yValue = event.target.childNodes[4].value;
@@ -363,13 +373,12 @@ function levelBuilder() {
     let hValue = event.target.childNodes[8].value;
     let sValue = event.target.childNodes[10].value;
     let colorValue;
-    sValue === "platform" ? colorValue = "black" : "";
-    sValue === "enemy" ? colorValue = "red" : "";
-    sValue === "coin" ? colorValue = "green" : "";
-    sValue === "goal" ? colorValue = "gold" : "";
-    console.log(colorValue)
-    if(xValue !== "" && yValue !== "" && wValue !== "" && hValue !== "")
-    {
+    sValue === "platform" ? (colorValue = "black") : "";
+    sValue === "enemy" ? (colorValue = "red") : "";
+    sValue === "coin" ? (colorValue = "green") : "";
+    sValue === "goal" ? (colorValue = "gold") : "";
+    console.log(colorValue);
+    if (xValue !== "" && yValue !== "" && wValue !== "" && hValue !== "") {
       obj = {
         x: parseInt(xValue),
         y: parseInt(yValue),
@@ -383,7 +392,6 @@ function levelBuilder() {
     }
   }
 }
-
 
 //OBSOLETE FUNCTIONS!!!!! WARNING!!! HERE THERE BE MONSTERS
 
@@ -423,8 +431,7 @@ function squareClickEventHandler(event) {
       square.style.backgroundColor = "transparent";
       newBlocks.splice(newBlocks.indexOf(square), 1);
     }
-  }
-  else if (goalBlockMode) {
+  } else if (goalBlockMode) {
     if (square.dataset.status === "none") {
       square.dataset.status = "goal";
       square.style.backgroundColor = "gold";
@@ -434,8 +441,7 @@ function squareClickEventHandler(event) {
       square.style.backgroundColor = "transparent";
       newBlocks.splice(newBlocks.indexOf(square), 1);
     }
-  }
-  else if (eraserBlockMode) {
+  } else if (eraserBlockMode) {
     if (square.dataset.status !== "none") {
       square.dataset.status = "none";
       square.style.backgroundColor = "transparent";
@@ -444,7 +450,7 @@ function squareClickEventHandler(event) {
   }
 }
 
-function dragAndDropStuff(){
+function dragAndDropStuff() {
   let dragGoing = false;
   let dragMode = false;
   let startDragX, startDragY, endDragX, endDragY;

@@ -97,8 +97,8 @@ class Player {
         this.disabled = false;
         success.remove();
         this.level.drop();
-        this.level.render();
-        this.level.init();
+        this.level.complete();
+        this.level = currentLevel;
       }, 2500);
     }
   }

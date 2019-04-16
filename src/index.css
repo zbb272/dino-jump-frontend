@@ -65,6 +65,7 @@ ul {
   position: absolute;
   z-index: 10;
   display: inline;
+  text-align: left;
 }
 
 .score {

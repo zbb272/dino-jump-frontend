@@ -5,6 +5,10 @@
   z-index: 0;
   position: absolute;
   text-align: right;
+  background-repeat: no-repeat;
+  width: 1200px;
+  height: 700px;
+  background-image: url(../assets/backgroundLarge.png);
   /* display: block;
 //  padding: 0px; */
 }
@@ -84,4 +88,54 @@ ul {
   font-family: Arial, Helvetica, sans-serif;
   display: inline;
   float: left;
+}
+
+.platform-block {
+  background-repeat: no-repeat;
+  width: 25px;
+  height: 25px;
+}
+
+.platform-block-center {
+  background-image: url(../assets/blockCenter.png);
+}
+
+.platform-block-left {
+  background-image: url(../assets/blockLeft.png);
+}
+
+.platform-block-right {
+  background-image: url(../assets/blockRight.png);
+}
+
+.platform-block-middle {
+  background-image: url(../assets/blockMiddle.png);
+}
+
+.platform-block-corner-left {
+  background-image: url(../assets/blockCornerLeft.png);
+}
+
+.platform-block-corner-right {
+  background-image: url(../assets/blockCornerRight.png);
+}
+
+.platform-block-left-inside-corner {
+  background-image: url(../assets/blockLeftInsideCorner.png);
+}
+
+.platform-block-right-inside-corner {
+  background-image: url(../assets/blockRightInsideCorner.png);
+}
+
+.platform-block-bottom {
+  background-image: url(../assets/blockBottom.png);
+}
+
+.platform-block-bottom-right {
+  background-image: url(../assets/blockBottomRight.png);
+}
+
+.platform-block-bottom-left {
+  background-image: url(../assets/blockBottomLeft.png);
 }

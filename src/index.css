@@ -31,3 +31,8 @@
   position: absolute;
   z-index: 10;
 }
+
+.score {
+  color: white;
+  font: Arial;
+}

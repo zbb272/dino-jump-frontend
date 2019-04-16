@@ -50,9 +50,8 @@ function run() {
   function levelForm() {
     const form = document.getElementById("level-select-form");
     const select = document.getElementById("level-select");
-    console.log("Levels", Level.all);
+
     Level.all.forEach(level => {
-      console.log("Level", level);
       const option = document.createElement("option");
       option.name = level.name;
       option.dataset.id = level.id;
@@ -61,7 +60,7 @@ function run() {
     });
     form.addEventListener("submit", e => {
       e.preventDefault();
-      console.log(select.options[select.selectedIndex]);
+
       selectLevel(select.options[select.selectedIndex].dataset.id);
     });
   }

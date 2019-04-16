@@ -1,3 +1,5 @@
+const currentScore = document.getElementById("current-score");
+const highScore = document.getElementById("high-score");
 class Level {
   static all = [];
   constructor(obj, gameContainer) {
@@ -6,17 +8,21 @@ class Level {
     this.name = obj.name;
     this.startPositionX = obj.startPositionX;
     this.startPositionY = obj.startPositionY;
+    this.highScore = obj.high_score.value;
     this.blockSchemas = obj.blocks;
     this.blocks = [];
     this.hazards = [];
     this.goal = [];
     this.coins = [];
+    this.currentScore = 0;
 
     Level.all.push(this);
     console.log(Level.all);
   }
 
   render() {
+    this.updateScore();
+    this.updateHighScore();
     this.blockSchemas.forEach(b => {
       const block = new Block(b, this.gameContainer);
       this.add(block);
@@ -36,5 +42,29 @@ class Level {
 
   drop() {
     this.blocks.forEach(block => block.container.remove());
+  }
+  updateHighScore() {
+    highScore.innerHTML = this.highScore;
+  }
+
+  updateScore(num = 0) {
+    this.currentScore += num;
+    currentScore.innerHTML = this.currentScore;
+  }
+
+  submitScore() {
+    fetch("http://localhost:3000/api/v1/scores/", {
+      method: "POST",
+      headers: { "Content-type": "Application/json" },
+      body: JSON.stringify({ level_id: this.id, value: this.currentScore })
+    })
+      .then(res => console.log(res))
+      .then(() => {
+        if (this.currentScore > this.highScore) {
+          highScore.innerHTML = this.currentScore;
+        }
+        this.currentScore = 0;
+        currentScore.innerHTML = 0;
+      });
   }
 }

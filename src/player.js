@@ -96,14 +96,18 @@ class Player {
   initiateDash() {
     this.dashing = 6;
     this.dy = 0;
+    let direction = 0;
     if (this.isAirborne()) {
       this.jumping = true;
     }
+
     if (this.movingRight) {
-      this.dx = 30;
+      direction = 1;
     } else if (this.movingLeft) {
-      this.dx = -30;
+      direction = -1;
     }
+
+    this.dx = direction * 30;
   }
   completeDash() {
     this.jumping = false;
@@ -150,6 +154,7 @@ class Player {
   //can't instantly change direction in the air, but can slow down/speed up
   moveRight() {
     this.movingRight = true;
+
     if (this.isAirborne() && this.dx < 0) {
       this.slowDown();
     } else if (this.dx < 2) {
@@ -191,6 +196,7 @@ class Player {
   collidesBottom(objects, yValue = this.dy, xValue = this.dx) {
     let ret = false;
     if (this.y + yValue + this.height >= this.gameContainer.clientHeight) {
+      this.level.submitScore();
       this.setXY(this.level.startPositionX, this.level.startPositionY);
     } else if (objects.length > 0) {
       objects.forEach(obj => {
@@ -247,12 +253,14 @@ class Player {
     if (typeof coin === "object") {
       coin.container.remove();
       coin.remove();
+      this.level.updateScore(10);
       console.log("Cha-ching");
     }
   }
 
   badCollisions() {
     if (typeof this.collidesAll(this.level.hazards) === "object") {
+      this.level.submitScore();
       this.setXY(this.level.startPositionX, this.level.startPositionY);
     }
   }
@@ -309,12 +317,12 @@ class Player {
   //Acts, applies slows, then collisions, then sets values
   draw(inputs) {
     this.specialCollisions();
-    if (!this.isAirborne()) {
+    if (!this.isAirborne() || (this.isAirborne() && this.isAgainstWall())) {
       this.doubleJump = true;
     }
     if (this.dashing > 1) {
       this.dashing -= 1;
-      if (this.dashing === 1) {
+      if (this.dashing === 1 || this.isAgainstWall()) {
         this.completeDash();
       }
     }

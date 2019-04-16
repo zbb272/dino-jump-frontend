@@ -85,6 +85,8 @@ function run() {
     // gameContainer = document.getElementById("game-container");
     gameContainer.style.display = "block";
 
+    let optionMenuOpen = false;
+
     let rightPressed = false;
     let leftPressed = false;
     let jumpPressed = false;
@@ -107,6 +109,39 @@ function run() {
         if (dashPressed) {
           dashPressed = false;
         }
+      }
+    }
+
+    function showOptionMenu(){
+      optionMenu = document.createElement("div");
+      optionMenu.classList.add("option-menu")
+      optionMenuTitle = document.createElement("h2");
+      optionMenuTitle.innerText = "Options";
+      optionMenu.appendChild(optionMenuTitle);
+      optionList = document.createElement("ul");
+
+      returnItem = document.createElement("li");
+      returnItem.innerText = "Return to Game";
+      returnItem.addEventListener("click", optionItemEventListener);
+      optionList.appendChild(returnItem);
+
+      optionItem = document.createElement("li");
+      optionItem.innerText = "Exit to Main Menu";
+      optionItem.addEventListener("click", optionItemEventListener);
+      optionList.appendChild(optionItem);
+
+      optionMenu.appendChild(optionList)
+      gameContainer.appendChild(optionMenu)
+    }
+
+    function optionItemEventListener(event){
+      console.log(event.target)
+      if(event.target.innerText === "Return to Game"){
+        optionMenu.remove();
+        optionMenuOpen = false;
+      }
+      else if(event.target.innerText === "Exit to Main Menu"){
+        document.location.reload();
       }
     }
 
@@ -133,6 +168,16 @@ function run() {
         }
       } else if (event.key === "?") {
         debugger;
+      }
+      if(event.keyCode === 27 || event.key === "Escape"){
+        if(optionMenuOpen){
+          optionMenu.remove();
+          optionMenuOpen = false;
+        }
+        else{
+          optionMenuOpen = true;
+          showOptionMenu();
+        }
       }
 
       //temporary power toggles

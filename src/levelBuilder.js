@@ -95,6 +95,8 @@ function levelBuilder() {
       platformBlockButton.remove();
       enemyBlockButton.remove();
       coinBlockButton.remove();
+      goalBlockButton.remove();
+      eraserBlockButton.remove();
     }
     gridModeButton.remove();
 
@@ -249,63 +251,6 @@ function levelBuilder() {
     drawingGoing = false;
   }
 
-  function squareClickEventHandler(event) {
-    console.log("square clicked");
-    let status = "platform";
-    let square = event.target;
-
-    newBlocks;
-    if (platformBlockMode) {
-      if (square.dataset.status === "none") {
-        square.dataset.status = "platform";
-        square.style.backgroundColor = "black";
-        newBlocks.push(square);
-      } else if (square.dataset.status === "platform") {
-        square.dataset.status = "none";
-        square.style.backgroundColor = "transparent";
-        newBlocks.splice(newBlocks.indexOf(square), 1);
-      }
-    } else if (enemyBlockMode) {
-      if (square.dataset.status === "none") {
-        square.dataset.status = "enemy";
-        square.style.backgroundColor = "red";
-        newBlocks.push(square);
-      } else if (square.dataset.status === "enemy") {
-        square.dataset.status = "none";
-        square.style.backgroundColor = "transparent";
-        newBlocks.splice(newBlocks.indexOf(square), 1);
-      }
-    } else if (coinBlockMode) {
-      if (square.dataset.status === "none") {
-        square.dataset.status = "coin";
-        square.style.backgroundColor = "green";
-        newBlocks.push(square);
-      } else if (square.dataset.status === "coin") {
-        square.dataset.status = "none";
-        square.style.backgroundColor = "transparent";
-        newBlocks.splice(newBlocks.indexOf(square), 1);
-      }
-    }
-    else if (goalBlockMode) {
-      if (square.dataset.status === "none") {
-        square.dataset.status = "goal";
-        square.style.backgroundColor = "gold";
-        newBlocks.push(square);
-      } else if (square.dataset.status === "goal") {
-        square.dataset.status = "none";
-        square.style.backgroundColor = "transparent";
-        newBlocks.splice(newBlocks.indexOf(square), 1);
-      }
-    }
-    else if (eraserBlockMode) {
-      if (square.dataset.status !== "none") {
-        square.dataset.status = "none";
-        square.style.backgroundColor = "transparent";
-        newBlocks.splice(newBlocks.indexOf(square), 1);
-      }
-    }
-  }
-
   function saveAsNewEventHandler(event) {
     event.preventDefault();
     let player = document.querySelector(".player");
@@ -330,24 +275,87 @@ function levelBuilder() {
   }
 
   function saveButtonEventHandler(event) {
-    console.log("save button hit");
-    let blockArray = [];
-    Block.all.forEach(block => {
-      blockArray.push(block.getObj());
-      console.log(block.getObj());
+    let player = document.querySelector(".player");
+    currentLevel.blocks.forEach(block => {
+      newBlocks.push(block);
     });
+    blocksToSend = [];
+    newBlocks.forEach(block =>{
+      blocksToSend.push({x: block.x, y: block.y, width: block.width, height: block.height, style: block.color, status: block.status})
+    })
+    obj = {level: {startPositionX: parseInt(player.style.left.replace(/\D/gm, "/")), startPositionY: parseInt(player.style.top.replace(/\D/gm, "/")), blocks_attributes: blocksToSend }};
     //fetch request
-    let levelUrl = `http://localhost:3000/levels/${currentLevel.id}`;
+    let levelUrl = `http://localhost:3000/api/v1/levels/${currentLevel.id}`;
     fetch(levelUrl, {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json"
       },
-      body: JSON.stringify({ blockArray })
-    }).then(res => response.json());
+      body: JSON.stringify(obj)
+    }).then(res => res.json())
+    .then(data => console.log(data));
   }
 }
 
+
+//OBSOLETE FUNCTIONS!!!!! WARNING!!! HERE THERE BE MONSTERS
+
+function squareClickEventHandler(event) {
+  console.log("square clicked");
+  let status = "platform";
+  let square = event.target;
+
+  newBlocks;
+  if (platformBlockMode) {
+    if (square.dataset.status === "none") {
+      square.dataset.status = "platform";
+      square.style.backgroundColor = "black";
+      newBlocks.push(square);
+    } else if (square.dataset.status === "platform") {
+      square.dataset.status = "none";
+      square.style.backgroundColor = "transparent";
+      newBlocks.splice(newBlocks.indexOf(square), 1);
+    }
+  } else if (enemyBlockMode) {
+    if (square.dataset.status === "none") {
+      square.dataset.status = "enemy";
+      square.style.backgroundColor = "red";
+      newBlocks.push(square);
+    } else if (square.dataset.status === "enemy") {
+      square.dataset.status = "none";
+      square.style.backgroundColor = "transparent";
+      newBlocks.splice(newBlocks.indexOf(square), 1);
+    }
+  } else if (coinBlockMode) {
+    if (square.dataset.status === "none") {
+      square.dataset.status = "coin";
+      square.style.backgroundColor = "green";
+      newBlocks.push(square);
+    } else if (square.dataset.status === "coin") {
+      square.dataset.status = "none";
+      square.style.backgroundColor = "transparent";
+      newBlocks.splice(newBlocks.indexOf(square), 1);
+    }
+  }
+  else if (goalBlockMode) {
+    if (square.dataset.status === "none") {
+      square.dataset.status = "goal";
+      square.style.backgroundColor = "gold";
+      newBlocks.push(square);
+    } else if (square.dataset.status === "goal") {
+      square.dataset.status = "none";
+      square.style.backgroundColor = "transparent";
+      newBlocks.splice(newBlocks.indexOf(square), 1);
+    }
+  }
+  else if (eraserBlockMode) {
+    if (square.dataset.status !== "none") {
+      square.dataset.status = "none";
+      square.style.backgroundColor = "transparent";
+      newBlocks.splice(newBlocks.indexOf(square), 1);
+    }
+  }
+}
 
 function dragAndDropStuff(){
   let dragGoing = false;

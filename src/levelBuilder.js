@@ -19,7 +19,7 @@ function levelBuilder() {
   let coinBlockButton;
   let newInputField;
 
-  let grid;
+  let grid = [];
   let builderControlContainer;
   let newBlocks;
 
@@ -42,7 +42,7 @@ function levelBuilder() {
   saveButton.addEventListener("click", saveButtonEventHandler);
   builderControlContainer.appendChild(saveButton);
 
-  saveAsNewForm = document.createElement("form");
+  let saveAsNewForm = document.createElement("form");
   newLabel = document.createElement("label");
   newLabel.innerText = "Save as New Level: ";
   saveAsNewForm.appendChild(newLabel);
@@ -213,15 +213,23 @@ function levelBuilder() {
     saveButton.remove();
     dragModeButton.remove();
     dottedRectangle.remove();
-    for (let y = 0; y < 28; y++) {
-      for (let x = 0; x < 48; x++) {
-        grid[y][x].remove();
+    saveAsNewForm.remove();
+    console.log(grid.length)
+    if(grid.length !== 0){
+      for (let y = 0; y < 28; y++) {
+        for (let x = 0; x < 48; x++) {
+          grid[y][x].remove();
+        }
       }
     }
+
+    if(gridMode){
+      platformBlockButton.remove();
+      enemyBlockButton.remove();
+      coinBlockButton.remove();
+    }
     gridModeButton.remove();
-    platformBlockButton.remove();
-    enemyBlockButton.remove();
-    coinBlockButton.remove();
+
 
     gameContainer.removeEventListener("mousedown", mouseDownEvent);
     gameContainer.removeEventListener("mousemove", mouseMoveEvent);
@@ -234,7 +242,6 @@ function levelBuilder() {
 
   function gridModeButtonEventHandler(event) {
     gridMode = !gridMode;
-    grid = [];
     if (gridMode) {
       console.log("grid mode enabled");
       //create grid 28 rows x 48 columns
@@ -255,7 +262,6 @@ function levelBuilder() {
           grid[y].push(square);
         }
       }
-
       platformBlockButton = document.createElement("button");
       platformBlockButton.innerText = "Platform Block";
       platformBlockButton.addEventListener("click", platformBlockEventHandler);
@@ -268,6 +274,11 @@ function levelBuilder() {
       coinBlockButton.innerText = "Coin Block";
       coinBlockButton.addEventListener("click", coinBlockEventHandler);
       builderControlContainer.appendChild(coinBlockButton);
+    }
+    else {
+      platformBlockButton.remove();
+      enemyBlockButton.remove();
+      coinBlockButton.remove();
     }
   }
 
@@ -334,7 +345,11 @@ function levelBuilder() {
     currentLevel.blocks.forEach(block => {
       newBlocks.push(block);
     });
-    obj = { name: newInputField.value, startPositionX: player.style.left, startPositionY: player.style.right, blocks: newBlocks };
+    blocksToSend = [];
+    newBlocks.forEach(block =>{
+      blocksToSend.push({x: block.x, y: block.y, width: block.width, height: block.height, style: block.color, status: block.status})
+    })
+    obj = {level: { name: newInputField.value, startPositionX: parseInt(player.style.left.replace(/\D/gm, "/")), startPositionY: parseInt(player.style.top.replace(/\D/gm, "/")), blocks_attributes: blocksToSend }};
     let levelUrl = `http://localhost:3000/api/v1/levels/`;
     console.log(JSON.stringify(obj));
     fetch(levelUrl, {
@@ -343,7 +358,8 @@ function levelBuilder() {
         "Content-Type": "application/json"
       },
       body: JSON.stringify(obj)
-    }).then(res => res.json());
+    }).then(res => res.json())
+    .then(data => console.log(data));
   }
 
   function saveButtonEventHandler(event) {

@@ -3,6 +3,8 @@ function levelBuilder() {
 
   let gridMode = false;
 
+  let drawingGoing = false;
+
   let platformBlockMode = false;
   let enemyBlockMode = false;
   let coinBlockMode = false;
@@ -115,7 +117,10 @@ function levelBuilder() {
           square.style.borderStyle = "solid";
           square.style.borderWidth = "1px";
           square.dataset.status = "none";
-          square.addEventListener("click", squareClickEventHandler);
+          // square.addEventListener("click", squareClickEventHandler);
+          square.addEventListener("mousedown", squareMouseDownEventHandler);
+          square.addEventListener("mousemove", squareMouseMoveEventHandler);
+          square.addEventListener("mouseup", squareMouseUpEventHandler);
           gameContainer.appendChild(square);
           grid[y].push(square);
         }
@@ -147,6 +152,11 @@ function levelBuilder() {
       coinBlockButton.remove();
       goalBlockButton.remove();
       eraserBlockButton.remove();
+      platformBlockMode = false;
+      enemyBlockMode = false;
+      coinBlockMode = false;
+      goalBlockMode = false;
+      eraserBlockMode = false;
     }
   }
 
@@ -188,6 +198,55 @@ function levelBuilder() {
     coinBlockMode = false;
     goalBlockMode = false;
     eraserBlockMode = true;
+  }
+
+  function squareMouseDownEventHandler(event){
+    drawingGoing = true;
+  }
+
+  function squareMouseMoveEventHandler(event){
+    if(drawingGoing){
+      let square = event.target;
+
+      newBlocks;
+      if (platformBlockMode) {
+        if (square.dataset.status === "none") {
+          square.dataset.status = "platform";
+          square.style.backgroundColor = "black";
+          newBlocks.push(square);
+        }
+      } else if (enemyBlockMode) {
+        if (square.dataset.status === "none") {
+          square.dataset.status = "enemy";
+          square.style.backgroundColor = "red";
+          newBlocks.push(square);
+        }
+      } else if (coinBlockMode) {
+        if (square.dataset.status === "none") {
+          square.dataset.status = "coin";
+          square.style.backgroundColor = "green";
+          newBlocks.push(square);
+        }
+      }
+      else if (goalBlockMode) {
+        if (square.dataset.status === "none") {
+          square.dataset.status = "goal";
+          square.style.backgroundColor = "gold";
+          newBlocks.push(square);
+        }
+      }
+      else if (eraserBlockMode) {
+        if (square.dataset.status !== "none") {
+          square.dataset.status = "none";
+          square.style.backgroundColor = "transparent";
+          newBlocks.splice(newBlocks.indexOf(square), 1);
+        }
+      }
+    }
+  }
+
+  function squareMouseUpEventHandler(event){
+    drawingGoing = false;
   }
 
   function squareClickEventHandler(event) {

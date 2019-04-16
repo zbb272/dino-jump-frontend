@@ -42,6 +42,7 @@ class Player {
     this.renderLives();
     if (this.lives === 0) {
       if (this.level.currentScore > 0) {
+        this.level.callTime(false);
         this.level.submitScore();
       }
       this.lives = 5;
@@ -56,6 +57,16 @@ class Player {
   setLevel(level) {
     this.setXY(level.startPositionX, level.startPositionY);
     this.level = level;
+  }
+  goalCollisions() {
+    if (typeof this.collidesAll(this.level.goal) === "object") {
+      console.log("Goal");
+      this.level.callTime(true);
+      this.level.submitScore();
+      this.dx = 0;
+      this.dy = 0;
+      this.setXY(this.level.startPositionX, this.level.startPositionY);
+    }
   }
 
   //only spot this.x and this.y should be modified
@@ -95,7 +106,7 @@ class Player {
       this.jumping = true;
       console.log("walljump");
       this.wallJump(15, this.isAgainstWall() * 10);
-    } else if (this.doubleJumpUnlocked && this.doubleJump) {
+    } else if (this.doubleJumpUnlocked && this.doubleJump && this.dashing === 0) {
       this.jumping = true;
       console.log("djump");
       this.doubleJump = false;
@@ -136,7 +147,7 @@ class Player {
     setTimeout(() => {
       console.log("dash ended");
       this.dashing = 0;
-    }, 500);
+    }, 200);
   }
 
   //triggered by keyUp --- applies slow()
@@ -208,8 +219,12 @@ class Player {
     } else if (objects.length > 0) {
       objects.forEach(obj => {
         if (obj.visible && this.verticallyIntercepts(obj, interceptValue) && this.top >= obj.bottom && this.top + value <= obj.bottom) {
-          console.log("touch");
-          ret = obj;
+          if (obj.status === "coin") {
+            this.level.removeCoin(obj);
+            this.level.updateScore(10);
+          } else {
+            ret = obj;
+          }
         }
       });
     }
@@ -224,7 +239,12 @@ class Player {
     } else if (objects.length > 0) {
       objects.forEach(obj => {
         if (obj.visible && this.verticallyIntercepts(obj, xValue) && this.bottom <= obj.top && this.bottom + yValue >= obj.top) {
-          ret = obj;
+          if (obj.status === "coin") {
+            this.level.removeCoin(obj);
+            this.level.updateScore(10);
+          } else {
+            ret = obj;
+          }
         }
       });
       return ret;
@@ -237,7 +257,12 @@ class Player {
     } else if (objects.length > 0) {
       objects.forEach(obj => {
         if (obj.visible && this.horizontallyIntercepts(obj, yValue) && this.left + xValue <= obj.right && this.left >= obj.right) {
-          ret = obj;
+          if (obj.status === "coin") {
+            this.level.removeCoin(obj);
+            this.level.updateScore(10);
+          } else {
+            ret = obj;
+          }
         }
       });
       return ret;
@@ -250,7 +275,12 @@ class Player {
     } else if (objects.length > 0) {
       objects.forEach(obj => {
         if (obj.visible && this.horizontallyIntercepts(obj, yValue) && this.right <= obj.left && this.right + xValue >= obj.left) {
-          ret = obj;
+          if (obj.status === "coin") {
+            this.level.removeCoin(obj);
+            this.level.updateScore(10);
+          } else {
+            ret = obj;
+          }
         }
       });
     }
@@ -262,23 +292,7 @@ class Player {
   }
   specialCollisions() {
     this.goalCollisions();
-    this.coinCollisions();
-
     this.badCollisions();
-  }
-
-  goalCollisions() {
-    if (typeof this.collidesAll(this.level.goal) === "object") {
-      console.log("Goal");
-    }
-  }
-  coinCollisions() {
-    const coin = this.collidesAll(this.level.coins);
-    if (typeof coin === "object") {
-      this.level.removeCoin(coin);
-      this.level.updateScore(10);
-      console.log("Cha-ching");
-    }
   }
 
   badCollisions() {

@@ -24,6 +24,7 @@
   background-color: mediumaquamarine;
   z-index: 5;
   display: block;
+  border-radius: 8px;
   /* min-height: 50px;
   min-width: 30px; */
 }

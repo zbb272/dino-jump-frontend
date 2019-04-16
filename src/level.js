@@ -17,7 +17,12 @@ class Level {
     this.currentScore = 0;
 
     Level.all.push(this);
-    console.log(Level.all);
+  }
+  init() {
+    this.time = 0;
+    this.timer = setInterval(() => {
+      timer++;
+    }, 1000);
   }
 
   render() {
@@ -62,7 +67,15 @@ class Level {
   drop() {
     this.blocks.forEach(block => block.container.remove());
   }
-
+  callTime(complete) {
+    clearInterval(this.timer);
+    if (complete) {
+      if (this.timer <= 120) {
+        this.currentScore += 120 - this.timer;
+      }
+    }
+    this.timer = 0;
+  }
   submitScore() {
     fetch("http://localhost:3000/api/v1/scores/", {
       method: "POST",

@@ -41,10 +41,11 @@ class Player {
     this.lives--;
     this.renderLives();
     if (this.lives === 0) {
-      this.level.submitScore();
+      if (this.level.currentScore > 0) {
+        this.level.submitScore();
+      }
       this.lives = 5;
-      this.level.drop();
-      this.level.render();
+
       this.renderLives();
     }
     this.dx = 0;

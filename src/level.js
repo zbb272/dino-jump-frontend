@@ -21,12 +21,26 @@ class Level {
   }
 
   render() {
-    this.updateScore();
-    this.updateHighScore();
+    this.renderScore();
     this.blockSchemas.forEach(b => {
       const block = new Block(b, this.gameContainer);
       this.add(block);
     });
+  }
+
+  renderScore() {
+    highScore.innerHTML = this.highScore;
+    currentScore.innerHTML = this.currentScore;
+  }
+
+  updateHighScore(num) {
+    this.highScore = num;
+    this.renderScore();
+  }
+
+  updateScore(num = 0) {
+    this.currentScore = parseInt(this.currentScore) + num;
+    this.renderScore();
   }
 
   add(block) {
@@ -43,14 +57,6 @@ class Level {
   drop() {
     this.blocks.forEach(block => block.container.remove());
   }
-  updateHighScore() {
-    highScore.innerHTML = this.highScore;
-  }
-
-  updateScore(num = 0) {
-    this.currentScore += num;
-    currentScore.innerHTML = this.currentScore;
-  }
 
   submitScore() {
     fetch("http://localhost:3000/api/v1/scores/", {
@@ -61,10 +67,11 @@ class Level {
       .then(res => console.log(res))
       .then(() => {
         if (this.currentScore > this.highScore) {
-          highScore.innerHTML = this.currentScore;
+          this.highScore = this.currentScore;
         }
         this.currentScore = 0;
-        currentScore.innerHTML = 0;
+        this.drop();
+        this.render();
       });
   }
 }

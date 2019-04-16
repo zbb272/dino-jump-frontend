@@ -19,7 +19,7 @@
   z-index: 10;
 }
 
-ul{
+ul {
   list-style-type: none;
   margin: 0;
   padding: 0;
@@ -55,7 +55,8 @@ ul{
   background-color: mediumaquamarine;
   z-index: 5;
   display: block;
-  border-radius: 8px;
+  border-top-left-radius: 25px;
+  border-top-right-radius: 25px;
   /* min-height: 50px;
   min-width: 30px; */
 }
@@ -68,13 +69,18 @@ ul{
 
 .score {
   color: white;
-  font: Arial;
+  font-family: Arial, Helvetica, sans-serif;
   display: inline;
 }
 
+.clock {
+  color: white;
+  font-family: "Courier New", Courier, monospace;
+  float: left;
+}
 .lives {
   color: magenta;
-  font: Arial;
+  font-family: Arial, Helvetica, sans-serif;
   display: inline;
   float: left;
 }

@@ -1,5 +1,6 @@
 const currentScore = document.getElementById("current-score");
 const highScore = document.getElementById("high-score");
+const clock = document.getElementById("clock");
 class Level {
   static all = [];
   constructor(obj, gameContainer) {
@@ -21,8 +22,10 @@ class Level {
   init() {
     this.time = 0;
     this.timer = setInterval(() => {
-      timer++;
+      this.time = parseInt(this.time) + 1;
+      clock.innerHTML = this.time;
     }, 1000);
+    this.render();
   }
 
   render() {
@@ -71,7 +74,7 @@ class Level {
     clearInterval(this.timer);
     if (complete) {
       if (this.timer <= 120) {
-        this.currentScore += 120 - this.timer;
+        this.currentScore = parseInt(this.currentScore) + 120 - parseInt(this.timer);
       }
     }
     this.timer = 0;
@@ -88,8 +91,6 @@ class Level {
           this.highScore = this.currentScore;
         }
         this.currentScore = 0;
-        this.drop();
-        this.render();
       });
   }
 }

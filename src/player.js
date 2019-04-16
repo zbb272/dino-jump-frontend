@@ -40,18 +40,40 @@ class Player {
   die() {
     this.lives--;
     this.renderLives();
+    this.disabled = true;
     if (this.lives === 0) {
-      if (this.level.currentScore > 0) {
-        this.level.callTime(false);
-        this.level.submitScore();
-      }
-      this.lives = 5;
-
-      this.renderLives();
+      this.gameOver();
+    } else {
+      setTimeout(() => {
+        this.dx = 0;
+        this.dy = 0;
+        this.setXY(this.level.startPositionX, this.level.startPositionY);
+        this.disabled = false;
+      }, 1000);
     }
-    this.dx = 0;
-    this.dy = 0;
-    this.setXY(this.level.startPositionX, this.level.startPositionY);
+  }
+  gameOver() {
+    this.level.callTime(false);
+    this.level.renderScore();
+    if (this.level.currentScore > 0) {
+      this.level.submitScore();
+    }
+    const gameOver = document.createElement("div");
+    gameOver.classList.add("option-menu");
+    gameOver.innerHTML = "GAME OVER";
+    this.gameContainer.appendChild(gameOver);
+    setTimeout(() => {
+      this.lives = 5;
+      this.renderLives();
+      gameOver.remove();
+      this.dx = 0;
+      this.dy = 0;
+      this.setXY(this.level.startPositionX, this.level.startPositionY);
+      this.disabled = false;
+      this.level.drop();
+      this.level.render();
+      this.level.init();
+    }, 2500);
   }
 
   setLevel(level) {
@@ -60,12 +82,24 @@ class Player {
   }
   goalCollisions() {
     if (typeof this.collidesAll(this.level.goal) === "object") {
-      console.log("Goal");
+      this.disabled = true;
+      this.level.updateScore(200);
       this.level.callTime(true);
       this.level.submitScore();
-      this.dx = 0;
-      this.dy = 0;
-      this.setXY(this.level.startPositionX, this.level.startPositionY);
+      const success = document.createElement("div");
+      success.classList.add("option-menu");
+      success.innerHTML = "LEVEL COMPLETE";
+      this.gameContainer.appendChild(success);
+      setTimeout(() => {
+        this.dx = 0;
+        this.dy = 0;
+        this.setXY(this.level.startPositionX, this.level.startPositionY);
+        this.disabled = false;
+        success.remove();
+        this.level.drop();
+        this.level.render();
+        this.level.init();
+      }, 2500);
     }
   }
 
@@ -352,35 +386,37 @@ class Player {
 
   //Acts, applies slows, then collisions, then sets values
   draw(inputs) {
-    this.specialCollisions();
-    if (!this.isAirborne() || (this.isAirborne() && this.isAgainstWall())) {
-      this.doubleJump = true;
-    }
-    if (this.dashing > 2) {
-      this.dashing -= 1;
-      if (this.dashing <= 2) {
-        this.completeDash();
+    if (!this.disabled) {
+      this.specialCollisions();
+      if (!this.isAirborne() || (this.isAirborne() && this.isAgainstWall())) {
+        this.doubleJump = true;
       }
+      if (this.dashing > 2) {
+        this.dashing -= 1;
+        if (this.dashing <= 2) {
+          this.completeDash();
+        }
+      }
+      if (inputs.jump && !this.jumping) {
+        this.processJumpInput();
+      }
+      if (this.dashUnlocked && inputs.dash && this.dashing === 0) {
+        this.initiateDash();
+      }
+      if (inputs.left) {
+        this.moveLeft();
+      }
+      if (inputs.right) {
+        this.moveRight();
+      }
+      this.applyGravity();
+      if (!this.isAirborne() && !this.movingRight && !this.movingLeft) {
+        this.slowDown();
+      }
+      this.collisions();
+      this.setXY(this.x + this.dx, this.y + this.dy);
+      this.render();
     }
-    if (inputs.jump && !this.jumping) {
-      this.processJumpInput();
-    }
-    if (this.dashUnlocked && inputs.dash && this.dashing === 0) {
-      this.initiateDash();
-    }
-    if (inputs.left) {
-      this.moveLeft();
-    }
-    if (inputs.right) {
-      this.moveRight();
-    }
-    this.applyGravity();
-    if (!this.isAirborne() && !this.movingRight && !this.movingLeft) {
-      this.slowDown();
-    }
-    this.collisions();
-    this.setXY(this.x + this.dx, this.y + this.dy);
-    this.render();
   }
 
   renderLives() {

@@ -17,11 +17,11 @@ function run() {
   mainMenu.appendChild(subTitleElement);
   mainMenu.addEventListener("click", mainMenuKeyDownEventHandler);
 
-  function mainMenuKeyDownEventHandler(event){
+  function mainMenuKeyDownEventHandler(event) {
     gameListMenu();
   }
 
-  function gameListMenu(){
+  function gameListMenu() {
     mainMenu.removeEventListener("click", mainMenuKeyDownEventHandler);
 
     subTitleElement.innerText = "Select Game To Play";
@@ -33,12 +33,12 @@ function run() {
     mainMenu.appendChild(gameList);
   }
 
-  function gameSelectEventListener(event){
+  function gameSelectEventListener(event) {
     gameList.remove();
     levelListMenu();
   }
 
-  function levelListMenu(){
+  function levelListMenu() {
     subTitleElement.innerText = "Select Level To Play";
     let levelList = document.createElement("ul");
 
@@ -53,16 +53,15 @@ function run() {
           levelListItem.dataset.id = level.id;
           levelListItem.addEventListener("click", levelSelectEventListener);
           levelList.appendChild(levelListItem);
-          new Level(level, gameContainer)
-        })
-      })
+          new Level(level, gameContainer);
+        });
+      });
 
     mainMenu.appendChild(levelList);
-
   }
 
-  function levelSelectEventListener(event){
-    console.log(event.target)
+  function levelSelectEventListener(event) {
+    console.log(event.target);
     //setup Player
     let startY = gameContainer.clientHeight - 50;
     let startX = 30;
@@ -70,7 +69,7 @@ function run() {
 
     //setup level
     currentLevel = Level.all.find(level => level.id === parseInt(event.target.dataset.id));
-    currentLevel.render();
+    currentLevel.init();
     player.setLevel(currentLevel);
     player.disabled = false;
 
@@ -79,9 +78,7 @@ function run() {
     runGame();
   }
 
-
-
-  function runGame(){
+  function runGame() {
     // gameContainer = document.getElementById("game-container");
     gameContainer.style.display = "block";
 
@@ -93,7 +90,6 @@ function run() {
     let dashPressed = false;
     document.addEventListener("keydown", keyDownEventHandler);
     document.addEventListener("keyup", keyUpEventHandler);
-
 
     // let currentLevel;
 
@@ -112,9 +108,9 @@ function run() {
       }
     }
 
-    function showOptionMenu(){
+    function showOptionMenu() {
       optionMenu = document.createElement("div");
-      optionMenu.classList.add("option-menu")
+      optionMenu.classList.add("option-menu");
       optionMenuTitle = document.createElement("h2");
       optionMenuTitle.innerText = "Options";
       optionMenu.appendChild(optionMenuTitle);
@@ -130,17 +126,16 @@ function run() {
       optionItem.addEventListener("click", optionItemEventListener);
       optionList.appendChild(optionItem);
 
-      optionMenu.appendChild(optionList)
-      gameContainer.appendChild(optionMenu)
+      optionMenu.appendChild(optionList);
+      gameContainer.appendChild(optionMenu);
     }
 
-    function optionItemEventListener(event){
-      console.log(event.target)
-      if(event.target.innerText === "Return to Game"){
+    function optionItemEventListener(event) {
+      console.log(event.target);
+      if (event.target.innerText === "Return to Game") {
         optionMenu.remove();
         optionMenuOpen = false;
-      }
-      else if(event.target.innerText === "Exit to Main Menu"){
+      } else if (event.target.innerText === "Exit to Main Menu") {
         document.location.reload();
       }
     }
@@ -169,12 +164,11 @@ function run() {
       } else if (event.key === "?") {
         debugger;
       }
-      if(event.keyCode === 27 || event.key === "Escape"){
-        if(optionMenuOpen){
+      if (event.keyCode === 27 || event.key === "Escape") {
+        if (optionMenuOpen) {
           optionMenu.remove();
           optionMenuOpen = false;
-        }
-        else{
+        } else {
           optionMenuOpen = true;
           showOptionMenu();
         }
@@ -207,5 +201,4 @@ function run() {
       }
     }
   }
-
 }

@@ -3,8 +3,9 @@ class Block {
   constructor(obj) {
     this.x = obj.x;
     this.y = obj.y;
-    this.dy = 0;
-    this.dx = 0;
+    this.origX = this.x;
+    this.origY = this.y;
+
     this.width = obj.width;
     this.height = obj.height;
     this.left = this.x;
@@ -42,6 +43,14 @@ class Block {
     };
     return obj;
   }
+  move(player) {
+    const wallClingEdgeCase = player.collidesAll([this]) === this;
+    this.setXY(this.x + this.config.dx, this.y + this.config.dy);
+
+    if (player.collidesAll([this]) === this || wallClingEdgeCase) {
+      player.setXY(player.x + this.config.dx, player.y + this.config.dy);
+    }
+  }
   remove() {
     this.container.remove();
     this.visible = false;
@@ -49,6 +58,12 @@ class Block {
 
   draw() {
     this.render();
+  }
+  reset() {
+    this.setXY(this.origX, this.origY);
+    this.config.dx = this.origDX;
+    this.config.dy = this.origDY;
+    console.log("resetting", this.config.dx, this.config.dy);
   }
 
   render() {
@@ -76,6 +91,8 @@ class Block {
     this.config.minX = this.config.minX + this.x;
     this.config.maxY = this.config.maxY + this.y;
     this.config.minY = this.config.minY + this.y;
+    this.origDX = this.config.dx;
+    this.origDY = this.config.dy;
 
     this.color = this.config.color;
   }

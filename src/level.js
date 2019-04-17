@@ -18,10 +18,15 @@ class Level {
     this.powers = [];
     this.movers = [];
     this.currentScore = 0;
-
+    this.disabled = false;
+    this.first = true;
     Level.all.push(this);
   }
   init() {
+    this.movers.forEach(b => {
+      b.reset();
+    });
+    console.log(this.movers);
     this.time = 0;
     this.timer = setInterval(() => {
       this.time = parseInt(this.time) + 1;
@@ -30,40 +35,33 @@ class Level {
     this.render();
   }
 
-  progress() {
-    this.movers.forEach(block => {
-      if (block.config.dx > 0) {
-        if (block.x >= block.config.maxX) {
-          block.config.dx = -1 * block.config.dx;
-        } else {
-          block.setXY(block.x + block.config.dx, block.y);
-          console.log("moving 1", block);
+  progress(player) {
+    if (!this.disabled) {
+      this.movers.forEach(block => {
+        // fully simultaneous
+        if (block.config.dx > 0) {
+          if (block.x >= block.config.maxX) {
+            block.config.dx = -1 * block.config.dx;
+          }
+        } else if (block.config.dx < 0) {
+          if (block.x <= block.config.minX) {
+            block.config.dx = -1 * block.config.dx;
+          }
         }
-      } else if (block.config.dx < 0) {
-        if (block.x <= block.config.minX) {
-          block.config.dx = -1 * block.config.dx;
-        } else {
-          block.setXY(block.x + block.config.dx, block.y);
-          console.log("moving 2", block);
+        if (block.config.dy > 0) {
+          if (block.y >= block.config.maxY) {
+            block.config.dy = -1 * block.config.dy;
+          }
+        } else if (block.config.dy < 0) {
+          if (block.y <= block.config.minY) {
+            block.config.dy = -1 * block.config.dy;
+          }
         }
-      }
-      if (block.config.dy > 0) {
-        if (block.x >= block.config.maxY) {
-          block.config.dy = -1 * block.config.dy;
-        } else {
-          block.setXY(block.y, block.config.dy + block.y);
-          console.log("moving 3", block);
-        }
-      } else if (block.config.dy < 0) {
-        if (block.x <= block.config.minY) {
-          block.config.dy = -1 * block.config.dy;
-        } else {
-          block.setXY(block.y, block.config.dy + block.y);
-          console.log("moving 4", block);
-        }
-      }
-      block.render();
-    });
+        block.move(player);
+
+        block.render();
+      });
+    }
   }
   complete() {
     let i = Level.all.indexOf(this);
@@ -73,16 +71,19 @@ class Level {
     }
     this.drop();
     currentLevel = Level.all[i];
-    currentLevel.render();
     currentLevel.init();
   }
 
   render() {
+    this.movers.forEach(b => b.reset());
     this.renderScore();
-    this.blockSchemas.forEach(b => {
-      const block = new Block(b, this.gameContainer);
-      this.add(block);
-    });
+    if (this.first) {
+      this.blockSchemas.forEach(b => {
+        const block = new Block(b, this.gameContainer);
+        this.add(block);
+      });
+    }
+    this.first = false;
   }
 
   renderScore() {

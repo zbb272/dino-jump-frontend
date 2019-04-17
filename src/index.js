@@ -99,9 +99,12 @@ function run() {
 
     setInterval(draw, 20);
 
+    let levelCounter = 0;
     function draw() {
-      if (currentLevel.movers.length > 0) {
-        currentLevel.progress();
+      levelCounter++;
+      if (!currentLevel.disabled && currentLevel.movers.length > 0 && levelCounter >= 2) {
+        levelCounter = 0;
+        currentLevel.progress(player);
       }
       if (!player.disabled) {
         player.draw({ left: leftPressed, right: rightPressed, jump: jumpPressed, dash: dashPressed });

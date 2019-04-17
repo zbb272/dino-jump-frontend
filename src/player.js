@@ -6,6 +6,7 @@ class Player {
     this.lastY = startY;
     this.dx = 0;
     this.dy = 0;
+    this.gravCounter = 0;
     this.height = 37;
     this.width = 23;
     this.lives = 5;
@@ -66,12 +67,6 @@ class Player {
   }
 
   setXY(x, y) {
-    if (this.x !== x) {
-      this.lastX = this.x;
-    }
-    if (this.y !== y) {
-      this.lastY = this.y;
-    }
     this.x = x;
     this.y = y;
     this.left = this.x;
@@ -99,16 +94,16 @@ class Player {
     if (!this.isAirborne()) {
       console.log("jump");
       this.jumping = true;
-      this.jump(15);
+      this.jump(18);
     } else if (this.wallJumpUnlocked && this.isAgainstWall() !== 0) {
       this.jumping = true;
       console.log("walljump");
-      this.wallJump(15, this.isAgainstWall() * 10);
+      this.wallJump(14, this.isAgainstWall() * 8);
     } else if (this.doubleJumpUnlocked && this.doubleJump && this.dashing === 0) {
       this.jumping = true;
       console.log("djump");
       this.doubleJump = false;
-      this.jump(8);
+      this.jump(10);
     }
   }
 
@@ -134,7 +129,7 @@ class Player {
       direction = -1;
     }
 
-    this.dx = direction * 30;
+    this.dx = direction * 20;
   }
   completeDash() {
     this.jumping = false;
@@ -158,11 +153,20 @@ class Player {
 
   //gradually fall when airborne
   applyGravity() {
-    if (this.isAirborne() && this.dashing <= 1 && this.dy <= 30) {
-      this.dy += 1;
-    }
-    if (this.isAgainstWall() && this.wallJumpUnlocked && this.dy > 5) {
-      this.dy = 3;
+    if (this.gravCounter <= 0) {
+      if (this.isAirborne() && this.dashing <= 1 && this.dy <= 20) {
+        this.dy += 3;
+      }
+      if (this.isAgainstWall() && this.wallJumpUnlocked && this.dy > 3) {
+        this.dy = 3;
+      }
+      this.gravCounter = 3;
+    } else {
+      if (this.dy < 0) {
+        this.gravCounter -= 2;
+      } else {
+        this.gravCounter--;
+      }
     }
   }
 
@@ -172,10 +176,10 @@ class Player {
       this.dx = 0;
     } else {
       if (this.dx > 0) {
-        this.dx -= this.dx / 5;
+        this.dx -= this.dx / 4;
         this.dx = Math.floor(this.dx);
       } else {
-        this.dx -= this.dx / 5;
+        this.dx -= this.dx / 4;
         this.dx = Math.ceil(this.dx);
       }
     }
@@ -188,8 +192,8 @@ class Player {
       if (this.isAirborne() && this.dx < 0) {
         this.slowDown();
       } else if (this.dx < 2) {
-        this.dx = 4;
-      } else if (this.dx < 10) {
+        this.dx = 3;
+      } else if (this.dx < 7) {
         this.dx += 1;
       }
     }
@@ -200,8 +204,8 @@ class Player {
       if (this.isAirborne() && this.dx > 0) {
         this.slowDown();
       } else if (this.dx > -2) {
-        this.dx = -4;
-      } else if (this.dx > -10) {
+        this.dx = -3;
+      } else if (this.dx > -7) {
         this.dx += -1;
       }
     }
@@ -250,7 +254,7 @@ class Player {
   //if collision with bottom, reset to original position
   collidesBottom(objects, yValue = this.dy, xValue = this.dx, shrink = false) {
     let ret = false;
-    if (this.y + yValue + this.height >= this.gameContainer.clientHeight) {
+    if (this.y + yValue >= this.gameContainer.clientHeight) {
       this.die();
     } else if (objects.length > 0) {
       objects.forEach(obj => {
@@ -310,6 +314,7 @@ class Player {
   goalCollisions() {
     if (typeof this.collidesAll(this.level.goal, 0) === "object") {
       this.disabled = true;
+      this.level.disabled = true;
       this.level.updateScore(100);
       this.level.callTime(true);
       this.level.submitScore();
@@ -326,11 +331,13 @@ class Player {
         this.dy = 0;
         this.setXY(this.level.startPositionX, this.level.startPositionY);
         this.disabled = false;
+        this.level.disabled = false;
       }, 2500);
     }
   }
   die() {
     this.disabled = true;
+    this.level.disabled = true;
     this.setXY(this.level.startPositionX, this.level.startPositionY);
     this.dx = 0;
     this.dy = 0;
@@ -341,14 +348,13 @@ class Player {
     } else {
       setTimeout(() => {
         this.disabled = false;
+        this.level.disabled = false;
+        console.log("level enabled", this.level, this.level.disabled);
       }, 1000);
     }
   }
   gameOver() {
     this.level.callTime(false);
-    this.dx = 0;
-    this.dy = 0;
-    this.setXY(this.level.startPositionX, this.level.startPositionY);
     this.level.renderScore();
     if (this.level.currentScore > 0) {
       this.level.submitScore();
@@ -361,10 +367,11 @@ class Player {
       this.lives = 5;
       this.renderLives();
       gameOver.remove();
-      this.level.drop();
-      this.level.render();
+
       this.level.init();
+
       this.disabled = false;
+      this.level.disabled = false;
     }, 2500);
   }
 

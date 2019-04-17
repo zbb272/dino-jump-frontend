@@ -15,6 +15,8 @@ class Level {
     this.hazards = [];
     this.goal = [];
     this.coins = [];
+    this.powers = [];
+    this.movers = [];
     this.currentScore = 0;
 
     Level.all.push(this);
@@ -28,6 +30,41 @@ class Level {
     this.render();
   }
 
+  progress() {
+    this.movers.forEach(block => {
+      if (block.config.dx > 0) {
+        if (block.x >= block.config.maxX) {
+          block.config.dx = -1 * block.config.dx;
+        } else {
+          block.setXY(block.x + block.config.dx, block.y);
+          console.log("moving 1", block);
+        }
+      } else if (block.config.dx < 0) {
+        if (block.x <= block.config.minX) {
+          block.config.dx = -1 * block.config.dx;
+        } else {
+          block.setXY(block.x + block.config.dx, block.y);
+          console.log("moving 2", block);
+        }
+      }
+      if (block.config.dy > 0) {
+        if (block.x >= block.config.maxY) {
+          block.config.dy = -1 * block.config.dy;
+        } else {
+          block.setXY(block.y, block.config.dy + block.y);
+          console.log("moving 3", block);
+        }
+      } else if (block.config.dy < 0) {
+        if (block.x <= block.config.minY) {
+          block.config.dy = -1 * block.config.dy;
+        } else {
+          block.setXY(block.y, block.config.dy + block.y);
+          console.log("moving 4", block);
+        }
+      }
+      block.render();
+    });
+  }
   complete() {
     let i = Level.all.indexOf(this);
     i++;
@@ -70,13 +107,20 @@ class Level {
       this.hazards.push(block);
     } else if (block.status === "coin") {
       this.coins.push(block);
+    } else if (block.status === "doubleJump" || block.status === "walljump" || block.status === "dash") {
+      console.log("Power");
+      this.coins.push(block);
+    }
+    if (block.color.substr(0, 5) === "mover") {
+      block.configMovement();
+      this.movers.push(block);
     }
     this.blocks.push(block);
   }
   removeCoin(block) {
+    console.log("Touched");
     this.coins.splice(this.coins.indexOf(block), 1);
     block.remove();
-    console.log(this.coins);
   }
 
   drop() {

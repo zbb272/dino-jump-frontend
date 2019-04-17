@@ -100,7 +100,9 @@ function run() {
     setInterval(draw, 20);
 
     function draw() {
-      // checkCollision();
+      if (currentLevel.movers.length > 0) {
+        currentLevel.progress();
+      }
       if (!player.disabled) {
         player.draw({ left: leftPressed, right: rightPressed, jump: jumpPressed, dash: dashPressed });
         if (dashPressed) {
@@ -163,14 +165,13 @@ function run() {
           levelBuilder();
         }
       }
-      if (event.keyCode === 80 || event.key === "p"){
-        if (!levelBuilderOpen && !levelArtBuilderOpen){
+      if (event.keyCode === 80 || event.key === "p") {
+        if (!levelBuilderOpen && !levelArtBuilderOpen) {
           levelArtBuilderOpen = true;
           // debugger
           levelArtBuilder();
         }
-      }
-      else if (event.key === "?") {
+      } else if (event.key === "?") {
         debugger;
       }
       if (event.keyCode === 27 || event.key === "Escape") {

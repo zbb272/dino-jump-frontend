@@ -133,7 +133,6 @@ function run() {
   }
 
   function characterSelectEvent(event){
-    console.log(event.target)
     if(event.target.dataset.character === "blue"){
       player.rightMovingSpriteArray = [
         "url(./assets/dinoBlueCharacter/dinoBlueRunRight1.png)",

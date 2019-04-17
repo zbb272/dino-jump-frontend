@@ -462,9 +462,19 @@ class Player {
 
   renderLives() {
     const livesBar = document.getElementById("lives-bar");
-    livesBar.innerText = "";
+    // livesBar.innerText = "";
+    while (livesBar.firstChild) {
+      livesBar.removeChild(livesBar.firstChild);
+    }
+
     for (let i = 0; i < this.lives; i++) {
-      livesBar.innerText += " <3";
+      // livesBar.innerText += " <3";
+      let liveDiv = document.createElement("div");
+      liveDiv.style.float = "left"
+      liveDiv.style.height = "17px";
+      liveDiv.style.width = "17px";
+      liveDiv.style.backgroundImage = "url(./assets/hearts/heart.png)";
+      livesBar.appendChild(liveDiv);
     }
   }
   render() {

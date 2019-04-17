@@ -46,6 +46,61 @@ function levelArtBuilder(){
       jungleRow.appendChild(jungleSquare)
     });
     platformTable.appendChild(jungleRow);
+
+    incaBackgroundImageURLS = [
+      "url(./assets/inca/incaBlock1.png)", "url(./assets/inca/incaBlock2.png)", "url(./assets/inca/incaBlock3.png)", "url(./assets/inca/incaBlock4.png)", "url(./assets/inca/incaBlock5.png)", "url(./assets/inca/incaBlock6.png)",
+      "url(./assets/inca/incaBlock7.png)", "url(./assets/inca/incaBlock8.png)", "url(./assets/inca/incaBlock9.png)", "url(./assets/inca/incaBlock10.png)", "url(./assets/inca/incaBlock11.png)", "url(./assets/inca/incaBlock12.png)", "url(./assets/inca/incaBlock11.png)",
+      "url(./assets/inca/incaColumnBlockBottom.png)", "url(./assets/inca/incaColumnBlockLower.png)", "url(./assets/inca/incaColumnBlockTop.png)", "url(./assets/inca/incaColumnBlockUpper.png)"
+    ];
+    let incaRow = document.createElement("tr");
+    incaBackgroundImageURLS.forEach(imageURL => {
+      let incaSquare = document.createElement("td");
+      incaSquare.style.height = "25px";
+      incaSquare.style.width = "25px";
+      incaSquare.style.borderStyle = "solid";
+      incaSquare.style.borderWidth = "1px";
+      incaSquare.style.backgroundImage = imageURL;
+      incaSquare.style.backgroundSize = "cover";
+      incaSquare.addEventListener("click", platformSquareEventListener);
+      incaRow.appendChild(incaSquare)
+    });
+    platformTable.appendChild(incaRow);
+
+    alienWorldBackgroundImageURLS = [
+      "url(./assets/alienWorld/alienWorldBlockBottomCenter.png)", "url(./assets/alienWorld/alienWorldBlockBottomLeft.png)", "url(./assets/alienWorld/alienWorldBlockBottomRight.png)", "url(./assets/alienWorld/alienWorldBlockCenter.png)", "url(./assets/alienWorld/alienWorldBlockFire.png)", "url(./assets/alienWorld/alienWorldBlockLeft.png)",
+      "url(./assets/alienWorld/alienWorldBlockMiddle.png)", "url(./assets/alienWorld/alienWorldBlockOther.png)", "url(./assets/alienWorld/alienWorldBlockPillar.png)", "url(./assets/alienWorld/alienWorldBlockRight.png)", "url(./assets/alienWorld/alienWorldBlockTopLeft.png)",
+      "url(./assets/alienWorld/alienWorldBlockTopRight.png)", "url(./assets/alienWorld/alienWorldRock.png)"
+    ];
+    let alienWorldRow = document.createElement("tr");
+    alienWorldBackgroundImageURLS.forEach(imageURL => {
+      let alienWorldSquare = document.createElement("td");
+      alienWorldSquare.style.height = "25px";
+      alienWorldSquare.style.width = "25px";
+      alienWorldSquare.style.borderStyle = "solid";
+      alienWorldSquare.style.borderWidth = "1px";
+      alienWorldSquare.style.backgroundImage = imageURL;
+      alienWorldSquare.addEventListener("click", platformSquareEventListener);
+      alienWorldRow.appendChild(alienWorldSquare)
+    });
+    platformTable.appendChild(alienWorldRow);
+
+    gemBackgroundImageURLS = [
+      "url(./assets/gems/20.png)", "url(./assets/gems/21.png)", "url(./assets/gems/22.png)", "url(./assets/gems/23.png)", "url(./assets/gems/24.png)"
+    ];
+    let gemRow = document.createElement("tr");
+    gemBackgroundImageURLS.forEach(imageURL => {
+      let gemSquare = document.createElement("td");
+      gemSquare.style.height = "25px";
+      gemSquare.style.width = "25px";
+      gemSquare.style.borderStyle = "solid";
+      gemSquare.style.borderWidth = "1px";
+      gemSquare.style.backgroundImage = imageURL;
+      gemSquare.style.backgroundSize = "cover";
+      gemSquare.addEventListener("click", platformSquareEventListener);
+      gemRow.appendChild(gemSquare)
+    });
+    platformTable.appendChild(gemRow);
+
     builderControlContainer.appendChild(platformTable);
   }
 

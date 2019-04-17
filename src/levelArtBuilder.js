@@ -235,7 +235,27 @@ function levelArtBuilder(){
   }
 
   function saveButtonEventHandler(event){
+    
+    let blocksToSend = [];
+    currentLevel.blocks.forEach(block => {
+      blocksToSend.push({ id: block.id, style: block.color });
+    })
 
+    let player = document.querySelector(".player");
+
+    console.log(blocksToSend.length);
+    obj = { level: { blocks_attributes: blocksToSend } };
+    //fetch request
+    let levelUrl = `http://localhost:3000/api/v1/levels/${currentLevel.id}`;
+    fetch(levelUrl, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(obj)
+    })
+      .then(res => res.json())
+      .then(data => console.log(data));
   }
 
   function squareMouseDownEventHandler(event) {
@@ -245,24 +265,10 @@ function levelArtBuilder(){
   function squareMouseMoveEventHandler(event) {
 
     if (drawingGoing) {
-
-      // if (eraserBlockMode) {
-      //   if (square.style.backgroundColor !== "none") {
-      //     square.dataset.status = "none";
-      //     square.style.backgroundColor = "transparent";
-      //     newBlocks.splice(newBlocks.indexOf(square), 1);
-      //   }
-      // }
       if(currentStyle !== "none"){
         Block.all.forEach(block => {
           if(block.style !== currentStyle){
             if(block.x === parseInt(event.target.style.left.replace(/\D/gm, "/")) && block.y === parseInt(event.target.style.top.replace(/\D/gm, "/"))){
-              // if(currentStyle.startsWith("url")){
-              //
-              // }
-              // else {
-              //
-              // }
               block.color = currentStyle;
               block.render();
             }

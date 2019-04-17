@@ -44,9 +44,11 @@ class Block {
   render() {
     if(this.color.startsWith("url")){
       this.container.style.backgroundImage = this.color;
+      this.container.style.backgroundColor = "none";
     }
     else{
       this.container.style.backgroundColor = this.color;
+      this.container.style.backgroundImage = "none";
     }
     this.container.style.minHeight = `${this.height}px`;
     this.container.style.minWidth = `${this.width}px`;
@@ -54,64 +56,4 @@ class Block {
     this.container.style.left = `${this.x}px`;
   }
 
-  // renderWithImage(){
-  //   if(this.status === "platform"){
-  //     this.applyPlatformStyle();
-  //   }
-  // }
-  //
-  // applyPlatformStyle(){
-  //   let blockLeft = false;
-  //   let blockRight = false;
-  //   let blockAbove = false;
-  //   let blockBelow = false;
-  //   let blockRightTopDiagonal = false;
-  //   let blockLeftTopDiagonal = false;
-  //
-  //   Block.all.forEach(block => {
-  //     if(block.x === (this.x - 25) && block.y === this.y){
-  //       blockLeft = true;
-  //     }
-  //     if(block.x === (this.x + 25) && block.y === this.y){
-  //       blockRight = true;
-  //     }
-  //     if(block.x === this.x && block.y === (this.y - 25)){
-  //       blockAbove = true;
-  //     }
-  //     if(block.x === this.x && block.y === (this.y + 25)){
-  //       blockBelow = true;
-  //     }
-  //     if(block.x === (this.x + 25) && block.y === (this.y - 25)){
-  //       blockRightTopDiagonal = true;
-  //     }
-  //     if(block.x === (this.x - 25) && block.y === (this.y - 25)){
-  //       blockLeftTopDiagonal = true;
-  //     }
-  //   })
-  //   if(blockLeft && blockRight && blockAbove && blockRightTopDiagonal && !blockLeftTopDiagonal){
-  //     this.container.classList.add("platform-block-right-inside-corner");
-  //   }
-  //   else if(blockLeft && blockRight && blockAbove && !blockRightTopDiagonal && blockLeftTopDiagonal){
-  //     this.container.classList.add("platform-block-left-inside-corner");
-  //   }
-  //   else if(blockLeft && blockRight && blockAbove){
-  //     this.container.classList.add("platform-block-center");
-  //   }
-  //   else if(!blockLeft && blockRight && blockAbove){
-  //     this.container.classList.add("platform-block-left");
-  //   }
-  //   else if(blockLeft && !blockRight && blockAbove){
-  //     this.container.classList.add("platform-block-right");
-  //   }
-  //   else if(blockLeft && blockRight && !blockAbove){
-  //     this.container.classList.add("platform-block-middle");
-  //   }
-  //   else if(!blockLeft && blockRight && !blockAbove){
-  //     this.container.classList.add("platform-block-corner-left");
-  //   }
-  //   else if(blockLeft && !blockRight && !blockAbove){
-  //     this.container.classList.add("platform-block-corner-right");
-  //   }
-  //   this.container.classList.add("platform-block");
-  // }
 }

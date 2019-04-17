@@ -30,8 +30,8 @@ function levelArtBuilder(){
   function createPlatformSelector(){
 
     jungleBackgroundImageURLS = [
-      "url(./assets/blockCenter.png)", "url(./assets/blockLeft.png)", "url(./assets/blockRight.png)", "url(./assets/blockMiddle.png)", "url(./assets/blockCornerLeft.png)", "url(./assets/blockCornerRight.png)",
-      "url(./assets/blockLeftInsideCorner.png)", "url(./assets/blockRightInsideCorner.png)", "url(./assets/blockBottom.png)", "url(./assets/blockBottomRight.png)", "url(./assets/blockBottomLeft.png)"
+      "url(./assets/jungle/blockCenter.png)", "url(./assets/jungle/blockLeft.png)", "url(./assets/jungle/blockRight.png)", "url(./assets/jungle/blockMiddle.png)", "url(./assets/jungle/blockCornerLeft.png)", "url(./assets/jungle/blockCornerRight.png)",
+      "url(./assets/jungle/blockLeftInsideCorner.png)", "url(./assets/jungle/blockRightInsideCorner.png)", "url(./assets/jungle/blockBottom.png)", "url(./assets/jungle/blockBottomRight.png)", "url(./assets/jungle/blockBottomLeft.png)"
     ];
     platformTable = document.createElement("table");
     let jungleRow = document.createElement("tr");

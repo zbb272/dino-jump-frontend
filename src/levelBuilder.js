@@ -161,6 +161,8 @@ function levelBuilder() {
       coinBlockButton.remove();
       goalBlockButton.remove();
       eraserBlockButton.remove();
+      powerBlockButton.remove();
+      powerBlockSelector.remove();
     }
     gridModeButton.remove();
   }

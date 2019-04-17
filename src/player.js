@@ -37,70 +37,9 @@ class Player {
     this.disabled = true;
   }
 
-  die() {
-    this.lives--;
-    this.renderLives();
-    this.disabled = true;
-    if (this.lives === 0) {
-      this.gameOver();
-    } else {
-      setTimeout(() => {
-        this.dx = 0;
-        this.dy = 0;
-        this.setXY(this.level.startPositionX, this.level.startPositionY);
-        this.disabled = false;
-      }, 1000);
-    }
-  }
-  gameOver() {
-    this.level.callTime(false);
-    this.level.renderScore();
-    if (this.level.currentScore > 0) {
-      this.level.submitScore();
-    }
-    const gameOver = document.createElement("div");
-    gameOver.classList.add("option-menu");
-    gameOver.innerHTML = "GAME OVER";
-    this.gameContainer.appendChild(gameOver);
-    setTimeout(() => {
-      this.lives = 5;
-      this.renderLives();
-      gameOver.remove();
-      this.dx = 0;
-      this.dy = 0;
-      this.setXY(this.level.startPositionX, this.level.startPositionY);
-      this.disabled = false;
-      this.level.drop();
-      this.level.render();
-      this.level.init();
-    }, 2500);
-  }
-
   setLevel(level) {
     this.setXY(level.startPositionX, level.startPositionY);
     this.level = level;
-  }
-  goalCollisions() {
-    if (typeof this.collidesAll(this.level.goal) === "object") {
-      this.disabled = true;
-      this.level.updateScore(200);
-      this.level.callTime(true);
-      this.level.submitScore();
-      const success = document.createElement("div");
-      success.classList.add("option-menu");
-      success.innerHTML = "LEVEL COMPLETE";
-      this.gameContainer.appendChild(success);
-      setTimeout(() => {
-        this.dx = 0;
-        this.dy = 0;
-        this.setXY(this.level.startPositionX, this.level.startPositionY);
-        this.disabled = false;
-        success.remove();
-        this.level.drop();
-        this.level.complete();
-        this.level = currentLevel;
-      }, 2500);
-    }
   }
 
   //only spot this.x and this.y should be modified
@@ -194,7 +133,7 @@ class Player {
 
   //gradually fall when airborne
   applyGravity() {
-    if (this.isAirborne() && this.dashing <= 1) {
+    if (this.isAirborne() && this.dashing <= 1 && this.dy <= 30) {
       this.dy += 1;
     }
     if (this.isAgainstWall() && this.wallJumpUnlocked && this.dy > 5) {
@@ -246,13 +185,13 @@ class Player {
   //collisions are against each object target
   // first checks if the object is above/below/ahead/behind the given object
   // then determines if the object's relevant side would pass through the object's relevant side if current dx/dy were applied.
-  collidesTop(objects, value = this.dy, interceptValue = this.dx) {
+  collidesTop(objects, value = this.dy, interceptValue = this.dx, shrink = false) {
     let ret = false;
     if (this.y + this.dy <= 0) {
       return true;
     } else if (objects.length > 0) {
       objects.forEach(obj => {
-        if (obj.visible && this.verticallyIntercepts(obj, interceptValue) && this.top >= obj.bottom && this.top + value <= obj.bottom) {
+        if (obj.visible && this.verticallyIntercepts(obj, interceptValue, shrink) && this.top >= obj.bottom && this.top + value <= obj.bottom) {
           if (obj.status === "coin") {
             this.level.removeCoin(obj);
             this.level.updateScore(10);
@@ -266,13 +205,13 @@ class Player {
   }
   //additional paramater here so as to check airborne(doesn't consider dx or)
   //if collision with bottom, reset to original position
-  collidesBottom(objects, yValue = this.dy, xValue = this.dx) {
+  collidesBottom(objects, yValue = this.dy, xValue = this.dx, shrink = false) {
     let ret = false;
     if (this.y + yValue + this.height >= this.gameContainer.clientHeight) {
       this.die();
     } else if (objects.length > 0) {
       objects.forEach(obj => {
-        if (obj.visible && this.verticallyIntercepts(obj, xValue) && this.bottom <= obj.top && this.bottom + yValue >= obj.top) {
+        if (obj.visible && this.verticallyIntercepts(obj, xValue, shrink) && this.bottom <= obj.top && this.bottom + yValue >= obj.top) {
           if (obj.status === "coin") {
             this.level.removeCoin(obj);
             this.level.updateScore(10);
@@ -284,13 +223,13 @@ class Player {
       return ret;
     }
   }
-  collidesLeft(objects, xValue = this.dx, yValue = this.dy) {
+  collidesLeft(objects, xValue = this.dx, yValue = this.dy, shrink = false) {
     let ret = false;
     if (this.x + this.dx <= 0) {
       return true;
     } else if (objects.length > 0) {
       objects.forEach(obj => {
-        if (obj.visible && this.horizontallyIntercepts(obj, yValue) && this.left + xValue <= obj.right && this.left >= obj.right) {
+        if (obj.visible && this.horizontallyIntercepts(obj, yValue, shrink) && this.left + xValue <= obj.right && this.left >= obj.right) {
           if (obj.status === "coin") {
             this.level.removeCoin(obj);
             this.level.updateScore(10);
@@ -302,13 +241,13 @@ class Player {
       return ret;
     }
   }
-  collidesRight(objects, xValue = this.dx, yValue = this.dy) {
+  collidesRight(objects, xValue = this.dx, yValue = this.dy, shrink = false) {
     let ret = false;
     if (this.x + this.dx + this.width >= this.gameContainer.clientWidth) {
       return true;
     } else if (objects.length > 0) {
       objects.forEach(obj => {
-        if (obj.visible && this.horizontallyIntercepts(obj, yValue) && this.right <= obj.left && this.right + xValue >= obj.left) {
+        if (obj.visible && this.horizontallyIntercepts(obj, yValue, shrink) && this.right <= obj.left && this.right + xValue >= obj.left) {
           if (obj.status === "coin") {
             this.level.removeCoin(obj);
             this.level.updateScore(10);
@@ -321,8 +260,8 @@ class Player {
     return ret;
   }
 
-  collidesAll(objects) {
-    return this.collidesLeft(objects, -1, 0) || this.collidesRight(objects, 1, 0) || this.collidesBottom(objects, 1, 0) || this.collidesTop(objects, -1, 0);
+  collidesAll(objects, wiggle) {
+    return this.collidesLeft(objects, -1, wiggle, true) || this.collidesRight(objects, 1, wiggle, true) || this.collidesBottom(objects, 1, wiggle, true) || this.collidesTop(objects, -1, wiggle, true);
   }
   specialCollisions() {
     this.goalCollisions();
@@ -330,9 +269,69 @@ class Player {
   }
 
   badCollisions() {
-    if (typeof this.collidesAll(this.level.hazards) === "object") {
+    if (typeof this.collidesAll(this.level.hazards, 3) === "object") {
       this.die();
     }
+  }
+  goalCollisions() {
+    if (typeof this.collidesAll(this.level.goal, 0) === "object") {
+      this.disabled = true;
+      this.level.updateScore(100);
+      this.level.callTime(true);
+      this.level.submitScore();
+      const success = document.createElement("div");
+      success.classList.add("option-menu");
+      success.innerHTML = "LEVEL COMPLETE";
+      this.gameContainer.appendChild(success);
+      setTimeout(() => {
+        success.remove();
+        this.level.drop();
+        this.level.complete();
+        this.level = currentLevel;
+        this.dx = 0;
+        this.dy = 0;
+        this.setXY(this.level.startPositionX, this.level.startPositionY);
+        this.disabled = false;
+      }, 2500);
+    }
+  }
+  die() {
+    this.disabled = true;
+    this.setXY(this.level.startPositionX, this.level.startPositionY);
+    this.dx = 0;
+    this.dy = 0;
+    this.lives--;
+    this.renderLives();
+    if (this.lives === 0) {
+      this.gameOver();
+    } else {
+      setTimeout(() => {
+        this.disabled = false;
+      }, 1000);
+    }
+  }
+  gameOver() {
+    this.level.callTime(false);
+    this.dx = 0;
+    this.dy = 0;
+    this.setXY(this.level.startPositionX, this.level.startPositionY);
+    this.level.renderScore();
+    if (this.level.currentScore > 0) {
+      this.level.submitScore();
+    }
+    const gameOver = document.createElement("div");
+    gameOver.classList.add("option-menu");
+    gameOver.innerHTML = "GAME OVER";
+    this.gameContainer.appendChild(gameOver);
+    setTimeout(() => {
+      this.lives = 5;
+      this.renderLives();
+      gameOver.remove();
+      this.level.drop();
+      this.level.render();
+      this.level.init();
+      this.disabled = false;
+    }, 2500);
   }
 
   //is the object's current position 1px above another object's top?
@@ -351,11 +350,19 @@ class Player {
   }
 
   //determines if a block is above/beneath/ahead/behind the player
-  horizontallyIntercepts(obj, otherValue) {
-    return obj.top < this.bottom + otherValue && obj.bottom > this.top + otherValue;
+  horizontallyIntercepts(obj, otherValue, shrink) {
+    if (shrink) {
+      return obj.top < this.bottom - otherValue && obj.bottom > this.top + otherValue;
+    } else {
+      return obj.top < this.bottom + otherValue && obj.bottom > this.top + otherValue;
+    }
   }
-  verticallyIntercepts(obj, otherValue) {
-    return obj.left < this.right + otherValue && obj.right > this.left + otherValue;
+  verticallyIntercepts(obj, otherValue, shrink) {
+    if (shrink) {
+      return obj.left < this.right - otherValue && obj.right > this.left + otherValue;
+    } else {
+      return obj.left < this.right + otherValue && obj.right > this.left + otherValue;
+    }
   }
 
   //boolean flag is only true if there are no collisions
@@ -427,9 +434,11 @@ class Player {
     }
   }
   render() {
-    this.container.style.minHeight = `${this.height}px`;
-    this.container.style.minWidth = `${this.width}px`;
-    this.container.style.top = `${this.y}px`;
-    this.container.style.left = `${this.x}px`;
+    if (!this.disabled) {
+      this.container.style.minHeight = `${this.height}px`;
+      this.container.style.minWidth = `${this.width}px`;
+      this.container.style.top = `${this.y}px`;
+      this.container.style.left = `${this.x}px`;
+    }
   }
 }

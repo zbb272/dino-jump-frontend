@@ -88,11 +88,11 @@ class Level {
   callTime(complete) {
     clearInterval(this.timer);
     if (complete) {
-      if (this.timer <= 120) {
-        this.currentScore = parseInt(this.currentScore) + 120 - parseInt(this.timer);
+      if (this.time <= 120) {
+        this.updateScore(120 - parseInt(this.time));
       }
     }
-    this.timer = 0;
+    this.time = 0;
   }
   submitScore() {
     fetch("http://localhost:3000/api/v1/scores/", {

@@ -52,6 +52,7 @@ ul {
 .block {
   z-index: 5;
   position: absolute;
+  background-size: cover;
 }
 
 .player {

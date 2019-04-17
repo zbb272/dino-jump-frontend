@@ -8,7 +8,7 @@
   background-repeat: no-repeat;
   width: 1200px;
   height: 700px;
-  background-image: url(../assets/backgroundLarge.png);
+  background-image: url(../assets/jungle/backgroundLarge.png);
   /* display: block;
 //  padding: 0px; */
 }
@@ -56,9 +56,11 @@ ul {
 
 .player {
   position: absolute;
-  background-color: mediumaquamarine;
+  /* background-color: mediumaquamarine; */
   z-index: 5;
   display: block;
+  background-repeat: no-repeat;
+  background-size: 100%;
 
   /* min-height: 50px;
   min-width: 30px; */

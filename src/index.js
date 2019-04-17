@@ -1,5 +1,6 @@
 let gameContainer;
 let levelBuilderOpen = false;
+let levelArtBuilderOpen = false;
 let currentLevel;
 document.addEventListener("DOMContentLoaded", run());
 
@@ -156,12 +157,20 @@ function run() {
         dashPressed = true;
       }
       if (event.keyCode === 76 || event.key === "l") {
-        if (!levelBuilderOpen) {
+        if (!levelBuilderOpen && !levelArtBuilderOpen) {
           levelBuilderOpen = true;
           // debugger
           levelBuilder();
         }
-      } else if (event.key === "?") {
+      }
+      if (event.keyCode === 80 || event.key === "p"){
+        if (!levelBuilderOpen && !levelArtBuilderOpen){
+          levelArtBuilderOpen = true;
+          // debugger
+          levelArtBuilder();
+        }
+      }
+      else if (event.key === "?") {
         debugger;
       }
       if (event.keyCode === 27 || event.key === "Escape") {

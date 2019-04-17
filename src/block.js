@@ -48,7 +48,7 @@ class Block {
     this.setXY(this.x + this.config.dx, this.y + this.config.dy);
 
     if (player.collidesAll([this]) === this || wallClingEdgeCase) {
-      player.setXY(player.x + this.config.dx, player.y + this.config.dy);
+      player.isMoved(this.config.dx, this.config.dy);
     }
   }
   remove() {

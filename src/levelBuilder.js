@@ -109,8 +109,73 @@ function levelBuilder() {
   goalOption.innerText = "Goal";
   blockSelect.appendChild(goalOption);
 
+  //attempt at movement form
+  customBlockForm.appendChild(document.createElement("br"));
+
+  minXLabel = document.createElement("label");
+  minXLabel.innerText = "Minimum X: ";
+  minXInput = document.createElement("input");
+  minXInput.name = "minX";
+  minXInput.type = "text";
+  minXInput.value = 0;
+
+  maxXLabel = document.createElement("label");
+  maxXLabel.innerText = "Maximum X: ";
+  maxXInput = document.createElement("input");
+  maxXInput.type = "text";
+  maxXInput.name = "maxX";
+  maxXInput.value = 0;
+
+  minYLabel = document.createElement("label");
+  minYLabel.innerText = "Minimum y: ";
+  minYInput = document.createElement("input");
+  minYInput.type = "text";
+  minYInput.name = "minY";
+  minYInput.value = 0;
+
+  maxYLabel = document.createElement("label");
+  maxYLabel.innerText = "Maximum y: ";
+  maxYInput = document.createElement("input");
+  maxYInput.type = "text";
+  maxYInput.name = "maxY";
+  maxYInput.value = 0;
+
+  dXLabel = document.createElement("label");
+  dXLabel.innerText = "DX: ";
+  dXInput = document.createElement("input");
+  dXInput.type = "text";
+  dXInput.name = "dX";
+  dXInput.value = 0;
+
+  dYLabel = document.createElement("label");
+  dYLabel.innerText = "DY: ";
+  dYInput = document.createElement("input");
+  dYInput.type = "text";
+  dYInput.name = "dY";
+  dYInput.value = 0;
+  //End of Inputs
+
+  customBlockForm.appendChild(blockHeightLabel);
+  customBlockForm.appendChild(blockHeightInput);
+
   customBlockForm.appendChild(blockStatusLabel);
   customBlockForm.appendChild(blockSelect);
+
+  //Begin appends
+
+  customBlockForm.appendChild(minXLabel);
+  customBlockForm.appendChild(minXInput);
+  customBlockForm.appendChild(minYLabel);
+  customBlockForm.appendChild(minYInput);
+  customBlockForm.appendChild(maxXLabel);
+  customBlockForm.appendChild(maxXInput);
+  customBlockForm.appendChild(maxYLabel);
+  customBlockForm.appendChild(maxYInput);
+  customBlockForm.appendChild(dXLabel);
+  customBlockForm.appendChild(dXInput);
+  customBlockForm.appendChild(dYLabel);
+  customBlockForm.appendChild(dYInput);
+  //End appends
 
   submitInput = document.createElement("input");
   submitInput.type = "submit";
@@ -239,8 +304,6 @@ function levelBuilder() {
       eraserBlockButton.innerText = "Eraser";
       eraserBlockButton.addEventListener("click", eraserBlockEventHandler);
       builderControlContainer.appendChild(eraserBlockButton);
-
-
     } else {
       platformBlockButton.remove();
       enemyBlockButton.remove();
@@ -303,7 +366,7 @@ function levelBuilder() {
     powerBlockMode = false;
   }
 
-  function powerBlockEventHandler(event){
+  function powerBlockEventHandler(event) {
     platformBlockMode = false;
     enemyBlockMode = false;
     coinBlockMode = false;
@@ -346,7 +409,7 @@ function levelBuilder() {
           newBlocks.push(square);
         }
       } else if (powerBlockMode) {
-        console.log(powerBlockSelector.value)
+        console.log(powerBlockSelector.value);
         if (square.dataset.status === "none") {
           square.dataset.status = powerBlockSelector.value;
           square.style.backgroundColor = "blue";
@@ -428,13 +491,24 @@ function levelBuilder() {
     let xValue = event.target.childNodes[2].value;
     let yValue = event.target.childNodes[4].value;
     let wValue = event.target.childNodes[6].value;
-    let hValue = event.target.childNodes[8].value;
-    let sValue = event.target.childNodes[10].value;
+    let hValue = event.target.childNodes[9].value;
+    let sValue = event.target.childNodes[11].value;
+
     let colorValue;
     sValue === "platform" ? (colorValue = "black") : "";
     sValue === "enemy" ? (colorValue = "red") : "";
     sValue === "coin" ? (colorValue = "green") : "";
     sValue === "goal" ? (colorValue = "gold") : "";
+
+    let moveObj = {
+      color: colorValue,
+      minX: event.target.minX.value,
+      minY: event.target.minY.value,
+      maxX: event.target.maxX.value,
+      maxY: event.target.maxY.value,
+      dx: event.target.dX.value,
+      dy: event.target.dY.value
+    };
     console.log(colorValue);
     if (xValue !== "" && yValue !== "" && wValue !== "" && hValue !== "") {
       obj = {
@@ -442,7 +516,7 @@ function levelBuilder() {
         y: parseInt(yValue),
         width: parseInt(wValue),
         height: parseInt(hValue),
-        style: colorValue,
+        style: `mover${JSON.stringify(moveObj)}`,
         status: sValue
       };
       let b = new Block(obj);
@@ -451,8 +525,8 @@ function levelBuilder() {
   }
 }
 
-function deleteButtonEventHandler(event){
-  if(window.confirm("Are you sure you want to delete the level? This is not reversible.")){
+function deleteButtonEventHandler(event) {
+  if (window.confirm("Are you sure you want to delete the level? This is not reversible.")) {
     let levelUrl = `http://localhost:3000/api/v1/levels/${currentLevel.id}`;
     fetch(levelUrl, {
       method: "DELETE"

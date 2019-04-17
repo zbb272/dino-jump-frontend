@@ -16,6 +16,8 @@ function levelBuilder() {
   let coinBlockButton;
   let goalBlockButton;
   let eraserBlockButton;
+  let powerBlockButton;
+  let powerBlockSelector;
 
   let grid = [];
   let newBlocks = [];
@@ -206,21 +208,46 @@ function levelBuilder() {
       goalBlockButton.innerText = "Goal Block";
       goalBlockButton.addEventListener("click", goalBlockEventHandler);
       builderControlContainer.appendChild(goalBlockButton);
+      powerBlockButton = document.createElement("button");
+
+      powerBlockButton.innerText = "Power Block";
+      powerBlockButton.addEventListener("click", powerBlockEventHandler);
+      builderControlContainer.appendChild(powerBlockButton);
+      powerBlockSelector = document.createElement("select");
+      powerDoubleJump = document.createElement("option");
+      powerDoubleJump.value = "doubleJump";
+      powerDoubleJump.innerText = "Double Jump";
+      powerBlockSelector.appendChild(powerDoubleJump);
+      powerDash = document.createElement("option");
+      powerDash.value = "dash";
+      powerDash.innerText = "Dash";
+      powerBlockSelector.appendChild(powerDash);
+      powerWallJump = document.createElement("option");
+      powerWallJump.value = "wallJump";
+      powerWallJump.innerText = "Wall Jump";
+      powerBlockSelector.appendChild(powerWallJump);
+      builderControlContainer.appendChild(powerBlockSelector);
+
       eraserBlockButton = document.createElement("button");
       eraserBlockButton.innerText = "Eraser";
       eraserBlockButton.addEventListener("click", eraserBlockEventHandler);
       builderControlContainer.appendChild(eraserBlockButton);
+
+
     } else {
       platformBlockButton.remove();
       enemyBlockButton.remove();
       coinBlockButton.remove();
       goalBlockButton.remove();
       eraserBlockButton.remove();
+      powerBlockButton.remove();
+      powerBlockSelector.remove();
       platformBlockMode = false;
       enemyBlockMode = false;
       coinBlockMode = false;
       goalBlockMode = false;
       eraserBlockMode = false;
+      powerBlockMode = false;
     }
   }
 
@@ -230,6 +257,7 @@ function levelBuilder() {
     coinBlockMode = false;
     goalBlockMode = false;
     eraserBlockMode = false;
+    powerBlockMode = false;
   }
 
   function enemyBlockEventHandler(event) {
@@ -238,6 +266,7 @@ function levelBuilder() {
     coinBlockMode = false;
     goalBlockMode = false;
     eraserBlockMode = false;
+    powerBlockMode = false;
   }
 
   function coinBlockEventHandler(event) {
@@ -246,6 +275,7 @@ function levelBuilder() {
     coinBlockMode = true;
     goalBlockMode = false;
     eraserBlockMode = false;
+    powerBlockMode = false;
   }
 
   function goalBlockEventHandler(event) {
@@ -254,6 +284,7 @@ function levelBuilder() {
     coinBlockMode = false;
     goalBlockMode = true;
     eraserBlockMode = false;
+    powerBlockMode = false;
   }
 
   function eraserBlockEventHandler(event) {
@@ -262,6 +293,16 @@ function levelBuilder() {
     coinBlockMode = false;
     goalBlockMode = false;
     eraserBlockMode = true;
+    powerBlockMode = false;
+  }
+
+  function powerBlockEventHandler(event){
+    platformBlockMode = false;
+    enemyBlockMode = false;
+    coinBlockMode = false;
+    goalBlockMode = false;
+    eraserBlockMode = false;
+    powerBlockMode = true;
   }
 
   function squareMouseDownEventHandler(event) {
@@ -295,6 +336,13 @@ function levelBuilder() {
         if (square.dataset.status === "none") {
           square.dataset.status = "goal";
           square.style.backgroundColor = "gold";
+          newBlocks.push(square);
+        }
+      } else if (powerBlockMode) {
+        console.log(powerBlockSelector.value)
+        if (square.dataset.status === "none") {
+          square.dataset.status = powerBlockSelector.value;
+          square.style.backgroundColor = "blue";
           newBlocks.push(square);
         }
       } else if (eraserBlockMode) {

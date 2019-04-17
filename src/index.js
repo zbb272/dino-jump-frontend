@@ -2,6 +2,7 @@ let gameContainer;
 let levelBuilderOpen = false;
 let levelArtBuilderOpen = false;
 let currentLevel;
+let levelList;
 document.addEventListener("DOMContentLoaded", run());
 
 function run() {
@@ -41,7 +42,7 @@ function run() {
 
   function levelListMenu() {
     subTitleElement.innerText = "Select Level To Play";
-    let levelList = document.createElement("ul");
+    levelList = document.createElement("ul");
 
     let levelUrl = `http://localhost:3000/api/v1/levels/`;
     fetch(levelUrl)
@@ -70,11 +71,154 @@ function run() {
 
     //setup level
     currentLevel = Level.all.find(level => level.id === parseInt(event.target.dataset.id));
+
+    characterListMenu()
+  }
+
+  function characterListMenu(){
+    levelList.remove();
+    subTitleElement.innerText = "Select Your Character";
+    let characterDiv1 = document.createElement("div");
+    characterDiv1.style.minHeight = "68px";
+    characterDiv1.style.minWidth = "60px";
+    characterDiv1.style.maxWidth = "60px";
+    characterDiv1.style.position = "absolute";
+    characterDiv1.style.left = "450px";
+    characterDiv1.style.top = "325px";
+    characterDiv1.style.backgroundImage = "url(./assets/dinoBlueCharacter/dinoBlueIdleRight.png)";
+    characterDiv1.style.backgroundRepeat = "no-repeat";
+    characterDiv1.style.backgroundSize = "cover";
+    characterDiv1.dataset.character = "blue";
+    characterDiv1.addEventListener("click", characterSelectEvent)
+    mainMenu.appendChild(characterDiv1);
+    let characterDiv2 = document.createElement("div");
+    characterDiv2.style.minHeight = "68px";
+    characterDiv2.style.minWidth = "60px";
+    characterDiv2.style.maxWidth = "60px";
+    characterDiv2.style.position = "absolute";
+    characterDiv2.style.left = "525px";
+    characterDiv2.style.top = "325px";
+    characterDiv2.style.backgroundImage = "url(./assets/dinoRedCharacter/dinoRedIdleRight.png)";
+    characterDiv2.style.backgroundRepeat = "no-repeat";
+    characterDiv2.style.backgroundSize = "cover";
+    characterDiv2.dataset.character = "red";
+    characterDiv2.addEventListener("click", characterSelectEvent)
+    mainMenu.appendChild(characterDiv2);
+    let characterDiv3 = document.createElement("div");
+    characterDiv3.style.minHeight = "68px";
+    characterDiv3.style.minWidth = "60px";
+    characterDiv3.style.maxWidth = "60px";
+    characterDiv3.style.position = "absolute";
+    characterDiv3.style.left = "600px";
+    characterDiv3.style.top = "325px";
+    characterDiv3.style.backgroundImage = "url(./assets/dinoGoldCharacter/dinoGoldIdleRight.png)";
+    characterDiv3.style.backgroundRepeat = "no-repeat";
+    characterDiv3.style.backgroundSize = "cover";
+    characterDiv3.dataset.character = "gold";
+    characterDiv3.addEventListener("click", characterSelectEvent)
+    mainMenu.appendChild(characterDiv3);
+    let characterDiv4 = document.createElement("div");
+    characterDiv4.style.minHeight = "68px";
+    characterDiv4.style.minWidth = "60px";
+    characterDiv4.style.maxWidth = "60px";
+    characterDiv4.style.position = "absolute";
+    characterDiv4.style.left = "675px";
+    characterDiv4.style.top = "325px";
+    characterDiv4.style.backgroundImage = "url(./assets/dinoGreenCharacter/dinoGreenIdleRight.png)";
+    characterDiv4.style.backgroundRepeat = "no-repeat";
+    characterDiv4.style.backgroundSize = "cover";
+    characterDiv4.dataset.character = "green";
+    characterDiv4.addEventListener("click", characterSelectEvent)
+    mainMenu.appendChild(characterDiv4);
+  }
+
+  function characterSelectEvent(event){
+    console.log(event.target)
+    if(event.target.dataset.character === "blue"){
+      player.rightMovingSpriteArray = [
+        "url(./assets/dinoBlueCharacter/dinoBlueRunRight1.png)",
+        "url(./assets/dinoBlueCharacter/dinoBlueRunRight2.png)",
+        "url(./assets/dinoBlueCharacter/dinoBlueRunRight3.png)",
+        "url(./assets/dinoBlueCharacter/dinoBlueRunRight4.png)",
+        "url(./assets/dinoBlueCharacter/dinoBlueRunRight5.png)",
+        "url(./assets/dinoBlueCharacter/dinoBlueRunRight6.png)"
+      ];
+      player.leftMovingSpriteArray = [
+        "url(./assets/dinoBlueCharacter/dinoBlueRunLeft1.png)",
+        "url(./assets/dinoBlueCharacter/dinoBlueRunLeft2.png)",
+        "url(./assets/dinoBlueCharacter/dinoBlueRunLeft3.png)",
+        "url(./assets/dinoBlueCharacter/dinoBlueRunLeft4.png)",
+        "url(./assets/dinoBlueCharacter/dinoBlueRunLeft5.png)",
+        "url(./assets/dinoBlueCharacter/dinoBlueRunLeft6.png)"
+      ];
+      player.idleSpriteArray = ["url(./assets/dinoBlueCharacter/dinoBlueIdleRight.png)", "url(./assets/dinoBlueCharacter/dinoBlueIdleLeft.png)"];
+
+    }
+    else if(event.target.dataset.character === "red"){
+      player.rightMovingSpriteArray = [
+        "url(./assets/dinoRedCharacter/dinoRedRunRight1.png)",
+        "url(./assets/dinoRedCharacter/dinoRedRunRight2.png)",
+        "url(./assets/dinoRedCharacter/dinoRedRunRight3.png)",
+        "url(./assets/dinoRedCharacter/dinoRedRunRight4.png)",
+        "url(./assets/dinoRedCharacter/dinoRedRunRight5.png)",
+        "url(./assets/dinoRedCharacter/dinoRedRunRight6.png)"
+      ];
+      player.leftMovingSpriteArray = [
+        "url(./assets/dinoRedCharacter/dinoRedRunLeft1.png)",
+        "url(./assets/dinoRedCharacter/dinoRedRunLeft2.png)",
+        "url(./assets/dinoRedCharacter/dinoRedRunLeft3.png)",
+        "url(./assets/dinoRedCharacter/dinoRedRunLeft4.png)",
+        "url(./assets/dinoRedCharacter/dinoRedRunLeft5.png)",
+        "url(./assets/dinoRedCharacter/dinoRedRunLeft6.png)"
+      ];
+      player.idleSpriteArray = ["url(./assets/dinoRedCharacter/dinoRedIdleRight.png)", "url(./assets/dinoRedCharacter/dinoRedIdleLeft.png)"];
+
+    }
+    else if(event.target.dataset.character === "gold"){
+      player.rightMovingSpriteArray = [
+        "url(./assets/dinoGoldCharacter/dinoGoldRunRight1.png)",
+        "url(./assets/dinoGoldCharacter/dinoGoldRunRight2.png)",
+        "url(./assets/dinoGoldCharacter/dinoGoldRunRight3.png)",
+        "url(./assets/dinoGoldCharacter/dinoGoldRunRight4.png)",
+        "url(./assets/dinoGoldCharacter/dinoGoldRunRight5.png)",
+        "url(./assets/dinoGoldCharacter/dinoGoldRunRight6.png)"
+      ];
+      player.leftMovingSpriteArray = [
+        "url(./assets/dinoGoldCharacter/dinoGoldRunLeft1.png)",
+        "url(./assets/dinoGoldCharacter/dinoGoldRunLeft2.png)",
+        "url(./assets/dinoGoldCharacter/dinoGoldRunLeft3.png)",
+        "url(./assets/dinoGoldCharacter/dinoGoldRunLeft4.png)",
+        "url(./assets/dinoGoldCharacter/dinoGoldRunLeft5.png)",
+        "url(./assets/dinoGoldCharacter/dinoGoldRunLeft6.png)"
+      ];
+      player.idleSpriteArray = ["url(./assets/dinoGoldCharacter/dinoGoldIdleRight.png)", "url(./assets/dinoGoldCharacter/dinoGoldIdleLeft.png)"];
+
+    }
+    else if(event.target.dataset.character === "green"){
+      player.rightMovingSpriteArray = [
+        "url(./assets/dinoGreenCharacter/dinoGreenRunRight1.png)",
+        "url(./assets/dinoGreenCharacter/dinoGreenRunRight2.png)",
+        "url(./assets/dinoGreenCharacter/dinoGreenRunRight3.png)",
+        "url(./assets/dinoGreenCharacter/dinoGreenRunRight4.png)",
+        "url(./assets/dinoGreenCharacter/dinoGreenRunRight5.png)",
+        "url(./assets/dinoGreenCharacter/dinoGreenRunRight6.png)"
+      ];
+      player.leftMovingSpriteArray = [
+        "url(./assets/dinoGreenCharacter/dinoGreenRunLeft1.png)",
+        "url(./assets/dinoGreenCharacter/dinoGreenRunLeft2.png)",
+        "url(./assets/dinoGreenCharacter/dinoGreenRunLeft3.png)",
+        "url(./assets/dinoGreenCharacter/dinoGreenRunLeft4.png)",
+        "url(./assets/dinoGreenCharacter/dinoGreenRunLeft5.png)",
+        "url(./assets/dinoGreenCharacter/dinoGreenRunLeft6.png)"
+      ];
+      player.idleSpriteArray = ["url(./assets/dinoGreenCharacter/dinoGreenIdleRight.png)", "url(./assets/dinoGreenCharacter/dinoGreenIdleLeft.png)"];
+
+    }
+
     currentLevel.init();
     player.setLevel(currentLevel);
-    player.disabled = false;
-
     //close menu
+    player.disabled = false;
     mainMenu.style.display = "none";
     runGame();
   }

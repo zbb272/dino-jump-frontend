@@ -38,24 +38,24 @@ class Player {
     this.disabled = true;
 
     //character image
-    this.container.style.backgroundImage = "url(./assets/dinoBlueCharacter/dinoBlueIdle1.png)";
-    this.rightMovingSpriteArray = [
-      "url(./assets/dinoBlueCharacter/dinoBlueRunRight1.png)",
-      "url(./assets/dinoBlueCharacter/dinoBlueRunRight2.png)",
-      "url(./assets/dinoBlueCharacter/dinoBlueRunRight3.png)",
-      "url(./assets/dinoBlueCharacter/dinoBlueRunRight4.png)",
-      "url(./assets/dinoBlueCharacter/dinoBlueRunRight5.png)",
-      "url(./assets/dinoBlueCharacter/dinoBlueRunRight6.png)"
-    ];
-    this.leftMovingSpriteArray = [
-      "url(./assets/dinoBlueCharacter/dinoBlueRunLeft1.png)",
-      "url(./assets/dinoBlueCharacter/dinoBlueRunLeft2.png)",
-      "url(./assets/dinoBlueCharacter/dinoBlueRunLeft3.png)",
-      "url(./assets/dinoBlueCharacter/dinoBlueRunLeft4.png)",
-      "url(./assets/dinoBlueCharacter/dinoBlueRunLeft5.png)",
-      "url(./assets/dinoBlueCharacter/dinoBlueRunLeft6.png)"
-    ];
-    this.idleSpriteArray = ["url(./assets/dinoBlueCharacter/dinoBlueIdle1.png)", "url(./assets/dinoBlueCharacter/dinoBlueIdle2Left.png)"];
+    // this.container.style.backgroundImage = "url(./assets/dinoBlueCharacter/dinoBlueIdleRight.png)";
+    // this.rightMovingSpriteArray = [
+    //   "url(./assets/dinoBlueCharacter/dinoBlueRunRight1.png)",
+    //   "url(./assets/dinoBlueCharacter/dinoBlueRunRight2.png)",
+    //   "url(./assets/dinoBlueCharacter/dinoBlueRunRight3.png)",
+    //   "url(./assets/dinoBlueCharacter/dinoBlueRunRight4.png)",
+    //   "url(./assets/dinoBlueCharacter/dinoBlueRunRight5.png)",
+    //   "url(./assets/dinoBlueCharacter/dinoBlueRunRight6.png)"
+    // ];
+    // this.leftMovingSpriteArray = [
+    //   "url(./assets/dinoBlueCharacter/dinoBlueRunLeft1.png)",
+    //   "url(./assets/dinoBlueCharacter/dinoBlueRunLeft2.png)",
+    //   "url(./assets/dinoBlueCharacter/dinoBlueRunLeft3.png)",
+    //   "url(./assets/dinoBlueCharacter/dinoBlueRunLeft4.png)",
+    //   "url(./assets/dinoBlueCharacter/dinoBlueRunLeft5.png)",
+    //   "url(./assets/dinoBlueCharacter/dinoBlueRunLeft6.png)"
+    // ];
+    // this.idleSpriteArray = ["url(./assets/dinoBlueCharacter/dinoBlueIdleRight.png)", "url(./assets/dinoBlueCharacter/dinoBlueIdleLeft.png)"];
     this.rightMovingSpriteIndex = 0;
     this.leftMovingSpriteIndex = 0;
     this.idleSpriteIndex = 0;
@@ -469,9 +469,19 @@ class Player {
 
   renderLives() {
     const livesBar = document.getElementById("lives-bar");
-    livesBar.innerText = "";
+    // livesBar.innerText = "";
+    while (livesBar.firstChild) {
+      livesBar.removeChild(livesBar.firstChild);
+    }
+
     for (let i = 0; i < this.lives; i++) {
-      livesBar.innerText += " <3";
+      // livesBar.innerText += " <3";
+      let liveDiv = document.createElement("div");
+      liveDiv.style.float = "left";
+      liveDiv.style.height = "17px";
+      liveDiv.style.width = "17px";
+      liveDiv.style.backgroundImage = "url(./assets/hearts/heart.png)";
+      livesBar.appendChild(liveDiv);
     }
   }
   render() {

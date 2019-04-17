@@ -3,6 +3,8 @@ class Block {
   constructor(obj) {
     this.x = obj.x;
     this.y = obj.y;
+    this.dy = 0;
+    this.dx = 0;
     this.width = obj.width;
     this.height = obj.height;
     this.left = this.x;
@@ -22,6 +24,14 @@ class Block {
     Block.all.push(this);
   }
 
+  setXY(x, y) {
+    this.x = x;
+    this.y = y;
+    this.left = this.x;
+    this.right = this.x + this.width;
+    this.top = this.y;
+    this.bottom = this.y + this.height;
+  }
   getObj() {
     let obj = {
       x: this.x,
@@ -42,11 +52,10 @@ class Block {
   }
 
   render() {
-    if(this.color.startsWith("url")){
+    if (this.color.startsWith("url")) {
       this.container.style.backgroundImage = this.color;
       this.container.style.backgroundColor = "none";
-    }
-    else{
+    } else {
       this.container.style.backgroundColor = this.color;
       this.container.style.backgroundImage = "none";
     }
@@ -56,4 +65,18 @@ class Block {
     this.container.style.left = `${this.x}px`;
   }
 
+  configMovement() {
+    this.config = JSON.parse(this.color.substr(5));
+    for (const key in this.config) {
+      if (key !== "color") {
+        this.config[key] = parseInt(this.config[key]);
+      }
+    }
+    this.config.maxX = this.config.maxX + this.x;
+    this.config.minX = this.config.minX + this.x;
+    this.config.maxY = this.config.maxY + this.y;
+    this.config.minY = this.config.minY + this.y;
+
+    this.color = this.config.color;
+  }
 }

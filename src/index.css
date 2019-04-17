@@ -71,6 +71,9 @@ ul {
   text-align: left;
 }
 
+.mover {
+  color: orangered;
+}
 .score {
   color: white;
   font-family: Arial, Helvetica, sans-serif;

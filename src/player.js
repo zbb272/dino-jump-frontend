@@ -42,7 +42,6 @@ class Player {
     this.level = level;
   }
 
-  //only spot this.x and this.y should be modified
   setXY(x, y) {
     if (this.x !== x) {
       this.lastX = this.x;
@@ -57,6 +56,9 @@ class Player {
     this.top = this.y;
     this.bottom = this.y + this.height;
   }
+
+  //only spot this.x and this.y should be modified
+
   //triggered by an early keyup, allows for shorter jumps
   haltJump() {
     console.log("Halt jump");
@@ -182,6 +184,27 @@ class Player {
     }
   }
 
+  collidesCoin(obj) {
+    if (obj.status === "coin") {
+      this.level.removeCoin(obj);
+      this.level.updateScore(10);
+      return true;
+    } else if (obj.status === "doubleJump") {
+      this.level.removeCoin(obj);
+      this.doubleJumpUnlocked = true;
+      return true;
+    } else if (obj.status === "wallJump") {
+      this.level.removeCoin(obj);
+      this.wallJumpUnlocked = true;
+      return true;
+    } else if (obj.status === "dash") {
+      this.level.removeCoin(obj);
+      this.dashUnlocked = true;
+      return true;
+    }
+    return false;
+  }
+
   //collisions are against each object target
   // first checks if the object is above/below/ahead/behind the given object
   // then determines if the object's relevant side would pass through the object's relevant side if current dx/dy were applied.
@@ -192,10 +215,7 @@ class Player {
     } else if (objects.length > 0) {
       objects.forEach(obj => {
         if (obj.visible && this.verticallyIntercepts(obj, interceptValue, shrink) && this.top >= obj.bottom && this.top + value <= obj.bottom) {
-          if (obj.status === "coin") {
-            this.level.removeCoin(obj);
-            this.level.updateScore(10);
-          } else {
+          if (!this.collidesCoin(obj)) {
             ret = obj;
           }
         }
@@ -212,10 +232,7 @@ class Player {
     } else if (objects.length > 0) {
       objects.forEach(obj => {
         if (obj.visible && this.verticallyIntercepts(obj, xValue, shrink) && this.bottom <= obj.top && this.bottom + yValue >= obj.top) {
-          if (obj.status === "coin") {
-            this.level.removeCoin(obj);
-            this.level.updateScore(10);
-          } else {
+          if (!this.collidesCoin(obj)) {
             ret = obj;
           }
         }
@@ -230,10 +247,7 @@ class Player {
     } else if (objects.length > 0) {
       objects.forEach(obj => {
         if (obj.visible && this.horizontallyIntercepts(obj, yValue, shrink) && this.left + xValue <= obj.right && this.left >= obj.right) {
-          if (obj.status === "coin") {
-            this.level.removeCoin(obj);
-            this.level.updateScore(10);
-          } else {
+          if (!this.collidesCoin(obj)) {
             ret = obj;
           }
         }
@@ -248,10 +262,7 @@ class Player {
     } else if (objects.length > 0) {
       objects.forEach(obj => {
         if (obj.visible && this.horizontallyIntercepts(obj, yValue, shrink) && this.right <= obj.left && this.right + xValue >= obj.left) {
-          if (obj.status === "coin") {
-            this.level.removeCoin(obj);
-            this.level.updateScore(10);
-          } else {
+          if (!this.collidesCoin(obj)) {
             ret = obj;
           }
         }

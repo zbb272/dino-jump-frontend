@@ -349,8 +349,11 @@ function levelBuilder() {
     });
     blocksToSend = [];
     newBlocks.forEach(block => {
-      blocksToSend.push({ x: block.x, y: block.y, width: block.width, height: block.height, style: block.color, status: block.status });
+      if (!block.id) {
+        blocksToSend.push({ x: block.x, y: block.y, width: block.width, height: block.height, style: block.color, status: block.status });
+      }
     });
+    console.log(blocksToSend.length);
     obj = { level: { startPositionX: parseInt(player.style.left.replace(/\D/gm, "/")), startPositionY: parseInt(player.style.top.replace(/\D/gm, "/")), blocks_attributes: blocksToSend } };
     //fetch request
     let levelUrl = `http://localhost:3000/api/v1/levels/${currentLevel.id}`;

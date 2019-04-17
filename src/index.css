@@ -55,8 +55,7 @@ ul {
   background-color: mediumaquamarine;
   z-index: 5;
   display: block;
-  border-top-left-radius: 25px;
-  border-top-right-radius: 25px;
+
   /* min-height: 50px;
   min-width: 30px; */
 }

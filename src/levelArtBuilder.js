@@ -189,8 +189,12 @@ function levelArtBuilder(){
     if (gridMode) {
       //remove grid mode stuff
     }
-    colorPalette.remove();
-    platformTable.remove();
+    if(colorPalette !== undefined){
+      colorPalette.remove();
+    }
+    if(platformTable !== undefined){
+      platformTable.remove();
+    }
     gridModeButton.remove();
     levelArtBuilderOpen = false;
   }
@@ -235,7 +239,7 @@ function levelArtBuilder(){
   }
 
   function saveButtonEventHandler(event){
-    
+
     let blocksToSend = [];
     currentLevel.blocks.forEach(block => {
       blocksToSend.push({ id: block.id, style: block.color });

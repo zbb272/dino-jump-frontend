@@ -7,7 +7,7 @@ class Player {
     this.dx = 0;
     this.dy = 0;
     this.height = 40;
-    this.width = 25;
+    this.width = 23;
     this.lives = 5;
 
     //values for easing collision calculations

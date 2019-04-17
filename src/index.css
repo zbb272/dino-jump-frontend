@@ -61,7 +61,7 @@ ul {
   z-index: 5;
   display: block;
   background-repeat: no-repeat;
-  background-size: 100%;
+  background-size: cover;
 
   /* min-height: 50px;
   min-width: 30px; */

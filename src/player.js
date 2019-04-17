@@ -6,7 +6,7 @@ class Player {
     this.lastY = startY;
     this.dx = 0;
     this.dy = 0;
-    this.height = 37;
+    this.height = 25;
     this.width = 23;
     this.lives = 5;
 
@@ -37,24 +37,24 @@ class Player {
     this.disabled = true;
 
     //character image
-    this.container.style.backgroundImage = "url(./assets/dinoBlueCharacter/dinoBlueIdle1.png)";
-    this.rightMovingSpriteArray = [
-      "url(./assets/dinoBlueCharacter/dinoBlueRunRight1.png)",
-      "url(./assets/dinoBlueCharacter/dinoBlueRunRight2.png)",
-      "url(./assets/dinoBlueCharacter/dinoBlueRunRight3.png)",
-      "url(./assets/dinoBlueCharacter/dinoBlueRunRight4.png)",
-      "url(./assets/dinoBlueCharacter/dinoBlueRunRight5.png)",
-      "url(./assets/dinoBlueCharacter/dinoBlueRunRight6.png)"
-    ];
-    this.leftMovingSpriteArray = [
-      "url(./assets/dinoBlueCharacter/dinoBlueRunLeft1.png)",
-      "url(./assets/dinoBlueCharacter/dinoBlueRunLeft2.png)",
-      "url(./assets/dinoBlueCharacter/dinoBlueRunLeft3.png)",
-      "url(./assets/dinoBlueCharacter/dinoBlueRunLeft4.png)",
-      "url(./assets/dinoBlueCharacter/dinoBlueRunLeft5.png)",
-      "url(./assets/dinoBlueCharacter/dinoBlueRunLeft6.png)"
-    ];
-    this.idleSpriteArray = ["url(./assets/dinoBlueCharacter/dinoBlueIdle1.png)", "url(./assets/dinoBlueCharacter/dinoBlueIdle2Left.png)"];
+    // this.container.style.backgroundImage = "url(./assets/dinoBlueCharacter/dinoBlueIdleRight.png)";
+    // this.rightMovingSpriteArray = [
+    //   "url(./assets/dinoBlueCharacter/dinoBlueRunRight1.png)",
+    //   "url(./assets/dinoBlueCharacter/dinoBlueRunRight2.png)",
+    //   "url(./assets/dinoBlueCharacter/dinoBlueRunRight3.png)",
+    //   "url(./assets/dinoBlueCharacter/dinoBlueRunRight4.png)",
+    //   "url(./assets/dinoBlueCharacter/dinoBlueRunRight5.png)",
+    //   "url(./assets/dinoBlueCharacter/dinoBlueRunRight6.png)"
+    // ];
+    // this.leftMovingSpriteArray = [
+    //   "url(./assets/dinoBlueCharacter/dinoBlueRunLeft1.png)",
+    //   "url(./assets/dinoBlueCharacter/dinoBlueRunLeft2.png)",
+    //   "url(./assets/dinoBlueCharacter/dinoBlueRunLeft3.png)",
+    //   "url(./assets/dinoBlueCharacter/dinoBlueRunLeft4.png)",
+    //   "url(./assets/dinoBlueCharacter/dinoBlueRunLeft5.png)",
+    //   "url(./assets/dinoBlueCharacter/dinoBlueRunLeft6.png)"
+    // ];
+    // this.idleSpriteArray = ["url(./assets/dinoBlueCharacter/dinoBlueIdleRight.png)", "url(./assets/dinoBlueCharacter/dinoBlueIdleLeft.png)"];
     this.rightMovingSpriteIndex = 0;
     this.leftMovingSpriteIndex = 0;
     this.idleSpriteIndex = 0;

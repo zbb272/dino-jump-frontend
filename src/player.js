@@ -6,7 +6,7 @@ class Player {
     this.lastY = startY;
     this.dx = 0;
     this.dy = 0;
-    this.height = 40;
+    this.height = 37;
     this.width = 23;
     this.lives = 5;
 
@@ -37,9 +37,23 @@ class Player {
     this.disabled = true;
 
     //character image
-    this.container.style.backgroundImage = "url(./assets/dinoBlueCharacter/dinoBlueIdle1.png)"
-    this.rightMovingSpriteArray = ["url(./assets/dinoBlueCharacter/dinoBlueRunRight1.png)", "url(./assets/dinoBlueCharacter/dinoBlueRunRight2.png)", "url(./assets/dinoBlueCharacter/dinoBlueRunRight3.png)", "url(./assets/dinoBlueCharacter/dinoBlueRunRight4.png)", "url(./assets/dinoBlueCharacter/dinoBlueRunRight5.png)", "url(./assets/dinoBlueCharacter/dinoBlueRunRight6.png)"];
-    this.leftMovingSpriteArray = ["url(./assets/dinoBlueCharacter/dinoBlueRunLeft1.png)", "url(./assets/dinoBlueCharacter/dinoBlueRunLeft2.png)", "url(./assets/dinoBlueCharacter/dinoBlueRunLeft3.png)", "url(./assets/dinoBlueCharacter/dinoBlueRunLeft4.png)", "url(./assets/dinoBlueCharacter/dinoBlueRunLeft5.png)", "url(./assets/dinoBlueCharacter/dinoBlueRunLeft6.png)"];
+    this.container.style.backgroundImage = "url(./assets/dinoBlueCharacter/dinoBlueIdle1.png)";
+    this.rightMovingSpriteArray = [
+      "url(./assets/dinoBlueCharacter/dinoBlueRunRight1.png)",
+      "url(./assets/dinoBlueCharacter/dinoBlueRunRight2.png)",
+      "url(./assets/dinoBlueCharacter/dinoBlueRunRight3.png)",
+      "url(./assets/dinoBlueCharacter/dinoBlueRunRight4.png)",
+      "url(./assets/dinoBlueCharacter/dinoBlueRunRight5.png)",
+      "url(./assets/dinoBlueCharacter/dinoBlueRunRight6.png)"
+    ];
+    this.leftMovingSpriteArray = [
+      "url(./assets/dinoBlueCharacter/dinoBlueRunLeft1.png)",
+      "url(./assets/dinoBlueCharacter/dinoBlueRunLeft2.png)",
+      "url(./assets/dinoBlueCharacter/dinoBlueRunLeft3.png)",
+      "url(./assets/dinoBlueCharacter/dinoBlueRunLeft4.png)",
+      "url(./assets/dinoBlueCharacter/dinoBlueRunLeft5.png)",
+      "url(./assets/dinoBlueCharacter/dinoBlueRunLeft6.png)"
+    ];
     this.idleSpriteArray = ["url(./assets/dinoBlueCharacter/dinoBlueIdle1.png)", "url(./assets/dinoBlueCharacter/dinoBlueIdle2Left.png)"];
     this.rightMovingSpriteIndex = 0;
     this.leftMovingSpriteIndex = 0;
@@ -85,7 +99,7 @@ class Player {
     if (!this.isAirborne()) {
       console.log("jump");
       this.jumping = true;
-      this.jump(20);
+      this.jump(15);
     } else if (this.wallJumpUnlocked && this.isAgainstWall() !== 0) {
       this.jumping = true;
       console.log("walljump");
@@ -94,7 +108,7 @@ class Player {
       this.jumping = true;
       console.log("djump");
       this.doubleJump = false;
-      this.jump(10);
+      this.jump(8);
     }
   }
 
@@ -459,14 +473,19 @@ class Player {
       this.container.style.minWidth = `${this.width}px`;
       this.container.style.top = `${this.y}px`;
       this.container.style.left = `${this.x}px`;
-      if(this.movingRight){
-        this.rightMovingSpriteIndex === 5 ? this.rightMovingSpriteIndex = 0 : this.rightMovingSpriteIndex += 1;
+      ``;
+
+      if (this.isAgainstWall() === 1 && this.wallJumpUnlocked) {
+        this.container.style.backgroundImage = this.idleSpriteArray[0];
+      } else if (this.isAgainstWall() === -1 && this.wallJumpUnlocked) {
+        this.container.style.backgroundImage = this.idleSpriteArray[1];
+      } else if (this.movingRight) {
+        this.rightMovingSpriteIndex === 5 ? (this.rightMovingSpriteIndex = 0) : (this.rightMovingSpriteIndex += 1);
         this.leftMovingSpriteIndex = 0;
         this.idleSpriteIndex = 0;
         this.container.style.backgroundImage = this.rightMovingSpriteArray[this.rightMovingSpriteIndex];
-      }
-      else if(this.movingLeft){
-        this.leftMovingSpriteIndex === 5 ? this.leftMovingSpriteIndex = 0 : this.leftMovingSpriteIndex += 1;
+      } else if (this.movingLeft) {
+        this.leftMovingSpriteIndex === 5 ? (this.leftMovingSpriteIndex = 0) : (this.leftMovingSpriteIndex += 1);
         this.rightMovingSpriteIndex = 0;
         this.idleSpriteIndex = 1;
         this.container.style.backgroundImage = this.leftMovingSpriteArray[this.leftMovingSpriteIndex];
@@ -477,7 +496,6 @@ class Player {
         // this.leftMovingSpriteIndex = 0;
         this.container.style.backgroundImage = this.idleSpriteArray[this.idleSpriteIndex];
       }
-
     }
   }
 }

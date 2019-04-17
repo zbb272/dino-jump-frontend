@@ -7,7 +7,7 @@ class Player {
     this.dx = 0;
     this.dy = 0;
     this.gravCounter = 0;
-    this.height = 37;
+    this.height = 25;
     this.width = 23;
     this.lives = 5;
 
@@ -73,6 +73,19 @@ class Player {
     this.right = this.x + this.width;
     this.top = this.y;
     this.bottom = this.y + this.height;
+  }
+  isMoved(dx, dy) {
+    if (
+      (dx > 0 && this.collidesRight(this.level.blocks, dx, dy)) ||
+      (dx < 0 && this.collidesLeft(this.level.blocks, dx, dy)) ||
+      (dy > 0 && this.collidesBottom(this.level.blocks, dy, dx)) ||
+      (dy < 0 && this.collidesTop(this.level.blocks, dy, dx))
+    ) {
+      console.log("SQUISH");
+      this.die();
+    } else {
+      this.setXY(this.x + dx, this.y + dy);
+    }
   }
 
   //only spot this.x and this.y should be modified
@@ -237,7 +250,7 @@ class Player {
   // then determines if the object's relevant side would pass through the object's relevant side if current dx/dy were applied.
   collidesTop(objects, value = this.dy, interceptValue = this.dx, shrink = false) {
     let ret = false;
-    if (this.y + this.dy <= 0) {
+    if (this.y + value <= 0) {
       return true;
     } else if (objects.length > 0) {
       objects.forEach(obj => {

@@ -38,6 +38,10 @@ function levelBuilder() {
   saveButton.style.left = `${gameContainer.clientWidth + 35}px`;
   saveButton.addEventListener("click", saveButtonEventHandler);
   builderControlContainer.appendChild(saveButton);
+  let deleteLevelButton = document.createElement("button");
+  deleteLevelButton.innerText = "Delete Level";
+  deleteLevelButton.addEventListener("click", deleteButtonEventHandler);
+  builderControlContainer.appendChild(deleteLevelButton);
 
   let saveAsNewForm = document.createElement("form");
   newLabel = document.createElement("label");
@@ -441,6 +445,18 @@ function levelBuilder() {
       let b = new Block(obj);
       currentLevel.add(b);
     }
+  }
+}
+
+function deleteButtonEventHandler(event){
+  if(window.confirm("Are you sure you want to delete the level? This is not reversible.")){
+    let levelUrl = `http://localhost:3000/api/v1/levels/${currentLevel.id}`;
+    fetch(levelUrl, {
+      method: "DELETE"
+    })
+      .then(res => res.json())
+      .then(data => console.log(data));
+    document.location.reload();
   }
 }
 

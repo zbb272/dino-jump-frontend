@@ -46,9 +46,6 @@ class Level {
       const block = new Block(b, this.gameContainer);
       this.add(block);
     });
-    this.blocks.forEach(b => {
-      b.renderWithImage();
-    });
   }
 
   renderScore() {

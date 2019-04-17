@@ -4,6 +4,7 @@ function levelArtBuilder(){
   let drawingGoing = false;
 
   let colorPalette;
+  let platformTable;
   let currentStyle = "none"
   let builderControlContainer = document.getElementById("builder-controls");
 
@@ -26,6 +27,27 @@ function levelArtBuilder(){
   gridModeButton.addEventListener("click", gridModeButtonEventHandler);
   builderControlContainer.appendChild(gridModeButton);
 
+  function createPlatformSelector(){
+
+    jungleBackgroundImageURLS = [
+      "url(./assets/blockCenter.png)", "url(./assets/blockLeft.png)", "url(./assets/blockRight.png)", "url(./assets/blockMiddle.png)", "url(./assets/blockCornerLeft.png)", "url(./assets/blockCornerRight.png)",
+      "url(./assets/blockLeftInsideCorner.png)", "url(./assets/blockRightInsideCorner.png)", "url(./assets/blockBottom.png)", "url(./assets/blockBottomRight.png)", "url(./assets/blockBottomLeft.png)"
+    ];
+    platformTable = document.createElement("table");
+    let jungleRow = document.createElement("tr");
+    jungleBackgroundImageURLS.forEach(imageURL => {
+      let jungleSquare = document.createElement("td");
+      jungleSquare.style.height = "25px";
+      jungleSquare.style.width = "25px";
+      jungleSquare.style.borderStyle = "solid";
+      jungleSquare.style.borderWidth = "1px";
+      jungleSquare.style.backgroundImage = imageURL;
+      jungleSquare.addEventListener("click", platformSquareEventListener);
+      jungleRow.appendChild(jungleSquare)
+    });
+    platformTable.appendChild(jungleRow);
+    builderControlContainer.appendChild(platformTable);
+  }
 
   function createColorPalette(){
     // let colorPalette = document.createElement("div");
@@ -143,11 +165,13 @@ function levelArtBuilder(){
     currentStyle = event.target.style.backgroundColor;
   }
 
+  function platformSquareEventListener(event){
+    currentStyle = event.target.style.backgroundImage;
+  }
+
   function doneButtonEventHandler(event) {
     // constructor(x, y, width, height, color = "black", visible = true, gameContainer){
     let block;
-
-    currentLevel.blocks.forEach(block => block.renderWithImage());
 
     levelBuilderOpen = false;
 
@@ -166,7 +190,9 @@ function levelArtBuilder(){
       //remove grid mode stuff
     }
     colorPalette.remove();
+    platformTable.remove();
     gridModeButton.remove();
+    levelArtBuilderOpen = false;
   }
 
   function gridModeButtonEventHandler(event) {
@@ -201,6 +227,7 @@ function levelArtBuilder(){
         }
       }
       createColorPalette();
+      createPlatformSelector();
     }
     else {
 
@@ -219,7 +246,6 @@ function levelArtBuilder(){
 
     if (drawingGoing) {
 
-      let square = event.target;
       // if (eraserBlockMode) {
       //   if (square.style.backgroundColor !== "none") {
       //     square.dataset.status = "none";
@@ -231,6 +257,12 @@ function levelArtBuilder(){
         Block.all.forEach(block => {
           if(block.style !== currentStyle){
             if(block.x === parseInt(event.target.style.left.replace(/\D/gm, "/")) && block.y === parseInt(event.target.style.top.replace(/\D/gm, "/"))){
+              // if(currentStyle.startsWith("url")){
+              //
+              // }
+              // else {
+              //
+              // }
               block.color = currentStyle;
               block.render();
             }

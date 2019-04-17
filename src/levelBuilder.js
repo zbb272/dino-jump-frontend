@@ -143,6 +143,7 @@ function levelBuilder() {
 
     doneButton.remove();
     saveButton.remove();
+    deleteLevelButton.remove();
 
     saveAsNewForm.remove();
     customBlockForm.remove();

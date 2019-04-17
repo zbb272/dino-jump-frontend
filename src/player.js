@@ -6,7 +6,7 @@ class Player {
     this.lastY = startY;
     this.dx = 0;
     this.dy = 0;
-    this.height = 45;
+    this.height = 40;
     this.width = 25;
     this.lives = 5;
 
@@ -35,6 +35,15 @@ class Player {
     this.container.classList.add("player");
     this.gameContainer.appendChild(this.container);
     this.disabled = true;
+
+    //character image
+    this.container.style.backgroundImage = "url(./assets/dinoBlueCharacter/dinoBlueIdle1.png)"
+    this.rightMovingSpriteArray = ["url(./assets/dinoBlueCharacter/dinoBlueRunRight1.png)", "url(./assets/dinoBlueCharacter/dinoBlueRunRight2.png)", "url(./assets/dinoBlueCharacter/dinoBlueRunRight3.png)", "url(./assets/dinoBlueCharacter/dinoBlueRunRight4.png)", "url(./assets/dinoBlueCharacter/dinoBlueRunRight5.png)", "url(./assets/dinoBlueCharacter/dinoBlueRunRight6.png)"];
+    this.leftMovingSpriteArray = ["url(./assets/dinoBlueCharacter/dinoBlueRunLeft1.png)", "url(./assets/dinoBlueCharacter/dinoBlueRunLeft2.png)", "url(./assets/dinoBlueCharacter/dinoBlueRunLeft3.png)", "url(./assets/dinoBlueCharacter/dinoBlueRunLeft4.png)", "url(./assets/dinoBlueCharacter/dinoBlueRunLeft5.png)", "url(./assets/dinoBlueCharacter/dinoBlueRunLeft6.png)"];
+    this.idleSpriteArray = ["url(./assets/dinoBlueCharacter/dinoBlueIdle1.png)", "url(./assets/dinoBlueCharacter/dinoBlueIdle2Left.png)"];
+    this.rightMovingSpriteIndex = 0;
+    this.leftMovingSpriteIndex = 0;
+    this.idleSpriteIndex = 0;
   }
 
   setLevel(level) {
@@ -439,6 +448,25 @@ class Player {
       this.container.style.minWidth = `${this.width}px`;
       this.container.style.top = `${this.y}px`;
       this.container.style.left = `${this.x}px`;
+      if(this.movingRight){
+        this.rightMovingSpriteIndex === 5 ? this.rightMovingSpriteIndex = 0 : this.rightMovingSpriteIndex += 1;
+        this.leftMovingSpriteIndex = 0;
+        this.idleSpriteIndex = 0;
+        this.container.style.backgroundImage = this.rightMovingSpriteArray[this.rightMovingSpriteIndex];
+      }
+      else if(this.movingLeft){
+        this.leftMovingSpriteIndex === 5 ? this.leftMovingSpriteIndex = 0 : this.leftMovingSpriteIndex += 1;
+        this.rightMovingSpriteIndex = 0;
+        this.idleSpriteIndex = 1;
+        this.container.style.backgroundImage = this.leftMovingSpriteArray[this.leftMovingSpriteIndex];
+      } else {
+        // console.log("idle")
+        // this.idleSpriteIndex === 3 ? this.idleSpriteIndex = 0 : this.idleSpriteIndex += 1;
+        // this.rightMovingSpriteIndex = 0;
+        // this.leftMovingSpriteIndex = 0;
+        this.container.style.backgroundImage = this.idleSpriteArray[this.idleSpriteIndex];
+      }
+
     }
   }
 }

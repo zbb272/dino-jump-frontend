@@ -56,9 +56,11 @@ ul {
 
 .player {
   position: absolute;
-  background-color: mediumaquamarine;
+  /* background-color: mediumaquamarine; */
   z-index: 5;
   display: block;
+  background-repeat: no-repeat;
+  background-size: 100%;
 
   /* min-height: 50px;
   min-width: 30px; */

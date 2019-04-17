@@ -41,7 +41,7 @@ class Block {
     this.render();
   }
 
-  render() {
+  render() { 
     if(this.color.startsWith("url")){
       this.container.style.backgroundImage = this.color;
       this.container.style.backgroundColor = "none";

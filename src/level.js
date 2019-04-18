@@ -136,6 +136,8 @@ class Level {
       this.movers.push(block);
     }
     this.blocks.push(block);
+    block.draw();
+    block.render();
   }
   removeCoin(block) {
     console.log("Touched");

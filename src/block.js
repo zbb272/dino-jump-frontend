@@ -21,6 +21,7 @@ class Block {
     this.level = Level.all.find(l => l.id === obj.level_id);
     this.visible = true;
     this.id = obj.id;
+    this.isMover = false;
     this.render();
     Block.all.push(this);
   }
@@ -88,6 +89,7 @@ class Block {
   }
 
   configMovement() {
+    this.isMover = true;
     this.config = JSON.parse(this.color.substr(5));
     this.origConfig = { ...this.config };
     for (const key in this.config) {

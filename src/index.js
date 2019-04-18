@@ -55,6 +55,33 @@ function run() {
   function newGameButtonEventListener(event){
     gameList.remove();
     subTitleElement.innerText = "Enter Name of New Game: ";
+    let newGameForm = document.createElement("form");
+    let nameInputField = document.createElement("input");
+    newGameForm.appendChild(nameInputField);
+    let newSubmitField = document.createElement("button");
+    newSubmitField.type = "submit";
+    newSubmitField.innerText = "submit";
+    newGameForm.appendChild(newSubmitField);
+    newGameForm.addEventListener("submit", newGameFormEventListener);
+    mainMenu.appendChild(newGameForm);
+  }
+
+  function newGameFormEventListener(event){
+    event.preventDefault();
+    if(event.target.childNodes[0].value !== ""){
+      let obj = {name: event.target.childNodes[0].value}
+      let gameUrl = `http://localhost:3000/api/v1/games/`;
+      fetch(gameUrl, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(obj)
+      })
+        .then(res => res.json())
+        .then(data => console.log(data));
+      document.location.reload();
+    }
   }
 
   function gameSelectEventListener(event) {
@@ -65,7 +92,9 @@ function run() {
   }
 
   function levelListMenu(game_id) {
+    titleElement.innerText = currentGame.name;
     subTitleElement.innerText = "Select Level To Play";
+
     levelList = document.createElement("ul");
     let levelUrl = `http://localhost:3000/api/v1/games/`;
     fetch(levelUrl)
@@ -85,7 +114,24 @@ function run() {
         });
       });
 
+    let deleteGameButton = document.createElement("button");
+    deleteGameButton.innerText = "Delete Game";
+    deleteGameButton.addEventListener("click", deleteGameButtonEventHandler)
+    levelList.appendChild(deleteGameButton);
+
     mainMenu.appendChild(levelList);
+  }
+
+  function deleteGameButtonEventHandler(event){
+    if (window.confirm("Are you sure you want to delete the game? This is not reversible.")) {
+      let levelUrl = `http://localhost:3000/api/v1/games/${currentGame.id}`;
+      fetch(levelUrl, {
+        method: "DELETE"
+      })
+        .then(res => res.json())
+        .then(data => console.log(data));
+      document.location.reload();
+    }
   }
 
   function levelSelectEventListener(event) {

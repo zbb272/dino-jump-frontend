@@ -220,7 +220,7 @@ class Player {
   }
   moveLeft() {
     this.movingLeft = true;
-    if (this.isAgainstWall() !== -1) {
+    if (this.isAgainstWall() !== 1) {
       if (this.isAirborne()) {
         if (this.dx > 0) {
           this.slowDown(5);

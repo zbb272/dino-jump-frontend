@@ -59,6 +59,7 @@ class Player {
     this.rightMovingSpriteIndex = 0;
     this.leftMovingSpriteIndex = 0;
     this.idleSpriteIndex = 0;
+    this.deathSpriteIndex = 0;
   }
 
   setLevel(level) {
@@ -369,6 +370,16 @@ class Player {
     this.dy = 0;
     this.lives--;
     this.renderLives();
+    this.deathSpriteInterval = setInterval(deathSprite.bind(this), 150);
+    function deathSprite(){
+      this.container.style.backgroundImage = this.deathSpriteArray[this.deathSpriteIndex];
+      if(this.deathSpriteIndex < 3){
+        this.deathSpriteIndex++;
+      }
+      else{
+        this.deathSpriteIndex = 0;
+      }
+    }
     if (this.lives === 0) {
       this.gameOver();
     } else {
@@ -376,7 +387,10 @@ class Player {
         this.disabled = false;
         this.level.disabled = false;
         console.log("level enabled", this.level, this.level.disabled);
+        clearInterval(this.deathSpriteInterval);
+        this.deathSpriteIndex = 0;
       }, 1000);
+
     }
   }
   gameOver() {
@@ -391,6 +405,8 @@ class Player {
 
     this.gameContainer.appendChild(gameOver);
     setTimeout(() => {
+      clearInterval(this.deathSpriteInterval);
+      this.deathSpriteIndex = 0;
       this.lives = 5;
       this.renderLives();
       gameOver.remove();
@@ -401,6 +417,7 @@ class Player {
 
       this.disabled = false;
       this.level.disabled = false;
+
     }, 2500);
   }
 

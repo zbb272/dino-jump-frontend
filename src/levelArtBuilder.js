@@ -125,7 +125,8 @@ function levelArtBuilder(){
     }
     colorPalette.appendChild(rUpRow);
     let bDownRow = document.createElement("tr");
-    while(b > 0){
+    b = 0;
+    while(b < 255){
       let colorSquare = document.createElement("td");
       colorSquare.style.backgroundColor = `rgb(${r},${g},${b})`;
       colorSquare.style.height = "10px";
@@ -135,8 +136,9 @@ function levelArtBuilder(){
       colorSquare.style.borderWidth = "1px";
       colorSquare.addEventListener("click", colorSquareEventListener);
       bDownRow.appendChild(colorSquare)
-      b -= 5;
+      b += 5;
     }
+    b= 0;
     colorPalette.appendChild(bDownRow);
     let gUpRow = document.createElement("tr");
     while(g < 255){
@@ -151,9 +153,10 @@ function levelArtBuilder(){
       gUpRow.appendChild(colorSquare)
       g += 5;
     }
+    r = 0;
     colorPalette.appendChild(gUpRow);
     let rDownRow = document.createElement("tr");
-    while(r > 0){
+    while(r < 255){
       let colorSquare = document.createElement("td");
       colorSquare.style.backgroundColor = `rgb(${r},${g},${b})`;
       colorSquare.style.height = "10px";
@@ -163,8 +166,9 @@ function levelArtBuilder(){
       colorSquare.style.borderWidth = "1px";
       colorSquare.addEventListener("click", colorSquareEventListener);
       rDownRow.appendChild(colorSquare)
-      r -= 5;
+      r += 5;
     }
+    r = 0;
     colorPalette.appendChild(rDownRow);
     let bUpRow = document.createElement("tr");
     while(b < 255){
@@ -179,9 +183,10 @@ function levelArtBuilder(){
       bUpRow.appendChild(colorSquare)
       b += 5;
     }
+    g = 0;
     colorPalette.appendChild(bUpRow);
     let gDownRow = document.createElement("tr");
-    while(g > 0){
+    while(g < 255){
       let colorSquare = document.createElement("td");
       colorSquare.style.backgroundColor = `rgb(${r},${g},${b})`;
       colorSquare.style.height = "10px";
@@ -191,7 +196,7 @@ function levelArtBuilder(){
       colorSquare.style.borderWidth = "1px";
       colorSquare.addEventListener("click", colorSquareEventListener);
       gDownRow.appendChild(colorSquare)
-      g -= 5;
+      g += 5;
     }
     colorPalette.appendChild(gDownRow);
     let bwRow = document.createElement("tr");
@@ -287,10 +292,40 @@ function levelArtBuilder(){
       }
       createColorPalette();
       createPlatformSelector();
+      createBackgroundSelector();
     }
     else {
 
     }
+  }
+
+  function createBackgroundSelector(){
+    backgroundImageURLS = [
+      "url(./assets/jungle/backgroundLarge.png)", "url(./assets/mountainBackground/glacialMountain.png)"
+    ];
+    let backgroundTable = document.createElement("table");
+    let backgroundRow = document.createElement("tr");
+    backgroundImageURLS.forEach(imageURL => {
+      let backgroundSquare = document.createElement("td");
+      backgroundSquare.classList.add("background-thumb");
+      backgroundSquare.style.height = "125px";
+      backgroundSquare.style.width = "125px";
+      backgroundSquare.style.borderStyle = "solid";
+      backgroundSquare.style.borderWidth = "1px";
+      backgroundSquare.style.backgroundImage = imageURL;
+      backgroundSquare.style.backgroundSize = "cover";
+      backgroundSquare.addEventListener("click", backgroundSquareEventListener);
+      backgroundRow.appendChild(backgroundSquare)
+    });
+    backgroundTable.appendChild(backgroundRow);
+
+    builderControlContainer.appendChild(backgroundTable);
+  }
+
+  function backgroundSquareEventListener(event){
+    console.log(event.target.style.backgroundImage)
+    currentLevel.background = event.target.style.backgroundImage;
+    currentLevel.gameContainer.style.backgroundImage = event.target.style.backgroundImage;
   }
 
   function saveButtonEventHandler(event){
@@ -308,7 +343,7 @@ function levelArtBuilder(){
     let player = document.querySelector(".player");
 
     console.log(blocksToSend.length);
-    obj = { level: { blocks_attributes: blocksToSend } };
+    obj = { level: { background: currentLevel.background, blocks_attributes: blocksToSend } };
     //fetch request
     let levelUrl = `http://localhost:3000/api/v1/levels/${currentLevel.id}`;
     fetch(levelUrl, {

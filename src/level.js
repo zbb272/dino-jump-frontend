@@ -63,15 +63,16 @@ class Level {
       });
     }
   }
-  complete() {
+  complete(player) {
     let i = currentGame.levels.indexOf(this);
     i++;
     if (i === currentGame.levels.length) {
-      i = 0;
+      currentGame.complete(player);
+    } else {
+      this.drop();
+      currentLevel = currentGame.levels[i];
+      currentLevel.init();
     }
-    this.drop();
-    currentLevel = currentGame.levels[i];
-    currentLevel.init();
   }
 
   render() {
@@ -81,6 +82,15 @@ class Level {
       this.blockSchemas.forEach(b => {
         const block = new Block(b, this.gameContainer);
         this.add(block);
+        block.draw();
+        block.render();
+      });
+    } else {
+      this.blocks.forEach(b => {
+        if (!gameContainer.contains(b.container)) {
+          b.draw();
+        }
+        b.render();
       });
     }
     this.first = false;
@@ -147,6 +157,7 @@ class Level {
         if (this.currentScore > this.highScore) {
           this.highScore = this.currentScore;
         }
+        currentGame.score += this.currentScore;
         this.currentScore = 0;
       });
   }

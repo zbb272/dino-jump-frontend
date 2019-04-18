@@ -351,8 +351,7 @@ class Player {
       this.gameContainer.appendChild(success);
       setTimeout(() => {
         success.remove();
-        this.level.drop();
-        this.level.complete();
+        this.level.complete(this);
         this.level = currentLevel;
         this.dx = 0;
         this.dy = 0;
@@ -395,7 +394,9 @@ class Player {
       this.lives = 5;
       this.renderLives();
       gameOver.remove();
-
+      currentGame.restart(this);
+      this.level.drop();
+      this.setLevel(currentLevel);
       this.level.init();
 
       this.disabled = false;

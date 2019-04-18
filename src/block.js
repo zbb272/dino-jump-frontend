@@ -17,12 +17,12 @@ class Block {
     this.gameContainer = gameContainer;
     this.container = document.createElement("div");
     this.container.classList.add("block");
-    this.gameContainer.appendChild(this.container);
+
     this.level = Level.all.find(l => l.id === obj.level_id);
     this.visible = true;
     this.id = obj.id;
     this.isMover = false;
-    this.render();
+
     Block.all.push(this);
   }
 
@@ -58,7 +58,8 @@ class Block {
   }
 
   draw() {
-    this.render();
+    this.gameContainer.appendChild(this.container);
+    this.visible = true;
   }
   reset() {
     this.setXY(this.origX, this.origY);

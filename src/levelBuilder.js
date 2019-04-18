@@ -202,6 +202,8 @@ function levelBuilder() {
       };
       let b = new Block(obj);
       currentLevel.add(b);
+      b.draw();
+      b.render();
     });
 
     levelBuilderOpen = false;

@@ -3,6 +3,7 @@ let levelBuilderOpen = false;
 let levelArtBuilderOpen = false;
 let currentLevel;
 let currentGame;
+let characterMenuSpriteMoveInterval;
 let levelList;
 document.addEventListener("DOMContentLoaded", run());
 
@@ -150,6 +151,8 @@ function run() {
   function characterListMenu(){
     levelList.remove();
     subTitleElement.innerText = "Select Your Character";
+    let character1IdleSprites = ["url(./assets/dinoBlueCharacter/dinoBlueIdleRight.png)", "url(./assets/dinoBlueCharacter/dinoBlueIdle2.png)",
+                                "url(./assets/dinoBlueCharacter/dinoBlueIdle3.png)", "url(./assets/dinoBlueCharacter/dinoBlueIdle4.png)"]
     let characterDiv1 = document.createElement("div");
     characterDiv1.style.minHeight = "68px";
     characterDiv1.style.minWidth = "60px";
@@ -167,6 +170,8 @@ function run() {
     // characterDiv1.appendChild(character2Name)
     characterDiv1.addEventListener("click", characterSelectEvent)
     mainMenu.appendChild(characterDiv1);
+    let character2IdleSprites = ["url(./assets/dinoRedCharacter/dinoRedIdleRight.png)", "url(./assets/dinoRedCharacter/dinoRedIdle2.png)",
+                                "url(./assets/dinoRedCharacter/dinoRedIdle3.png)", "url(./assets/dinoRedCharacter/dinoRedIdle4.png)"]
     let characterDiv2 = document.createElement("div");
     characterDiv2.style.minHeight = "68px";
     characterDiv2.style.minWidth = "60px";
@@ -180,6 +185,8 @@ function run() {
     characterDiv2.dataset.character = "red";
     characterDiv2.addEventListener("click", characterSelectEvent)
     mainMenu.appendChild(characterDiv2);
+    let character3IdleSprites = ["url(./assets/dinoGoldCharacter/dinoGoldIdleRight.png)", "url(./assets/dinoGoldCharacter/dinoGoldIdle2.png)",
+                                "url(./assets/dinoGoldCharacter/dinoGoldIdle3.png)", "url(./assets/dinoGoldCharacter/dinoGoldIdle4.png)"]
     let characterDiv3 = document.createElement("div");
     characterDiv3.style.minHeight = "68px";
     characterDiv3.style.minWidth = "60px";
@@ -193,6 +200,8 @@ function run() {
     characterDiv3.dataset.character = "gold";
     characterDiv3.addEventListener("click", characterSelectEvent)
     mainMenu.appendChild(characterDiv3);
+    let character4IdleSprites = ["url(./assets/dinoGreenCharacter/dinoGreenIdleRight.png)", "url(./assets/dinoGreenCharacter/dinoGreenIdle2.png)",
+                                "url(./assets/dinoGreenCharacter/dinoGreenIdle3.png)", "url(./assets/dinoGreenCharacter/dinoGreenIdle4.png)"]
     let characterDiv4 = document.createElement("div");
     characterDiv4.style.minHeight = "68px";
     characterDiv4.style.minWidth = "60px";
@@ -206,9 +215,27 @@ function run() {
     characterDiv4.dataset.character = "green";
     characterDiv4.addEventListener("click", characterSelectEvent)
     mainMenu.appendChild(characterDiv4);
+
+    characterMenuSpriteMoveInterval = setInterval(moveIdleSprites, 80);
+    let characterSpriteIndex = 0;
+    function moveIdleSprites(){
+      characterDiv1.style.backgroundImage = character1IdleSprites[characterSpriteIndex];
+      characterDiv2.style.backgroundImage = character2IdleSprites[characterSpriteIndex];
+      characterDiv3.style.backgroundImage = character3IdleSprites[characterSpriteIndex];
+      characterDiv4.style.backgroundImage = character4IdleSprites[characterSpriteIndex];
+      if(characterSpriteIndex < 3){
+        characterSpriteIndex++;
+      }
+      else{
+        characterSpriteIndex = 0;
+      }
+    }
   }
 
+
+
   function characterSelectEvent(event){
+    clearInterval(characterMenuSpriteMoveInterval);
     if(event.target.dataset.character === "blue"){
       player.rightMovingSpriteArray = [
         "url(./assets/dinoBlueCharacter/dinoBlueRunRight1.png)",
@@ -227,7 +254,10 @@ function run() {
         "url(./assets/dinoBlueCharacter/dinoBlueRunLeft6.png)"
       ];
       player.idleSpriteArray = ["url(./assets/dinoBlueCharacter/dinoBlueIdleRight.png)", "url(./assets/dinoBlueCharacter/dinoBlueIdleLeft.png)"];
-
+      player.deathSpriteArray = [
+        "url(./assets/dinoBlueCharacter/dinoBlueDeath1.png)",
+        "url(./assets/dinoBlueCharacter/dinoBlueDeath2.png)",
+        "url(./assets/dinoBlueCharacter/dinoBlueDeath3.png)"];
     }
     else if(event.target.dataset.character === "red"){
       player.rightMovingSpriteArray = [
@@ -247,7 +277,10 @@ function run() {
         "url(./assets/dinoRedCharacter/dinoRedRunLeft6.png)"
       ];
       player.idleSpriteArray = ["url(./assets/dinoRedCharacter/dinoRedIdleRight.png)", "url(./assets/dinoRedCharacter/dinoRedIdleLeft.png)"];
-
+      player.deathSpriteArray = [
+        "url(./assets/dinoRedCharacter/dinoRedDeath1.png)",
+        "url(./assets/dinoRedCharacter/dinoRedDeath2.png)",
+        "url(./assets/dinoRedCharacter/dinoRedDeath3.png)"];
     }
     else if(event.target.dataset.character === "gold"){
       player.rightMovingSpriteArray = [
@@ -267,7 +300,10 @@ function run() {
         "url(./assets/dinoGoldCharacter/dinoGoldRunLeft6.png)"
       ];
       player.idleSpriteArray = ["url(./assets/dinoGoldCharacter/dinoGoldIdleRight.png)", "url(./assets/dinoGoldCharacter/dinoGoldIdleLeft.png)"];
-
+      player.deathSpriteArray = [
+        "url(./assets/dinoGoldCharacter/dinoGoldDeath1.png)",
+        "url(./assets/dinoGoldCharacter/dinoGoldDeath2.png)",
+        "url(./assets/dinoGoldCharacter/dinoGoldDeath3.png)"];
     }
     else if(event.target.dataset.character === "green"){
       player.rightMovingSpriteArray = [
@@ -287,7 +323,10 @@ function run() {
         "url(./assets/dinoGreenCharacter/dinoGreenRunLeft6.png)"
       ];
       player.idleSpriteArray = ["url(./assets/dinoGreenCharacter/dinoGreenIdleRight.png)", "url(./assets/dinoGreenCharacter/dinoGreenIdleLeft.png)"];
-
+      player.deathSpriteArray = [
+        "url(./assets/dinoGreenCharacter/dinoGreenDeath1.png)",
+        "url(./assets/dinoGreenCharacter/dinoGreenDeath2.png)",
+        "url(./assets/dinoGreenCharacter/dinoGreenDeath3.png)"];
     }
 
     currentLevel.init();

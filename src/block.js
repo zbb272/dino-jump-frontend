@@ -17,7 +17,6 @@ class Block {
     this.gameContainer = gameContainer;
     this.container = document.createElement("div");
     this.container.classList.add("block");
-
     this.level = Level.all.find(l => l.id === obj.level_id);
     this.visible = true;
     this.id = obj.id;

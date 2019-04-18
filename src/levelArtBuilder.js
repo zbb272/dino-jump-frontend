@@ -5,6 +5,7 @@ function levelArtBuilder(){
 
   let colorPalette;
   let platformTable;
+  let backgroundTable;
   let currentStyle = "none"
   let builderControlContainer = document.getElementById("builder-controls");
 
@@ -31,7 +32,7 @@ function levelArtBuilder(){
 
     jungleBackgroundImageURLS = [
       "url(./assets/jungle/blockCenter.png)", "url(./assets/jungle/blockLeft.png)", "url(./assets/jungle/blockRight.png)", "url(./assets/jungle/blockMiddle.png)", "url(./assets/jungle/blockCornerLeft.png)", "url(./assets/jungle/blockCornerRight.png)",
-      "url(./assets/jungle/blockLeftInsideCorner.png)", "url(./assets/jungle/blockRightInsideCorner.png)", "url(./assets/jungle/blockBottom.png)", "url(./assets/jungle/blockBottomRight.png)", "url(./assets/jungle/blockBottomLeft.png)"
+      "url(./assets/jungle/blockLeftInsideCorner.png)", "url(./assets/jungle/blockRightInsideCorner.png)", "url(./assets/jungle/blockBottom.png)", "url(./assets/jungle/blockBottomRight.png)", "url(./assets/jungle/blockBottomLeft.png)",  "url(./assets/jungle/blockSingle1.png)"
     ];
     platformTable = document.createElement("table");
     let jungleRow = document.createElement("tr");
@@ -255,6 +256,9 @@ function levelArtBuilder(){
     if(platformTable !== undefined){
       platformTable.remove();
     }
+    if(backgroundTable !== undefined){
+      backgroundTable.remove();
+    }
     gridModeButton.remove();
     levelArtBuilderOpen = false;
   }
@@ -301,9 +305,10 @@ function levelArtBuilder(){
 
   function createBackgroundSelector(){
     backgroundImageURLS = [
-      "url(./assets/jungle/backgroundLarge.png)", "url(./assets/mountainBackground/glacialMountain.png)"
+      "url(./assets/jungle/backgroundLarge.png)", "url(./assets/backgrounds/bg1.png)", "url(./assets/backgrounds/bg2.png)", "url(./assets/backgrounds/bg3.png)",
+      , "url(./assets/backgrounds/bg4.png)", "url(./assets/backgrounds/bg5.png)", "url(./assets/backgrounds/bg6.png)", "url(./assets/backgrounds/bg7.png)"
     ];
-    let backgroundTable = document.createElement("table");
+    backgroundTable = document.createElement("table");
     let backgroundRow = document.createElement("tr");
     backgroundImageURLS.forEach(imageURL => {
       let backgroundSquare = document.createElement("td");

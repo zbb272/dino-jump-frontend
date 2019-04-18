@@ -53,7 +53,7 @@ function run() {
     mainMenu.appendChild(gameList);
   }
 
-  function newGameButtonEventListener(event){
+  function newGameButtonEventListener(event) {
     gameList.remove();
     subTitleElement.innerText = "Enter Name of New Game: ";
     let newGameForm = document.createElement("form");
@@ -67,10 +67,10 @@ function run() {
     mainMenu.appendChild(newGameForm);
   }
 
-  function newGameFormEventListener(event){
+  function newGameFormEventListener(event) {
     event.preventDefault();
-    if(event.target.childNodes[0].value !== ""){
-      let obj = {name: event.target.childNodes[0].value}
+    if (event.target.childNodes[0].value !== "") {
+      let obj = { name: event.target.childNodes[0].value };
       let gameUrl = `http://localhost:3000/api/v1/games/`;
       fetch(gameUrl, {
         method: "POST",
@@ -102,7 +102,7 @@ function run() {
       .then(res => res.json())
       .then(data => {
         data.forEach(game => {
-          if(game_id === game.id){
+          if (game_id === game.id) {
             game.levels.forEach(level => {
               let levelListItem = document.createElement("li");
               levelListItem.innerText = level.name;
@@ -110,20 +110,20 @@ function run() {
               levelListItem.addEventListener("click", levelSelectEventListener);
               levelList.appendChild(levelListItem);
               currentGame.levels.push(new Level(level, gameContainer));
-            })
+            });
           }
         });
       });
 
     let deleteGameButton = document.createElement("button");
     deleteGameButton.innerText = "Delete Game";
-    deleteGameButton.addEventListener("click", deleteGameButtonEventHandler)
+    deleteGameButton.addEventListener("click", deleteGameButtonEventHandler);
     levelList.appendChild(deleteGameButton);
 
     mainMenu.appendChild(levelList);
   }
 
-  function deleteGameButtonEventHandler(event){
+  function deleteGameButtonEventHandler(event) {
     if (window.confirm("Are you sure you want to delete the game? This is not reversible.")) {
       let levelUrl = `http://localhost:3000/api/v1/games/${currentGame.id}`;
       fetch(levelUrl, {
@@ -145,14 +145,18 @@ function run() {
     //setup level
     currentLevel = Level.all.find(level => level.id === parseInt(event.target.dataset.id));
 
-    characterListMenu()
+    characterListMenu();
   }
 
-  function characterListMenu(){
+  function characterListMenu() {
     levelList.remove();
     subTitleElement.innerText = "Select Your Character";
-    let character1IdleSprites = ["url(./assets/dinoBlueCharacter/dinoBlueIdleRight.png)", "url(./assets/dinoBlueCharacter/dinoBlueIdle2.png)",
-                                "url(./assets/dinoBlueCharacter/dinoBlueIdle3.png)", "url(./assets/dinoBlueCharacter/dinoBlueIdle4.png)"]
+    let character1IdleSprites = [
+      "url(./assets/dinoBlueCharacter/dinoBlueIdleRight.png)",
+      "url(./assets/dinoBlueCharacter/dinoBlueIdle2.png)",
+      "url(./assets/dinoBlueCharacter/dinoBlueIdle3.png)",
+      "url(./assets/dinoBlueCharacter/dinoBlueIdle4.png)"
+    ];
     let characterDiv1 = document.createElement("div");
     characterDiv1.style.minHeight = "68px";
     characterDiv1.style.minWidth = "60px";
@@ -168,10 +172,14 @@ function run() {
     // character2Name.innerText = "Meep";
     // character2Name.style.top = "450px";
     // characterDiv1.appendChild(character2Name)
-    characterDiv1.addEventListener("click", characterSelectEvent)
+    characterDiv1.addEventListener("click", characterSelectEvent);
     mainMenu.appendChild(characterDiv1);
-    let character2IdleSprites = ["url(./assets/dinoRedCharacter/dinoRedIdleRight.png)", "url(./assets/dinoRedCharacter/dinoRedIdle2.png)",
-                                "url(./assets/dinoRedCharacter/dinoRedIdle3.png)", "url(./assets/dinoRedCharacter/dinoRedIdle4.png)"]
+    let character2IdleSprites = [
+      "url(./assets/dinoRedCharacter/dinoRedIdleRight.png)",
+      "url(./assets/dinoRedCharacter/dinoRedIdle2.png)",
+      "url(./assets/dinoRedCharacter/dinoRedIdle3.png)",
+      "url(./assets/dinoRedCharacter/dinoRedIdle4.png)"
+    ];
     let characterDiv2 = document.createElement("div");
     characterDiv2.style.minHeight = "68px";
     characterDiv2.style.minWidth = "60px";
@@ -183,10 +191,14 @@ function run() {
     characterDiv2.style.backgroundRepeat = "no-repeat";
     characterDiv2.style.backgroundSize = "cover";
     characterDiv2.dataset.character = "red";
-    characterDiv2.addEventListener("click", characterSelectEvent)
+    characterDiv2.addEventListener("click", characterSelectEvent);
     mainMenu.appendChild(characterDiv2);
-    let character3IdleSprites = ["url(./assets/dinoGoldCharacter/dinoGoldIdleRight.png)", "url(./assets/dinoGoldCharacter/dinoGoldIdle2.png)",
-                                "url(./assets/dinoGoldCharacter/dinoGoldIdle3.png)", "url(./assets/dinoGoldCharacter/dinoGoldIdle4.png)"]
+    let character3IdleSprites = [
+      "url(./assets/dinoGoldCharacter/dinoGoldIdleRight.png)",
+      "url(./assets/dinoGoldCharacter/dinoGoldIdle2.png)",
+      "url(./assets/dinoGoldCharacter/dinoGoldIdle3.png)",
+      "url(./assets/dinoGoldCharacter/dinoGoldIdle4.png)"
+    ];
     let characterDiv3 = document.createElement("div");
     characterDiv3.style.minHeight = "68px";
     characterDiv3.style.minWidth = "60px";
@@ -198,10 +210,14 @@ function run() {
     characterDiv3.style.backgroundRepeat = "no-repeat";
     characterDiv3.style.backgroundSize = "cover";
     characterDiv3.dataset.character = "gold";
-    characterDiv3.addEventListener("click", characterSelectEvent)
+    characterDiv3.addEventListener("click", characterSelectEvent);
     mainMenu.appendChild(characterDiv3);
-    let character4IdleSprites = ["url(./assets/dinoGreenCharacter/dinoGreenIdleRight.png)", "url(./assets/dinoGreenCharacter/dinoGreenIdle2.png)",
-                                "url(./assets/dinoGreenCharacter/dinoGreenIdle3.png)", "url(./assets/dinoGreenCharacter/dinoGreenIdle4.png)"]
+    let character4IdleSprites = [
+      "url(./assets/dinoGreenCharacter/dinoGreenIdleRight.png)",
+      "url(./assets/dinoGreenCharacter/dinoGreenIdle2.png)",
+      "url(./assets/dinoGreenCharacter/dinoGreenIdle3.png)",
+      "url(./assets/dinoGreenCharacter/dinoGreenIdle4.png)"
+    ];
     let characterDiv4 = document.createElement("div");
     characterDiv4.style.minHeight = "68px";
     characterDiv4.style.minWidth = "60px";
@@ -213,30 +229,27 @@ function run() {
     characterDiv4.style.backgroundRepeat = "no-repeat";
     characterDiv4.style.backgroundSize = "cover";
     characterDiv4.dataset.character = "green";
-    characterDiv4.addEventListener("click", characterSelectEvent)
+    characterDiv4.addEventListener("click", characterSelectEvent);
     mainMenu.appendChild(characterDiv4);
 
     characterMenuSpriteMoveInterval = setInterval(moveIdleSprites, 80);
     let characterSpriteIndex = 0;
-    function moveIdleSprites(){
+    function moveIdleSprites() {
       characterDiv1.style.backgroundImage = character1IdleSprites[characterSpriteIndex];
       characterDiv2.style.backgroundImage = character2IdleSprites[characterSpriteIndex];
       characterDiv3.style.backgroundImage = character3IdleSprites[characterSpriteIndex];
       characterDiv4.style.backgroundImage = character4IdleSprites[characterSpriteIndex];
-      if(characterSpriteIndex < 3){
+      if (characterSpriteIndex < 3) {
         characterSpriteIndex++;
-      }
-      else{
+      } else {
         characterSpriteIndex = 0;
       }
     }
   }
 
-
-
-  function characterSelectEvent(event){
+  function characterSelectEvent(event) {
     clearInterval(characterMenuSpriteMoveInterval);
-    if(event.target.dataset.character === "blue"){
+    if (event.target.dataset.character === "blue") {
       player.rightMovingSpriteArray = [
         "url(./assets/dinoBlueCharacter/dinoBlueRunRight1.png)",
         "url(./assets/dinoBlueCharacter/dinoBlueRunRight2.png)",
@@ -254,12 +267,8 @@ function run() {
         "url(./assets/dinoBlueCharacter/dinoBlueRunLeft6.png)"
       ];
       player.idleSpriteArray = ["url(./assets/dinoBlueCharacter/dinoBlueIdleRight.png)", "url(./assets/dinoBlueCharacter/dinoBlueIdleLeft.png)"];
-      player.deathSpriteArray = [
-        "url(./assets/dinoBlueCharacter/dinoBlueDeath1.png)",
-        "url(./assets/dinoBlueCharacter/dinoBlueDeath2.png)",
-        "url(./assets/dinoBlueCharacter/dinoBlueDeath3.png)"];
-    }
-    else if(event.target.dataset.character === "red"){
+      player.deathSpriteArray = ["url(./assets/dinoBlueCharacter/dinoBlueDeath1.png)", "url(./assets/dinoBlueCharacter/dinoBlueDeath2.png)", "url(./assets/dinoBlueCharacter/dinoBlueDeath3.png)"];
+    } else if (event.target.dataset.character === "red") {
       player.rightMovingSpriteArray = [
         "url(./assets/dinoRedCharacter/dinoRedRunRight1.png)",
         "url(./assets/dinoRedCharacter/dinoRedRunRight2.png)",
@@ -277,12 +286,8 @@ function run() {
         "url(./assets/dinoRedCharacter/dinoRedRunLeft6.png)"
       ];
       player.idleSpriteArray = ["url(./assets/dinoRedCharacter/dinoRedIdleRight.png)", "url(./assets/dinoRedCharacter/dinoRedIdleLeft.png)"];
-      player.deathSpriteArray = [
-        "url(./assets/dinoRedCharacter/dinoRedDeath1.png)",
-        "url(./assets/dinoRedCharacter/dinoRedDeath2.png)",
-        "url(./assets/dinoRedCharacter/dinoRedDeath3.png)"];
-    }
-    else if(event.target.dataset.character === "gold"){
+      player.deathSpriteArray = ["url(./assets/dinoRedCharacter/dinoRedDeath1.png)", "url(./assets/dinoRedCharacter/dinoRedDeath2.png)", "url(./assets/dinoRedCharacter/dinoRedDeath3.png)"];
+    } else if (event.target.dataset.character === "gold") {
       player.rightMovingSpriteArray = [
         "url(./assets/dinoGoldCharacter/dinoGoldRunRight1.png)",
         "url(./assets/dinoGoldCharacter/dinoGoldRunRight2.png)",
@@ -300,12 +305,8 @@ function run() {
         "url(./assets/dinoGoldCharacter/dinoGoldRunLeft6.png)"
       ];
       player.idleSpriteArray = ["url(./assets/dinoGoldCharacter/dinoGoldIdleRight.png)", "url(./assets/dinoGoldCharacter/dinoGoldIdleLeft.png)"];
-      player.deathSpriteArray = [
-        "url(./assets/dinoGoldCharacter/dinoGoldDeath1.png)",
-        "url(./assets/dinoGoldCharacter/dinoGoldDeath2.png)",
-        "url(./assets/dinoGoldCharacter/dinoGoldDeath3.png)"];
-    }
-    else if(event.target.dataset.character === "green"){
+      player.deathSpriteArray = ["url(./assets/dinoGoldCharacter/dinoGoldDeath1.png)", "url(./assets/dinoGoldCharacter/dinoGoldDeath2.png)", "url(./assets/dinoGoldCharacter/dinoGoldDeath3.png)"];
+    } else if (event.target.dataset.character === "green") {
       player.rightMovingSpriteArray = [
         "url(./assets/dinoGreenCharacter/dinoGreenRunRight1.png)",
         "url(./assets/dinoGreenCharacter/dinoGreenRunRight2.png)",
@@ -326,7 +327,8 @@ function run() {
       player.deathSpriteArray = [
         "url(./assets/dinoGreenCharacter/dinoGreenDeath1.png)",
         "url(./assets/dinoGreenCharacter/dinoGreenDeath2.png)",
-        "url(./assets/dinoGreenCharacter/dinoGreenDeath3.png)"];
+        "url(./assets/dinoGreenCharacter/dinoGreenDeath3.png)"
+      ];
     }
 
     currentLevel.init();

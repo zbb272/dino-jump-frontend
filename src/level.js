@@ -30,10 +30,17 @@ class Level {
     });
     console.log(this.movers);
     this.time = 0;
-    this.timer = setInterval(() => {
-      this.time = parseInt(this.time) + 1;
-      clock.innerHTML = this.time;
-    }, 1000);
+    if (!this.timer) {
+      this.timer = setInterval(() => {
+        if (currentLevel === this) {
+          this.time = parseInt(this.time) + 1;
+          clock.innerHTML = this.time;
+        } else {
+          clearInterval(this.timer);
+          this.timer = null;
+        }
+      }, 1000);
+    }
     this.render();
   }
 
@@ -65,15 +72,16 @@ class Level {
       });
     }
   }
-  complete() {
+  complete(player) {
     let i = currentGame.levels.indexOf(this);
     i++;
     if (i === currentGame.levels.length) {
-      i = 0;
+      currentGame.complete(player);
+    } else {
+      this.drop();
+      currentLevel = currentGame.levels[i];
+      currentLevel.init();
     }
-    this.drop();
-    currentLevel = currentGame.levels[i];
-    currentLevel.init();
   }
 
   render() {
@@ -83,6 +91,15 @@ class Level {
       this.blockSchemas.forEach(b => {
         const block = new Block(b, this.gameContainer);
         this.add(block);
+        block.draw();
+        block.render();
+      });
+    } else {
+      this.blocks.forEach(b => {
+        if (!gameContainer.contains(b.container)) {
+          b.draw();
+        }
+        b.render();
       });
     }
     this.first = false;
@@ -130,7 +147,7 @@ class Level {
     this.blocks.forEach(block => block.container.remove());
   }
   callTime(complete) {
-    clearInterval(this.timer);
+    let finalTime = this.time;
     if (complete) {
       if (this.time <= 120) {
         this.updateScore(120 - parseInt(this.time));
@@ -149,6 +166,7 @@ class Level {
         if (this.currentScore > this.highScore) {
           this.highScore = this.currentScore;
         }
+        currentGame.score += this.currentScore;
         this.currentScore = 0;
       });
   }

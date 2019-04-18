@@ -79,9 +79,17 @@ class Block {
     this.container.style.top = `${this.y}px`;
     this.container.style.left = `${this.x}px`;
   }
+  updateMoverObject(color) {
+    this.origConfig.color = color;
+    this.color = `mover${JSON.stringify(this.origConfig)}`;
+  }
+  getMoverObject() {
+    return `mover${JSON.stringify(this.origConfig)}`;
+  }
 
   configMovement() {
     this.config = JSON.parse(this.color.substr(5));
+    this.origConfig = { ...this.config };
     for (const key in this.config) {
       if (key !== "color") {
         this.config[key] = parseInt(this.config[key]);

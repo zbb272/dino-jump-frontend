@@ -44,9 +44,17 @@ function run() {
           new Game(parseInt(game.id), game.name, []);
         });
       });
-
+    let newGameButton = document.createElement("button");
+    newGameButton.innerText = "Create New Game";
+    newGameButton.addEventListener("click", newGameButtonEventListener);
+    gameList.appendChild(newGameButton);
 
     mainMenu.appendChild(gameList);
+  }
+
+  function newGameButtonEventListener(event){
+    gameList.remove();
+    subTitleElement.innerText = "Enter Name of New Game: ";
   }
 
   function gameSelectEventListener(event) {

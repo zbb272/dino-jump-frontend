@@ -297,7 +297,12 @@ function levelArtBuilder(){
 
     let blocksToSend = [];
     currentLevel.blocks.forEach(block => {
-      blocksToSend.push({ id: block.id, style: block.color });
+      if(block.isMover){
+        blocksToSend.push({ id: block.id, style: block.getMoverObject() });
+      }
+      else{
+        blocksToSend.push({ id: block.id, style: block.color });
+      }
     })
 
     let player = document.querySelector(".player");
@@ -328,8 +333,16 @@ function levelArtBuilder(){
         Block.all.forEach(block => {
           if(block.style !== currentStyle){
             if(block.x === parseInt(event.target.style.left.replace(/\D/gm, "/")) && block.y === parseInt(event.target.style.top.replace(/\D/gm, "/"))){
-              block.color = currentStyle;
-              block.render();
+              // debugger
+              if(block.isMover){
+                block.updateMoverObject(currentStyle);
+                block.color = currentStyle;
+                block.render();
+              }
+              else{
+                block.color = currentStyle;
+                block.render();
+              }
             }
           }
         })

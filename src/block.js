@@ -82,7 +82,7 @@ class Block {
   }
   updateMoverObject(color) {
     this.origConfig.color = color;
-    this.color = `mover${JSON.stringify(this.origConfig)}`;
+    // this.color = `mover${JSON.stringify(this.origConfig)}`;
   }
   getMoverObject() {
     return `mover${JSON.stringify(this.origConfig)}`;

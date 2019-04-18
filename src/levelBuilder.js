@@ -476,16 +476,9 @@ function levelBuilder() {
     blocksToSend = [];
     newBlocks.forEach(block => {
       if (!block.id) {
-<<<<<<< HEAD
         if (block.isMover) {
           blocksToSend.push({ x: block.origX, y: block.origY, width: block.width, height: block.height, style: block.getMoverObject(), status: block.status });
         } else {
-=======
-        if(block.isMover){
-          blocksToSend.push({ x: block.x, y: block.y, width: block.width, height: block.height, style: block.getMoverObject(), status: block.status });
-        }
-        else{
->>>>>>> zach
           blocksToSend.push({ x: block.x, y: block.y, width: block.width, height: block.height, style: block.color, status: block.status });
         }
         //blocksToSend.push({ x: block.x, y: block.y, width: block.width, height: block.height, style: block.color, status: block.status });

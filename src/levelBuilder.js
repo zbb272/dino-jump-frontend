@@ -444,6 +444,8 @@ function levelBuilder() {
         name: newInputField.value,
         startPositionX: parseInt(player.style.left.replace(/\D/gm, "/")),
         startPositionY: parseInt(player.style.top.replace(/\D/gm, "/")),
+        game_id: currentGame.id,
+        background: "url(./assets/jungle/backgroundLarge.png)",
         blocks_attributes: blocksToSend
       }
     };

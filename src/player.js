@@ -7,7 +7,7 @@ class Player {
     this.dx = 0;
     this.dy = 0;
     this.gravCounter = 0;
-    this.height = 37;
+    this.height = 25;
     this.width = 23;
     this.lives = 5;
 

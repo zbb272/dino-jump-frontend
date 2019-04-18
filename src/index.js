@@ -89,6 +89,10 @@ function run() {
     characterDiv1.style.backgroundRepeat = "no-repeat";
     characterDiv1.style.backgroundSize = "cover";
     characterDiv1.dataset.character = "blue";
+    // let character2Name = document.createElement("h4");
+    // character2Name.innerText = "Meep";
+    // character2Name.style.top = "450px";
+    // characterDiv1.appendChild(character2Name)
     characterDiv1.addEventListener("click", characterSelectEvent)
     mainMenu.appendChild(characterDiv1);
     let characterDiv2 = document.createElement("div");

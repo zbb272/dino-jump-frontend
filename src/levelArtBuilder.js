@@ -102,6 +102,23 @@ function levelArtBuilder(){
     });
     platformTable.appendChild(gemRow);
 
+    funBackgroundImageURLS = [
+      "url(./assets/funBlocks/funBlock1.png)", "url(./assets/funBlocks/funBlock2.png)", "url(./assets/funBlocks/funBlock3.png)", "url(./assets/funBlocks/funBlock4.png)", "url(./assets/funBlocks/funBlock5.png)", "url(./assets/funBlocks/funBlock6.png)"
+    ];
+    let funRow = document.createElement("tr");
+    funBackgroundImageURLS.forEach(imageURL => {
+      let funSquare = document.createElement("td");
+      funSquare.style.height = "25px";
+      funSquare.style.width = "25px";
+      funSquare.style.borderStyle = "solid";
+      funSquare.style.borderWidth = "1px";
+      funSquare.style.backgroundImage = imageURL;
+      funSquare.style.backgroundSize = "cover";
+      funSquare.addEventListener("click", platformSquareEventListener);
+      funRow.appendChild(funSquare)
+    });
+    platformTable.appendChild(funRow);
+
     builderControlContainer.appendChild(platformTable);
   }
 
@@ -306,7 +323,8 @@ function levelArtBuilder(){
   function createBackgroundSelector(){
     backgroundImageURLS = [
       "url(./assets/jungle/backgroundLarge.png)", "url(./assets/backgrounds/bg1.png)", "url(./assets/backgrounds/bg2.png)", "url(./assets/backgrounds/bg3.png)",
-      , "url(./assets/backgrounds/bg4.png)", "url(./assets/backgrounds/bg5.png)", "url(./assets/backgrounds/bg6.png)", "url(./assets/backgrounds/bg7.png)"
+      "url(./assets/backgrounds/bg4.png)", "url(./assets/backgrounds/bg5.png)", "url(./assets/backgrounds/bg6.png)", "url(./assets/backgrounds/bg7.png)",
+      "url(./assets/backgrounds/bg8.png)", "url(./assets/backgrounds/bg9.png)", "url(./assets/backgrounds/bg10.png)", "url(./assets/backgrounds/bg11.png)"
     ];
     backgroundTable = document.createElement("table");
     let backgroundRow = document.createElement("tr");

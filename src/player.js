@@ -371,12 +371,11 @@ class Player {
     this.lives--;
     this.renderLives();
     this.deathSpriteInterval = setInterval(deathSprite.bind(this), 150);
-    function deathSprite(){
+    function deathSprite() {
       this.container.style.backgroundImage = this.deathSpriteArray[this.deathSpriteIndex];
-      if(this.deathSpriteIndex < 3){
+      if (this.deathSpriteIndex < 3) {
         this.deathSpriteIndex++;
-      }
-      else{
+      } else {
         this.deathSpriteIndex = 0;
       }
     }
@@ -390,7 +389,6 @@ class Player {
         clearInterval(this.deathSpriteInterval);
         this.deathSpriteIndex = 0;
       }, 1000);
-
     }
   }
   gameOver() {
@@ -417,7 +415,6 @@ class Player {
 
       this.disabled = false;
       this.level.disabled = false;
-
     }, 2500);
   }
 
@@ -482,7 +479,7 @@ class Player {
   draw(inputs) {
     if (!this.disabled) {
       this.specialCollisions();
-      if (!this.isAirborne() || (this.isAirborne() && this.isAgainstWall())) {
+      if (!this.isAirborne()) {
         this.doubleJump = true;
       }
       if (this.dashing > 2) {

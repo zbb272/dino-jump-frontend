@@ -15,11 +15,9 @@ class Game {
     currentPlayer.doubleJumpUnlocked = false;
     currentPlayer.wallJumpUnlocked = false;
     currentPlayer.dashUnlocked = false;
-    clearInterval(currentLevel.timer);
     currentLevel.drop();
     currentLevel = this.levels[0];
     this.score = 0;
-    clearInterval(currentLevel.timer);
     currentLevel.init();
     currentPlayer.lives = 5;
     currentPlayer.renderLives();

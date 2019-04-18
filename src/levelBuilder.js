@@ -437,7 +437,13 @@ function levelBuilder() {
     });
     blocksToSend = [];
     newBlocks.forEach(block => {
-      blocksToSend.push({ x: block.x, y: block.y, width: block.width, height: block.height, style: block.color, status: block.status });
+      if(block.isMover){
+        blocksToSend.push({ x: block.x, y: block.y, width: block.width, height: block.height, style: block.getMoverObject(), status: block.status });
+      }
+      else{
+        blocksToSend.push({ x: block.x, y: block.y, width: block.width, height: block.height, style: block.color, status: block.status });
+      }
+
     });
     obj = {
       level: {

@@ -64,13 +64,13 @@ class Level {
     }
   }
   complete() {
-    let i = Level.all.indexOf(this);
+    let i = currentGame.levels.indexOf(this);
     i++;
-    if (i === Level.all.length) {
+    if (i === currentGame.levels.length) {
       i = 0;
     }
     this.drop();
-    currentLevel = Level.all[i];
+    currentLevel = currentGame.levels[i];
     currentLevel.init();
   }
 

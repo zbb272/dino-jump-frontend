@@ -343,10 +343,11 @@ class Player {
       this.level.updateScore(100);
       let time = this.level.time;
       this.level.callTime(true);
-      this.level.submitScore();
       const success = document.createElement("div");
       success.classList.add("option-menu");
-      success.innerHTML = `LEVEL COMPLETE <br> TIME: ${time} <br>`;
+      success.innerHTML = `LEVEL COMPLETE <br> TIME: ${time} <br> SCORE: ${this.level.currentScore} <br> HIGH SCORE: ${this.level.highScore}`;
+      this.level.submitScore();
+
       this.gameContainer.appendChild(success);
       setTimeout(() => {
         success.remove();
@@ -382,12 +383,13 @@ class Player {
   gameOver() {
     this.level.callTime(false);
     this.level.renderScore();
+    const gameOver = document.createElement("div");
+    gameOver.classList.add("option-menu");
+    gameOver.innerHTML = `GAME OVER <br>  SCORE: ${this.level.currentScore} <br> HIGH SCORE: ${this.level.highScore}`;
     if (this.level.currentScore > 0) {
       this.level.submitScore();
     }
-    const gameOver = document.createElement("div");
-    gameOver.classList.add("option-menu");
-    gameOver.innerHTML = "GAME OVER";
+
     this.gameContainer.appendChild(gameOver);
     setTimeout(() => {
       this.lives = 5;

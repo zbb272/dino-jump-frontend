@@ -2,6 +2,7 @@ let gameContainer;
 let levelBuilderOpen = false;
 let levelArtBuilderOpen = false;
 let currentLevel;
+let currentGame;
 let levelList;
 document.addEventListener("DOMContentLoaded", run());
 
@@ -28,34 +29,51 @@ function run() {
 
     subTitleElement.innerText = "Select Game To Play";
     gameList = document.createElement("ul");
-    let gameListItem = document.createElement("li");
-    gameListItem.innerText = "Test Game";
-    gameListItem.addEventListener("click", gameSelectEventListener);
-    gameList.appendChild(gameListItem);
+
+    let gameUrl = `http://localhost:3000/api/v1/games/`;
+    fetch(gameUrl)
+      .then(res => res.json())
+      .then(data => {
+        console.log(data);
+        data.forEach(game => {
+          let gameListItem = document.createElement("li");
+          gameListItem.innerText = game.name;
+          gameListItem.dataset.id = game.id;
+          gameListItem.addEventListener("click", gameSelectEventListener);
+          gameList.appendChild(gameListItem);
+          new Game(parseInt(game.id), game.name, []);
+        });
+      });
+
+
     mainMenu.appendChild(gameList);
   }
 
   function gameSelectEventListener(event) {
+    let game_id = parseInt(event.target.dataset.id);
+    currentGame = Game.all.find(game => game.id === game_id);
     gameList.remove();
-    levelListMenu();
+    levelListMenu(game_id);
   }
 
-  function levelListMenu() {
+  function levelListMenu(game_id) {
     subTitleElement.innerText = "Select Level To Play";
     levelList = document.createElement("ul");
-
-    let levelUrl = `http://localhost:3000/api/v1/levels/`;
+    let levelUrl = `http://localhost:3000/api/v1/games/`;
     fetch(levelUrl)
       .then(res => res.json())
       .then(data => {
-        console.log(data);
-        data.forEach(level => {
-          let levelListItem = document.createElement("li");
-          levelListItem.innerText = level.name;
-          levelListItem.dataset.id = level.id;
-          levelListItem.addEventListener("click", levelSelectEventListener);
-          levelList.appendChild(levelListItem);
-          new Level(level, gameContainer);
+        data.forEach(game => {
+          if(game_id === game.id){
+            game.levels.forEach(level => {
+              let levelListItem = document.createElement("li");
+              levelListItem.innerText = level.name;
+              levelListItem.dataset.id = level.id;
+              levelListItem.addEventListener("click", levelSelectEventListener);
+              levelList.appendChild(levelListItem);
+              currentGame.levels.push(new Level(level, gameContainer));
+            })
+          }
         });
       });
 

@@ -107,7 +107,7 @@ class Player {
     if (!this.isAirborne()) {
       console.log("jump");
       this.jumping = true;
-      this.jump(18);
+      this.jump(17);
     } else if (this.wallJumpUnlocked && this.isAgainstWall() !== 0) {
       this.jumping = true;
       console.log("walljump");
@@ -116,7 +116,7 @@ class Player {
       this.jumping = true;
       console.log("djump");
       this.doubleJump = false;
-      this.jump(10);
+      this.jump(11);
     }
   }
 
@@ -168,12 +168,12 @@ class Player {
   applyGravity() {
     if (this.gravCounter <= 0) {
       if (this.isAirborne() && this.dashing <= 1 && this.dy <= 20) {
-        this.dy += 3;
+        this.dy += 1;
       }
       if (this.isAgainstWall() && this.wallJumpUnlocked && this.dy > 3) {
         this.dy = 3;
       }
-      this.gravCounter = 3;
+      this.gravCounter = 0;
     } else {
       if (this.dy < 0) {
         this.gravCounter -= 2;
@@ -184,16 +184,16 @@ class Player {
   }
 
   //produces a sliding/skidding if you are moving too fast
-  slowDown() {
+  slowDown(num) {
     if (this.dx < 2 && this.dx > -2) {
       this.dx = 0;
     } else {
       if (this.dx > 0) {
-        this.dx -= this.dx / 4;
-        this.dx = Math.floor(this.dx);
+        this.dx -= this.dx / num;
+        //   this.dx = Math.floor(this.dx);
       } else {
-        this.dx -= this.dx / 4;
-        this.dx = Math.ceil(this.dx);
+        this.dx -= this.dx / num;
+        //this.dx = Math.ceil(this.dx);
       }
     }
   }
@@ -202,24 +202,36 @@ class Player {
   moveRight() {
     this.movingRight = true;
     if (this.isAgainstWall() !== -1) {
-      if (this.isAirborne() && this.dx < 0) {
-        this.slowDown();
+      if (this.isAirborne()) {
+        if (this.dx < 0) {
+          this.slowDown(5);
+        } else if (this.dx < 6) {
+          this.dx += 1;
+        }
+      } else if (this.dx < -5) {
+        this.slowDown(6);
       } else if (this.dx < 2) {
-        this.dx = 3;
-      } else if (this.dx < 7) {
-        this.dx += 1;
+        this.dx = 2;
+      } else if (this.dx < 8) {
+        this.dx += 0.5;
       }
     }
   }
   moveLeft() {
     this.movingLeft = true;
-    if (this.isAgainstWall() !== 1) {
-      if (this.isAirborne() && this.dx > 0) {
-        this.slowDown();
+    if (this.isAgainstWall() !== -1) {
+      if (this.isAirborne()) {
+        if (this.dx > 0) {
+          this.slowDown(5);
+        } else if (this.dx > -6) {
+          this.dx -= 1;
+        }
+      } else if (this.dx > 5) {
+        this.slowDown(6);
       } else if (this.dx > -2) {
-        this.dx = -3;
-      } else if (this.dx > -7) {
-        this.dx += -1;
+        this.dx = -2;
+      } else if (this.dx > -8) {
+        this.dx -= 0.5;
       }
     }
   }
@@ -329,11 +341,12 @@ class Player {
       this.disabled = true;
       this.level.disabled = true;
       this.level.updateScore(100);
+      let time = this.level.time;
       this.level.callTime(true);
       this.level.submitScore();
       const success = document.createElement("div");
       success.classList.add("option-menu");
-      success.innerHTML = "LEVEL COMPLETE";
+      success.innerHTML = `LEVEL COMPLETE <br> TIME: ${time} <br>`;
       this.gameContainer.appendChild(success);
       setTimeout(() => {
         success.remove();
@@ -472,7 +485,7 @@ class Player {
       }
       this.applyGravity();
       if (!this.isAirborne() && !this.movingRight && !this.movingLeft) {
-        this.slowDown();
+        this.slowDown(5);
       }
       this.collisions();
       this.setXY(this.x + this.dx, this.y + this.dy);

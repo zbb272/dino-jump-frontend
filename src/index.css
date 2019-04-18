@@ -12,6 +12,10 @@
   /* display: block;
 //  padding: 0px; */
 }
+.container-builder {
+  min-height: 200px;
+  z-index: 5;
+}
 
 #main-menu {
   min-height: 700px;
@@ -58,7 +62,7 @@ ul {
 .player {
   position: absolute;
   /* background-color: mediumaquamarine; */
-  z-index: 5;
+  z-index: 3;
   display: block;
   background-repeat: no-repeat;
   background-size: cover;

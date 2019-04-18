@@ -292,10 +292,40 @@ function levelArtBuilder(){
       }
       createColorPalette();
       createPlatformSelector();
+      createBackgroundSelector();
     }
     else {
 
     }
+  }
+
+  function createBackgroundSelector(){
+    backgroundImageURLS = [
+      "url(./assets/jungle/backgroundLarge.png)", "url(./assets/mountainBackground/glacialMountain.png)"
+    ];
+    let backgroundTable = document.createElement("table");
+    let backgroundRow = document.createElement("tr");
+    backgroundImageURLS.forEach(imageURL => {
+      let backgroundSquare = document.createElement("td");
+      backgroundSquare.classList.add("background-thumb");
+      backgroundSquare.style.height = "125px";
+      backgroundSquare.style.width = "125px";
+      backgroundSquare.style.borderStyle = "solid";
+      backgroundSquare.style.borderWidth = "1px";
+      backgroundSquare.style.backgroundImage = imageURL;
+      backgroundSquare.style.backgroundSize = "cover";
+      backgroundSquare.addEventListener("click", backgroundSquareEventListener);
+      backgroundRow.appendChild(backgroundSquare)
+    });
+    backgroundTable.appendChild(backgroundRow);
+
+    builderControlContainer.appendChild(backgroundTable);
+  }
+
+  function backgroundSquareEventListener(event){
+    console.log(event.target.style.backgroundImage)
+    currentLevel.background = event.target.style.backgroundImage;
+    currentLevel.gameContainer.style.backgroundImage = event.target.style.backgroundImage;
   }
 
   function saveButtonEventHandler(event){
@@ -313,7 +343,7 @@ function levelArtBuilder(){
     let player = document.querySelector(".player");
 
     console.log(blocksToSend.length);
-    obj = { level: { blocks_attributes: blocksToSend } };
+    obj = { level: { background: currentLevel.background, blocks_attributes: blocksToSend } };
     //fetch request
     let levelUrl = `http://localhost:3000/api/v1/levels/${currentLevel.id}`;
     fetch(levelUrl, {

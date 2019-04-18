@@ -6,9 +6,10 @@
   position: absolute;
   text-align: right;
   background-repeat: no-repeat;
+  background-size: cover;
   width: 1200px;
   height: 700px;
-  background-image: url(../assets/jungle/backgroundLarge.png);
+  /* background-image: url(../assets/jungle/backgroundLarge.png); */
   /* display: block;
 //  padding: 0px; */
 }
@@ -56,6 +57,11 @@ ul {
 .block {
   z-index: 5;
   position: absolute;
+  background-size: cover;
+}
+
+.background-thumb {
+  background-repeat: no-repeat;
   background-size: cover;
 }
 

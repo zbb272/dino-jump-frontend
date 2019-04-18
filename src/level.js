@@ -20,9 +20,11 @@ class Level {
     this.currentScore = 0;
     this.disabled = false;
     this.first = true;
+    this.background = obj.background;
     Level.all.push(this);
   }
   init() {
+    this.gameContainer.style.backgroundImage = this.background;
     this.movers.forEach(b => {
       b.reset();
     });

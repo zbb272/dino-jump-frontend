@@ -44,12 +44,12 @@ class Block {
     };
     return obj;
   }
-  move(player) {
+  move(dx, dy, player) {
     const wallClingEdgeCase = player.collidesAll([this]) === this;
-    this.setXY(this.x + this.config.dx, this.y + this.config.dy);
+    this.setXY(this.x + dx, this.y + dy);
 
     if (player.collidesAll([this]) === this || wallClingEdgeCase) {
-      player.isMoved(this.config.dx, this.config.dy);
+      player.isMoved(dx, dy);
     }
   }
   remove() {

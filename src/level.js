@@ -47,7 +47,7 @@ class Level {
   progress(player, frameCount) {
     if (!this.disabled) {
       this.movers.forEach(block => {
-        if (frameCount >= Math.abs(block.config.dx) || frameCount >= Math.abs(block.config.dy)) {
+        if (frameCount <= Math.abs(block.config.dx)) {
           if (block.config.dx > 0) {
             // fully simultaneous
             if (block.x >= block.config.maxX) {
@@ -58,6 +58,10 @@ class Level {
               block.config.dx = -1 * block.config.dx;
             }
           }
+          block.move(block.config.dx, 0, player);
+          block.render();
+        }
+        if (frameCount <= Math.abs(block.config.dy)) {
           if (block.config.dy > 0) {
             if (block.y >= block.config.maxY) {
               block.config.dy = -1 * block.config.dy;
@@ -67,9 +71,7 @@ class Level {
               block.config.dy = -1 * block.config.dy;
             }
           }
-
-          block.move(player);
-
+          block.move(0, block.config.dy, player);
           block.render();
         }
       });

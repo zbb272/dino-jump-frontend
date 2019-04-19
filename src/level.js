@@ -82,6 +82,8 @@ class Level {
       currentGame.complete(player);
     } else {
       this.drop();
+      player.lives++;
+      player.renderLives();
       currentLevel = currentGame.levels[i];
       currentLevel.init();
     }

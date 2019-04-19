@@ -12,7 +12,11 @@ function run() {
   gameContainer = document.getElementById("game-container");
   gameContainer.style.display = "none";
 
-  let mainMenu = document.getElementById("main-menu");
+  let mainMenuContainer = document.getElementById("main-menu-container");
+
+  let mainMenu = document.createElement("div");
+  mainMenu.classList.add("main-menu");
+  mainMenuContainer.appendChild(mainMenu);
   let titleElement = document.createElement("h1");
   titleElement.innerText = "Platform Party 6000";
   let subTitleElement = document.createElement("h4");
@@ -29,8 +33,9 @@ function run() {
   function gameListMenu() {
     mainMenu.removeEventListener("click", mainMenuKeyDownEventHandler);
 
-    subTitleElement.innerText = "Select Game To Play";
+    subTitleElement.innerText = "Select Game";
     gameList = document.createElement("ul");
+    gameList.classList.add("menu-list");
 
     let gameUrl = `http://localhost:3000/api/v1/games/`;
     fetch(gameUrl)
@@ -41,6 +46,7 @@ function run() {
           let gameListItem = document.createElement("li");
           gameListItem.innerText = game.name;
           gameListItem.dataset.id = game.id;
+          gameListItem.classList.add("menu-item");
           gameListItem.addEventListener("click", gameSelectEventListener);
           gameList.appendChild(gameListItem);
           new Game(parseInt(game.id), game.name, []);
@@ -48,7 +54,7 @@ function run() {
       });
     let newGameButton = document.createElement("button");
     newGameButton.innerText = "Create New Game";
-    newGameButton.id = "new-game-button";
+    newGameButton.classList.add("menu-button");
     newGameButton.addEventListener("click", newGameButtonEventListener);
     gameList.appendChild(newGameButton);
 
@@ -99,6 +105,7 @@ function run() {
     subTitleElement.innerText = "Select Level To Play";
 
     levelList = document.createElement("ul");
+    levelList.classList.add("menu-list");
     let levelUrl = `http://localhost:3000/api/v1/games/`;
     fetch(levelUrl)
       .then(res => res.json())
@@ -107,6 +114,7 @@ function run() {
           if (game_id === game.id) {
             game.levels.forEach(level => {
               let levelListItem = document.createElement("li");
+              levelListItem.classList.add("menu-item")
               levelListItem.innerText = level.name;
               levelListItem.dataset.id = level.id;
               levelListItem.addEventListener("click", levelSelectEventListener);
@@ -119,6 +127,7 @@ function run() {
 
     let deleteGameButton = document.createElement("button");
     deleteGameButton.innerText = "Delete Game";
+    deleteGameButton.classList.add("menu-button");
     deleteGameButton.addEventListener("click", deleteGameButtonEventHandler);
     levelList.appendChild(deleteGameButton);
 
@@ -338,6 +347,7 @@ function run() {
     //close menu
     player.disabled = false;
     mainMenu.style.display = "none";
+    mainMenuContainer.style.display = "none";
     runGame();
   }
 

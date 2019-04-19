@@ -362,9 +362,8 @@ function run() {
     let levelCounter = 0;
     function draw() {
       levelCounter++;
-      if (!currentLevel.disabled && currentLevel.movers.length > 0 && levelCounter >= 2) {
-        levelCounter = 0;
-        currentLevel.progress(player);
+      if (!currentLevel.disabled && currentLevel.movers.length > 0) {
+        currentLevel.progress(player, levelCounter % 4);
       }
       if (!player.disabled) {
         player.draw({ left: leftPressed, right: rightPressed, jump: jumpPressed, dash: dashPressed });

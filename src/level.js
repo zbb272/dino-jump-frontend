@@ -44,31 +44,35 @@ class Level {
     this.render();
   }
 
-  progress(player) {
+  progress(player, frameCount) {
     if (!this.disabled) {
       this.movers.forEach(block => {
-        // fully simultaneous
-        if (block.config.dx > 0) {
-          if (block.x >= block.config.maxX) {
-            block.config.dx = -1 * block.config.dx;
+        if (frameCount >= Math.abs(block.config.dx) || frameCount >= Math.abs(block.config.dy)) {
+          if (block.config.dx > 0) {
+            // fully simultaneous
+            if (block.x >= block.config.maxX) {
+              block.config.dx = -1 * block.config.dx;
+            }
+          } else if (block.config.dx < 0) {
+            if (block.x <= block.config.minX) {
+              block.config.dx = -1 * block.config.dx;
+            }
           }
-        } else if (block.config.dx < 0) {
-          if (block.x <= block.config.minX) {
-            block.config.dx = -1 * block.config.dx;
-          }
-        }
-        if (block.config.dy > 0) {
-          if (block.y >= block.config.maxY) {
-            block.config.dy = -1 * block.config.dy;
-          }
-        } else if (block.config.dy < 0) {
-          if (block.y <= block.config.minY) {
-            block.config.dy = -1 * block.config.dy;
-          }
-        }
-        block.move(player);
 
-        block.render();
+          if (block.config.dy > 0) {
+            if (block.y >= block.config.maxY) {
+              block.config.dy = -1 * block.config.dy;
+            }
+          } else if (block.config.dy < 0) {
+            if (block.y <= block.config.minY) {
+              block.config.dy = -1 * block.config.dy;
+            }
+          }
+
+          block.move(player);
+
+          block.render();
+        }
       });
     }
   }

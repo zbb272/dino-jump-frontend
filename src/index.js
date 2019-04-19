@@ -1,6 +1,7 @@
 let gameContainer;
 let levelBuilderOpen = false;
 let levelArtBuilderOpen = false;
+let canSave = false;
 let currentLevel;
 let currentGame;
 let characterMenuSpriteMoveInterval;

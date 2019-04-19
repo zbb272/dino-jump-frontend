@@ -58,7 +58,6 @@ class Level {
               block.config.dx = -1 * block.config.dx;
             }
           }
-
           if (block.config.dy > 0) {
             if (block.y >= block.config.maxY) {
               block.config.dy = -1 * block.config.dy;

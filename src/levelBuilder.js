@@ -12,6 +12,8 @@ function levelBuilder() {
   let eraserBlockMode = false;
   let deleteBlockMode = false;
 
+  
+
   let platformBlockButton;
   let enemyBlockButton;
   let coinBlockButton;
@@ -213,6 +215,7 @@ function levelBuilder() {
     });
 
     levelBuilderOpen = false;
+    canSave = true;
 
     doneButton.remove();
     saveButton.remove();
@@ -241,6 +244,7 @@ function levelBuilder() {
       deleteBlockButton.remove();
     }
     gridModeButton.remove();
+    console.log(canSave);
   }
 
   function gridModeButtonEventHandler(event) {
@@ -477,6 +481,7 @@ function levelBuilder() {
           console.log(event.target)
           deleteBlockMode = false;
       }
+      canSave = false;
     }
   }
 
@@ -522,34 +527,43 @@ function levelBuilder() {
   }
 
   function saveButtonEventHandler(event) {
-    let player = document.querySelector(".player");
-    currentLevel.blocks.forEach(block => {
-      newBlocks.push(block);
-    });
-    blocksToSend = [];
-    newBlocks.forEach(block => {
-      if (!block.id) {
-        if (block.isMover) {
-          blocksToSend.push({ x: block.origX, y: block.origY, width: block.width, height: block.height, style: block.getMoverObject(), status: block.status });
-        } else {
-          blocksToSend.push({ x: block.x, y: block.y, width: block.width, height: block.height, style: block.color, status: block.status });
+
+    // let doneClickEvent = new Event("click");
+    // doneButton.dispatchEvent(doneClickEvent)
+    console.log(canSave)
+    if(!canSave){
+      window.alert("Hit Done Button Before Saving");
+    }
+    else{
+      let player = document.querySelector(".player");
+      currentLevel.blocks.forEach(block => {
+        newBlocks.push(block);
+      });
+      blocksToSend = [];
+      newBlocks.forEach(block => {
+        if (!block.id) {
+          if (block.isMover) {
+            blocksToSend.push({ x: block.origX, y: block.origY, width: block.width, height: block.height, style: block.getMoverObject(), status: block.status });
+          } else {
+            blocksToSend.push({ x: block.x, y: block.y, width: block.width, height: block.height, style: block.color, status: block.status });
+          }
+          //blocksToSend.push({ x: block.x, y: block.y, width: block.width, height: block.height, style: block.color, status: block.status });
         }
-        //blocksToSend.push({ x: block.x, y: block.y, width: block.width, height: block.height, style: block.color, status: block.status });
-      }
-    });
-    console.log(blocksToSend.length);
-    obj = { level: { startPositionX: parseInt(player.style.left.replace(/\D/gm, "/")), startPositionY: parseInt(player.style.top.replace(/\D/gm, "/")), blocks_attributes: blocksToSend } };
-    //fetch request
-    let levelUrl = `http://localhost:3000/api/v1/levels/${currentLevel.id}`;
-    fetch(levelUrl, {
-      method: "PATCH",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify(obj)
-    })
-      .then(res => res.json())
-      .then(data => console.log(data));
+      });
+      console.log(blocksToSend.length);
+      obj = { level: { startPositionX: parseInt(player.style.left.replace(/\D/gm, "/")), startPositionY: parseInt(player.style.top.replace(/\D/gm, "/")), blocks_attributes: blocksToSend } };
+      //fetch request
+      let levelUrl = `http://localhost:3000/api/v1/levels/${currentLevel.id}`;
+      fetch(levelUrl, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(obj)
+      })
+        .then(res => res.json())
+        .then(data => console.log(data));
+    }
   }
 
   function customBlockFormEventHandler(event) {

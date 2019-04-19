@@ -32,7 +32,7 @@ function levelArtBuilder(){
 
     jungleBackgroundImageURLS = [
       "url(./assets/jungle/blockCenter.png)", "url(./assets/jungle/blockLeft.png)", "url(./assets/jungle/blockRight.png)", "url(./assets/jungle/blockMiddle.png)", "url(./assets/jungle/blockCornerLeft.png)", "url(./assets/jungle/blockCornerRight.png)",
-      "url(./assets/jungle/blockLeftInsideCorner.png)", "url(./assets/jungle/blockRightInsideCorner.png)", "url(./assets/jungle/blockBottom.png)", "url(./assets/jungle/blockBottomRight.png)", "url(./assets/jungle/blockBottomLeft.png)",  "url(./assets/jungle/blockSingle1.png)"
+      "url(./assets/jungle/blockLeftInsideCorner.png)", "url(./assets/jungle/blockRightInsideCorner.png)", "url(./assets/jungle/blockBottom.png)", "url(./assets/jungle/blockBottomRight.png)", "url(./assets/jungle/blockBottomLeft.png)",  "url(./assets/jungle/blockSingle1.png)",  "url(./assets/jungle/spike1.png)"
     ];
     platformTable = document.createElement("table");
     let jungleRow = document.createElement("tr");
@@ -50,7 +50,7 @@ function levelArtBuilder(){
 
     incaBackgroundImageURLS = [
       "url(./assets/inca/incaBlock1.png)", "url(./assets/inca/incaBlock2.png)", "url(./assets/inca/incaBlock3.png)", "url(./assets/inca/incaBlock4.png)", "url(./assets/inca/incaBlock5.png)", "url(./assets/inca/incaBlock6.png)",
-      "url(./assets/inca/incaBlock7.png)", "url(./assets/inca/incaBlock8.png)", "url(./assets/inca/incaBlock9.png)", "url(./assets/inca/incaBlock10.png)", "url(./assets/inca/incaBlock11.png)", "url(./assets/inca/incaBlock12.png)", "url(./assets/inca/incaBlock11.png)",
+      "url(./assets/inca/incaBlock7.png)", "url(./assets/inca/incaBlock8.png)", "url(./assets/inca/incaBlock9.png)", "url(./assets/inca/incaBlock10.png)", "url(./assets/inca/incaBlock11.png)", "url(./assets/inca/incaBlock12.png)", "url(./assets/inca/incaBlock13.png)",
       "url(./assets/inca/incaColumnBlockBottom.png)", "url(./assets/inca/incaColumnBlockLower.png)", "url(./assets/inca/incaColumnBlockTop.png)", "url(./assets/inca/incaColumnBlockUpper.png)"
     ];
     let incaRow = document.createElement("tr");

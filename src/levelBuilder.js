@@ -10,6 +10,7 @@ function levelBuilder() {
   let coinBlockMode = false;
   let goalBlockMode = false;
   let eraserBlockMode = false;
+  let deleteBlockMode = false;
 
   let platformBlockButton;
   let enemyBlockButton;
@@ -18,6 +19,7 @@ function levelBuilder() {
   let eraserBlockButton;
   let powerBlockButton;
   let powerBlockSelector;
+  let deleteBlockButton;
 
   let grid = [];
   let newBlocks = [];
@@ -42,6 +44,10 @@ function levelBuilder() {
   deleteLevelButton.innerText = "Delete Level";
   deleteLevelButton.addEventListener("click", deleteButtonEventHandler);
   builderControlContainer.appendChild(deleteLevelButton);
+  deleteBlockButton = document.createElement("button");
+  deleteBlockButton.innerText = "Delete Block";
+  deleteBlockButton.addEventListener("click", deleteBlockButtonEventHandler)
+  builderControlContainer.appendChild(deleteBlockButton);
 
   let saveAsNewForm = document.createElement("form");
   newLabel = document.createElement("label");
@@ -211,6 +217,7 @@ function levelBuilder() {
     doneButton.remove();
     saveButton.remove();
     deleteLevelButton.remove();
+    deleteBlockButton.remove();
 
     saveAsNewForm.remove();
     customBlockForm.remove();
@@ -231,6 +238,7 @@ function levelBuilder() {
       eraserBlockButton.remove();
       powerBlockButton.remove();
       powerBlockSelector.remove();
+      deleteBlockButton.remove();
     }
     gridModeButton.remove();
   }
@@ -306,6 +314,7 @@ function levelBuilder() {
       eraserBlockButton.innerText = "Eraser";
       eraserBlockButton.addEventListener("click", eraserBlockEventHandler);
       builderControlContainer.appendChild(eraserBlockButton);
+
     } else {
       platformBlockButton.remove();
       enemyBlockButton.remove();
@@ -320,6 +329,7 @@ function levelBuilder() {
       goalBlockMode = false;
       eraserBlockMode = false;
       powerBlockMode = false;
+      deleteBlockMode = false;
     }
   }
 
@@ -330,6 +340,7 @@ function levelBuilder() {
     goalBlockMode = false;
     eraserBlockMode = false;
     powerBlockMode = false;
+    deleteBlockMode = false;
   }
 
   function enemyBlockEventHandler(event) {
@@ -339,6 +350,7 @@ function levelBuilder() {
     goalBlockMode = false;
     eraserBlockMode = false;
     powerBlockMode = false;
+    deleteBlockMode = false;
   }
 
   function coinBlockEventHandler(event) {
@@ -348,6 +360,7 @@ function levelBuilder() {
     goalBlockMode = false;
     eraserBlockMode = false;
     powerBlockMode = false;
+    deleteBlockMode = false;
   }
 
   function goalBlockEventHandler(event) {
@@ -357,6 +370,7 @@ function levelBuilder() {
     goalBlockMode = true;
     eraserBlockMode = false;
     powerBlockMode = false;
+    deleteBlockMode = false;
   }
 
   function eraserBlockEventHandler(event) {
@@ -366,6 +380,7 @@ function levelBuilder() {
     goalBlockMode = false;
     eraserBlockMode = true;
     powerBlockMode = false;
+    deleteBlockMode = false;
   }
 
   function powerBlockEventHandler(event) {
@@ -375,6 +390,41 @@ function levelBuilder() {
     goalBlockMode = false;
     eraserBlockMode = false;
     powerBlockMode = true;
+    deleteBlockMode = false;
+  }
+
+  function deleteBlockButtonEventHandler(event){
+    platformBlockMode = false;
+    enemyBlockMode = false;
+    coinBlockMode = false;
+    goalBlockMode = false;
+    eraserBlockMode = false;
+    powerBlockMode = false;
+    deleteBlockMode = true;
+    currentLevel.blocks.forEach(block => {
+      block.container.addEventListener("click", blockClickListener)
+    })
+  }
+
+  function blockClickListener(event){
+    if(deleteBlockMode){
+      console.log(event.target);
+      currentLevel.blocks.forEach(block => {
+        if(block.id === parseInt(event.target.dataset.id)){
+          block.container.remove();
+          currentLevel.blocks.splice(currentLevel.blocks.indexOf(block), 1);
+          if (window.confirm("Are you sure you want to delete the block? This is not reversible.")) {
+            let levelUrl = `http://localhost:3000/api/v1/blocks/${block.id}`;
+            fetch(levelUrl, {
+              method: "DELETE"
+            })
+              .then(res => res.json())
+              .then(data => console.log(data));
+          }
+        }
+      })
+      deleteBlockMode = false;
+    }
   }
 
   function squareMouseDownEventHandler(event) {
@@ -423,6 +473,9 @@ function levelBuilder() {
           square.style.backgroundColor = "transparent";
           newBlocks.splice(newBlocks.indexOf(square), 1);
         }
+      } else if (deleteBlockMode){
+          console.log(event.target)
+          deleteBlockMode = false;
       }
     }
   }

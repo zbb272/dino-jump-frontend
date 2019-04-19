@@ -47,6 +47,7 @@ function run() {
       });
     let newGameButton = document.createElement("button");
     newGameButton.innerText = "Create New Game";
+    newGameButton.id = "new-game-button";
     newGameButton.addEventListener("click", newGameButtonEventListener);
     gameList.appendChild(newGameButton);
 
